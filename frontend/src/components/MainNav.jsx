@@ -104,7 +104,10 @@ const MainNav = () => {
                   <Link to="/resturent-menu">Cart</Link>
                 </li>
                 <li className="tracking-wide font-medium text-sm">
-                  <Link to="/resturent-menu">Checkout</Link>
+                  <Link to="/checkout">Checkout</Link>
+                </li>
+                <li className="tracking-wide font-medium text-sm">
+                  <Link to="/my-order">My Orders</Link>
                 </li>
               </ul>
             </li>

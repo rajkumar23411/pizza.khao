@@ -17,7 +17,7 @@ module.exports = {
     },
     fontFamily: {
       sans: ["sans-serif"],
-      roboto: ["Roboto", "sans-serif"],
+      roboto: ["Lato"],
     },
   },
   plugins: [],
