@@ -1,230 +1,174 @@
 import React, { useState } from "react";
 import MainNav from "../components/MainNav";
 import AddIcon from "@mui/icons-material/Add";
-import { LocationOn } from "@mui/icons-material";
-
+import { Done, LocationOn } from "@mui/icons-material";
+import OrderedItems from "../components/OrderedItems";
 const CheckOut = () => {
-  const [viewOptions, setViewOptions] = useState(1);
-
-  const handleViewOption = (index) => {
-    setViewOptions(index);
-  };
   return (
-    <section className="min-h-full w-full">
-      <div>
-        <MainNav />
-      </div>
+    <>
+      <MainNav />
       <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
         <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-          Checkout
+          CheckOut
         </h1>
       </div>
-      <div className="py-20 px-40 flex gap-10">
-        <div className="flex-1 flex flex-col gap-2">
-          <h1 className="text-xl uppercase font-semibold text-gray-800">
-            Biling Details
-          </h1>
-          <div
-            className="mt-6 text-lg border-b-2 border-dashed uppercase text-golden font-semibold tracking-wider flex items-center"
-            onClick={() => handleViewOption(1)}
-          >
-            <LocationOn /> Select Address
-          </div>
-          <div
-            className={`${
-              viewOptions === 1 ? "h-max transition-[0.5s]" : "hidden h-0"
-            } flex flex-col gap-6`}
-          >
-            <div className="flex items-start gap-6">
-              <span>
-                <input
-                  type="checkbox"
-                  name=""
-                  id=""
-                  className="h-3 w-3 rounded-full"
-                />
-              </span>
-              <span className="text-gray-700">
-                Ghy, Assam, Nalbari <br /> 781339, India, 9101121717 <br />
-                Hajo-Nalbari Road
-              </span>
+      <div className="min-h-screen w-full bg-slate-50 py-20 px-40 flex gap-4">
+        <div className="flex-1 flex flex-col gap-4">
+          <div className="flex gap-6 items-start justify-start bg-white px-10 py-5 shadow-md">
+            <div className="h-6 w-6 bg-slate-100 rounded-sm flex items-center justify-center">
+              <span className="text-red-600 font-semibold">1</span>
             </div>
-            <div className="flex items-start gap-6">
-              <span>
-                <input
-                  type="checkbox"
-                  name=""
-                  id=""
-                  className="h-3 w-3 rounded-full"
-                />
-              </span>
-              <span className="text-gray-700">
-                Ghy, Assam, Nalbari <br /> 781339, India, 9101121717 <br />
-                Hajo-Nalbari Road
-              </span>
-            </div>
-          </div>
-          <div
-            className={`mt-6 cursor-pointer hover:text-blue-800 ${
-              viewOptions === 2
-                ? "text-lg border-b-2 border-dashed uppercase text-golden font-semibold tracking-wider flex items-center"
-                : "text-blue-700 font-semibold"
-            }`}
-            onClick={() => handleViewOption(2)}
-          >
-            <AddIcon /> <span>Add address</span>
-          </div>
-          <div
-            className={`${
-              viewOptions === 2 ? "block h-max" : "hidden h-0 "
-            } w-full pt-6`}
-          >
-            <form action="#" className="flex flex-col gap-6 w-full">
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-sm">Full Name*</label>
-                <input
-                  type="text"
-                  className="w-full border-[1px] border-gray-500 py-3 px-2 text-lg focus:border-red-600"
-                />
-              </div>
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-sm">Phone no.*</label>
-                <input
-                  type="number"
-                  className="w-full border-[1px] border-gray-500 py-3 px-2 text-lg focus:border-red-600"
-                />
-              </div>
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-sm">Email*</label>
-                <input
-                  type="text"
-                  className="w-full border-[1px] border-gray-500 py-3 px-2 text-lg focus:border-red-600"
-                />
-              </div>
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-sm">Country*</label>
-                <input
-                  type="text"
-                  className="w-full border-[1px] border-gray-500 py-3 px-2 text-lg focus:border-red-600"
-                />
-              </div>
-              <div className="flex flex-col gap-2 w-full">
-                <label className="text-sm">Address*</label>
-                <input
-                  type="text"
-                  className="w-full border-[1px] border-gray-500 py-3 px-2 text-lg focus:border-red-600"
-                />
-              </div>
-              <div className="flex gap-6">
-                <div className="flex flex-col gap-2 w-full">
-                  <label className="text-sm">Zip Code*</label>
-                  <input
-                    type="text"
-                    className="w-full border-[1px] border-gray-500 py-3 px-2 text-lg focus:border-red-600"
-                  />
-                </div>
-                <div className="flex flex-col gap-2 w-full">
-                  <label className="text-sm">Town / Country*</label>
-                  <input
-                    type="text"
-                    className="w-full border-[1px] border-gray-500 py-3 px-2 text-lg focus:border-red-600"
-                  />
-                </div>
+            <div className="flex flex-col items-start justify-start gap-2">
+              <div className="flex items-center gap-3">
+                <span className="uppercase text-gray-500 font-semibold">
+                  login
+                </span>
+                <span>
+                  <Done fontSize="small" className="text-blue-600" />
+                </span>
               </div>
               <div className="flex items-center gap-2">
-                <input type="checkbox" className="h-5 w-5" />
-                <span className="text-gray-600">Save this address</span>
+                <span className="font-semibold">Rajkumar Kalita</span>
+                <span>9101121717</span>
               </div>
-            </form>
+            </div>
+          </div>
+          <div className="shadow-md">
+            <div className="bg-white">
+              <div className="bg-red-600 px-10 py-3 flex gap-6">
+                <span className="h-6 w-6 bg-slate-100 text-red-600 font-semibold flex items-center justify-center rounded-sm">
+                  2
+                </span>
+                <span className="uppercase font-semibold text-white tracking-wide">
+                  Delivery Address
+                </span>
+              </div>
+              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
+                <div>
+                  <input type="radio" className="h-4 w-4" />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <span className="font-semibold">Rajkumar Kalita</span>
+                    <span className="font-semibold">9101121717</span>
+                  </div>
+                  <div className="text-gray-600">
+                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
+                    Nalbari <br />
+                    Assam - 781339
+                  </div>
+                  <div className="bg-red-500 text-white uppercase w-max text-sm tracking-wider px-4 py-2 rounded-sm font-semibold mt-4 hover:bg-red-600 cursor-pointer">
+                    Deliver here
+                  </div>
+                </div>
+              </div>
+              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
+                <div>
+                  <input type="radio" className="h-4 w-4" />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <span className="font-semibold">Rajkumar Kalita</span>
+                    <span className="font-semibold">9101121717</span>
+                  </div>
+                  <div className="text-gray-600">
+                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
+                    Nalbari <br />
+                    Assam - 781339
+                  </div>
+                </div>
+              </div>
+              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
+                <div>
+                  <input type="radio" className="h-4 w-4" />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <span className="font-semibold">Rajkumar Kalita</span>
+                    <span className="font-semibold">9101121717</span>
+                  </div>
+                  <div className="text-gray-600">
+                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
+                    Nalbari <br />
+                    Assam - 781339
+                  </div>
+                </div>
+              </div>
+              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
+                <div>
+                  <input type="radio" className="h-4 w-4" />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <span className="font-semibold">Rajkumar Kalita</span>
+                    <span className="font-semibold">9101121717</span>
+                  </div>
+                  <div className="text-gray-600">
+                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
+                    Nalbari <br />
+                    Assam - 781339
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center bg-white px-10 py-3 gap-4 cursor-pointer">
+              <AddIcon className="text-blue-600" fontSize="small" />
+              <span className="text-blue-600 font-semibold">
+                Add a new address
+              </span>
+            </div>
+          </div>
+          <div className="flex bg-white gap-4 cursor-pointer shadow-md flex-col">
+            <div className="flex items-center gap-4 bg-red-600 px-10 py-3">
+              <div className="h-6 w-6 bg-slate-100 rounded-sm flex items-center justify-center">
+                <span className="text-red-600 font-semibold">3</span>
+              </div>
+              <span className="text-white font-semibold uppercase tracking-wide">
+                Order Summary
+              </span>
+            </div>
+            <div className="w-full flex gap-6 flex-col">
+              <OrderedItems />
+              <OrderedItems />
+              <OrderedItems />
+              <OrderedItems />
+            </div>
+          </div>
+          <div className="flex items-center bg-white px-10 py-3 gap-4 cursor-pointer shadow-md">
+            <div className="h-6 w-6 bg-slate-100 rounded-sm flex items-center justify-center">
+              <span className="text-red-600 font-semibold">4</span>
+            </div>
+            <span className="text-red-600 font-semibold uppercase tracking-wide">
+              Payment options
+            </span>
           </div>
         </div>
-        <div className="flex-[0.5] flex flex-col gap-2">
-          <h1 className="text-xl uppercase font-semibold text-gray-800">
-            Your Items
+        <div className="flex-[0.5] bg-white h-max shadow-md">
+          <h1 className="uppercase font-semibold tracking-wide text-golden w-full border-b-2 border-golden border-dashed px-4 py-2">
+            Price Details
           </h1>
-          <div className="pt-8">
-            <div className="flex gap-3 items-start justify-start border-b-[1px] border-gray-300 py-5">
-              <div className="h-20 w-20 border-[1px] border-gray-300 grid place-items-center">
-                <img
-                  src="/images/pizza-5.png"
-                  alt="pizza5"
-                  className="h-[85%]"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <p className="uppercase font-semibold text-gray-600 text-sm">
-                  Margherita Pizza
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="line-through font-semibold text-gray-400 text-sm">
-                    $22.25
-                  </span>
-                  <span className="font-semibold text-red-600 text-sm">
-                    $15.67
-                  </span>
-                </p>
-                <span className="text-gray-500 text-xs">Qty: 1</span>
-              </div>
+          <div className="flex flex-col gap-2 border-b-[1px] p-4">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Price (4 items)</span>
+              <span className="text-gray-800 font-semibold">$ 190.67</span>
             </div>
-            <div className="flex gap-3 items-start justify-start border-b-[1px] border-gray-300 py-5">
-              <div className="h-20 w-20 border-[1px] border-gray-300 grid place-items-center">
-                <img
-                  src="/images/pizza-5.png"
-                  alt="pizza5"
-                  className="h-[85%]"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <p className="uppercase font-semibold text-gray-600 text-sm">
-                  Margherita Pizza
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="line-through font-semibold text-gray-400 text-sm">
-                    $22.25
-                  </span>
-                  <span className="font-semibold text-red-600 text-sm">
-                    $15.67
-                  </span>
-                </p>
-                <span className="text-gray-500 text-xs">Qty: 1</span>
-              </div>
-            </div>
-            <div className="flex gap-3 items-start justify-start border-b-[1px] border-gray-300 py-5">
-              <div className="h-20 w-20 border-[1px] border-gray-300 grid place-items-center">
-                <img
-                  src="/images/pizza-5.png"
-                  alt="pizza5"
-                  className="h-[85%]"
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <p className="uppercase font-semibold text-gray-600 text-sm">
-                  Margherita Pizza
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="line-through font-semibold text-gray-400 text-sm">
-                    $22.25
-                  </span>
-                  <span className="font-semibold text-red-600 text-sm">
-                    $15.67
-                  </span>
-                </p>
-                <span className="text-gray-500 text-xs">Qty: 1</span>
-              </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Delivery Charge</span>
+              <span className="text-gray-800 font-semibold">$ 5.34</span>
             </div>
           </div>
-          <div className="flex items-center gap-2 py-10 justify-center">
-            <span className="capitalize font-semibold text-gray-700 text-lg">
-              Total:
+          <div className="flex justify-between items-center p-4 border-b-[1px]">
+            <span className="text-lg font-semibold text-gray-800">
+              Total Payable:
             </span>
-            <span className="text-red-600 font-bold text-lg">$100.67</span>
+            <span className="text-red-600 font-semibold text-lg">$ 400.56</span>
           </div>
-          <div className="bg-red-500 text-center py-2 uppercase text-white tracking-wider font-semibold hover:bg-red-700 cursor-pointer">
-            Proceed to payment
+          <div className="flex justify-between items-center p-4 text-golden font-semibold">
+            *Your total savings in this order is $45.98
           </div>
         </div>
       </div>
-    </section>
+    </>
   );
 };
 
