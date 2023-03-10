@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import MainNav from "../components/MainNav";
 import AddIcon from "@mui/icons-material/Add";
 import { Done, LocationOn } from "@mui/icons-material";
 import OrderedItems from "../components/OrderedItems";
+import AddressForm from "../components/AddressForm";
 const CheckOut = () => {
+  const [showDeliverButton, setShowDeliverButton] = useState();
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [showOrderedItems, setShowOrderedItems] = useState(false);
+  const radioRef = useRef(true);
+  const handleOptionChange = (index) => {
+    setShowDeliverButton(index);
+  };
   return (
     <>
       <MainNav />
@@ -45,7 +53,16 @@ const CheckOut = () => {
               </div>
               <div className="flex px-10 py-4 gap-6 border-b-[1px]">
                 <div>
-                  <input type="radio" className="h-4 w-4" />
+                  <input
+                    type="radio"
+                    className="h-4 w-4"
+                    name="address"
+                    onChange={() => {
+                      handleOptionChange(1);
+                      setShowAddressForm(false);
+                    }}
+                    ref={radioRef}
+                  />
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
@@ -57,14 +74,21 @@ const CheckOut = () => {
                     Nalbari <br />
                     Assam - 781339
                   </div>
-                  <div className="bg-red-500 text-white uppercase w-max text-sm tracking-wider px-4 py-2 rounded-sm font-semibold mt-4 hover:bg-red-600 cursor-pointer">
-                    Deliver here
-                  </div>
+                  {showDeliverButton === 1 && <DeliverButton />}
                 </div>
               </div>
               <div className="flex px-10 py-4 gap-6 border-b-[1px]">
                 <div>
-                  <input type="radio" className="h-4 w-4" />
+                  <input
+                    type="radio"
+                    className="h-4 w-4"
+                    name="address"
+                    onChange={() => {
+                      handleOptionChange(2);
+                      setShowAddressForm(false);
+                    }}
+                    ref={radioRef}
+                  />
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
@@ -76,11 +100,21 @@ const CheckOut = () => {
                     Nalbari <br />
                     Assam - 781339
                   </div>
+                  {showDeliverButton === 2 && <DeliverButton />}
                 </div>
               </div>
               <div className="flex px-10 py-4 gap-6 border-b-[1px]">
                 <div>
-                  <input type="radio" className="h-4 w-4" />
+                  <input
+                    type="radio"
+                    className="h-4 w-4"
+                    name="address"
+                    onChange={() => {
+                      handleOptionChange(3);
+                      setShowAddressForm(false);
+                    }}
+                    ref={radioRef}
+                  />
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
@@ -92,30 +126,41 @@ const CheckOut = () => {
                     Nalbari <br />
                     Assam - 781339
                   </div>
-                </div>
-              </div>
-              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
-                <div>
-                  <input type="radio" className="h-4 w-4" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <span className="font-semibold">Rajkumar Kalita</span>
-                    <span className="font-semibold">9101121717</span>
-                  </div>
-                  <div className="text-gray-600">
-                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
-                    Nalbari <br />
-                    Assam - 781339
-                  </div>
+                  {showDeliverButton === 3 && <DeliverButton />}
                 </div>
               </div>
             </div>
-            <div className="flex items-center bg-white px-10 py-3 gap-4 cursor-pointer">
-              <AddIcon className="text-blue-600" fontSize="small" />
-              <span className="text-blue-600 font-semibold">
-                Add a new address
-              </span>
+            <div className="bg-white">
+              <div className="flex flex-col w-full px-10 py-4">
+                <div className="flex justify-between">
+                  <div
+                    className="flex items-center  gap-4 cursor-pointer"
+                    onClick={() => {
+                      radioRef.current.checked = false;
+                      setShowAddressForm(true);
+                      handleOptionChange(0);
+                    }}
+                  >
+                    <AddIcon className="text-blue-600" fontSize="small" />
+                    <span className="text-blue-600 font-semibold">
+                      Add a new address
+                    </span>
+                  </div>
+                  <div
+                    className={`uppercase text-red-500 font-semibold tracking-wide cursor-pointer hover:text-red-700 ${
+                      showAddressForm === true ? "block" : "hidden"
+                    }`}
+                    onClick={() => setShowAddressForm(false)}
+                  >
+                    Cancel
+                  </div>
+                </div>
+                {showAddressForm && (
+                  <div className="w-full bg-white">
+                    <AddressForm />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex bg-white gap-4 cursor-pointer shadow-md flex-col">
@@ -171,5 +216,11 @@ const CheckOut = () => {
     </>
   );
 };
-
+const DeliverButton = () => {
+  return (
+    <div className="bg-red-500 text-white uppercase w-max text-sm tracking-wider px-4 py-2 rounded-sm font-semibold mt-4 hover:bg-red-600 cursor-pointer">
+      Deliver here
+    </div>
+  );
+};
 export default CheckOut;
