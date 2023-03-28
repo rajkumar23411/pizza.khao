@@ -57,15 +57,15 @@ export const createProduct =
   };
 
 export const getAllProducts =
-  (keyword = "", category, price=[0, 1000]) =>
+  (keyword = "", category, price=[0, 1000], currentPage=1) =>
   async (dispatch) => {
     try {
       dispatch({ type: ALL_PRODUCT_REQUEST });
 
-      let Link = `/api/products?keyword=${keyword}&prices.regular[gte]=${price[0]}&prices.regular[lte]=${price[1]}`;
+      let Link = `/api/products?keyword=${keyword}&prices.regular[gte]=${price[0]}&prices.regular[lte]=${price[1]}&page=${currentPage}`;
      
       if (category) {
-        Link = `/api/products?keyword=${keyword}&category=${category}&prices.regular[gte]=${price[0]}&prices.regular[lte]=${price[1]}`;
+        Link = `/api/products?keyword=${keyword}&category=${category}&prices.regular[gte]=${price[0]}&prices.regular[lte]=${price[1]}&page=${currentPage}`;
       }
 
       const { data } = await axios.get(Link, config);

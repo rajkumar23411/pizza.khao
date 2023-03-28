@@ -11,26 +11,36 @@ import { getAllProducts } from "../redux/actions/productAction";
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import { ALL_PRODUCT_RESET } from "../redux/constants/productConstant";
+import Stack from "@mui/material/Stack";
+import { Pagination } from "@mui/material";
 
 const Menu = () => {
-  const { loading, products } = useSelector((state) => state.products);
+  const { loading, products, productsCount, resultPerPage } = useSelector(
+    (state) => state.products
+  );
   const [category, setCategory] = useState("");
   const { keyword } = useParams();
   const dispatch = useDispatch();
   const [price, setPrice] = useState([0, 1000]);
   const [sort, setSort] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handlePriceChange = (event, newValue) => {
     setPrice(newValue);
   };
+
+  const setCurrentPageNo = (e, page) => {
+    setCurrentPage(page);
+  };
+
   useEffect(() => {
-    dispatch(getAllProducts(keyword, category, price));
-  }, [dispatch, keyword, category, price]);
+    dispatch(getAllProducts(keyword, category, price, currentPage));
+  }, [dispatch, keyword, category, price, currentPage]);
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
   };
-
+  const totalPages = Math.ceil(productsCount / resultPerPage);
   useEffect(() => {
     sortProducts();
   }, [sort]);
@@ -46,11 +56,11 @@ const Menu = () => {
       sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sort === "Name Z to A") {
       sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
-    }else if(sort === "Newest first"){
+    } else if (sort === "Newest first") {
       sortedProducts.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-    }else if(sort === "Oldest first"){
+    } else if (sort === "Oldest first") {
       sortedProducts.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-    }else if(sort === "Average Rating"){
+    } else if (sort === "Average Rating") {
       sortedProducts.sort((a, b) => b.ratings - a.ratings);
     }
 
@@ -212,12 +222,25 @@ const Menu = () => {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-3 place-content-center place-items-center">
-              {products &&
-                products.map((pizza, i) => (
-                  <MenuPizzaCard pizza={pizza} key={i} />
-                ))}
-            </div>
+            <>
+              <div className="grid grid-cols-3 place-items-center place-content-start h-full">
+                {products &&
+                  products.map((pizza, i) => (
+                    <MenuPizzaCard pizza={pizza} key={i} />
+                  ))}
+              </div>
+              {resultPerPage < productsCount && (
+                <div className="grid place-items-center ">
+                  <Stack>
+                    <Pagination
+                      onChange={setCurrentPageNo}
+                      page={currentPage}
+                      count={totalPages}
+                    />
+                  </Stack>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
