@@ -14,6 +14,7 @@ import {
 } from "../redux/actions/productAction";
 import { pizzaSize } from "../utils";
 import { Rating } from "@mui/material";
+import PlaceHolderCard from "../components/PlaceHolderCard";
 
 const SinglePizza = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,6 @@ const SinglePizza = () => {
   const [price, setPrice] = useState();
   const [size, setSize] = useState("");
   const { id } = useParams();
-  const [ratings, setRatings] = useState(null);
 
   const handleSelectSize = (e) => {
     setSize(e.target.value);
@@ -47,9 +47,7 @@ const SinglePizza = () => {
   useEffect(() => {
     dispatch(getProductDetails(id));
     dispatch(getRelatedProducts(id));
-    loading === false && product && setRatings(product.ratings);
-  }, [dispatch, id]);
-
+  }, [id]);
   return (
     <>
       <MainNav />
@@ -78,7 +76,7 @@ const SinglePizza = () => {
               <Rating
                 size="medium"
                 precision={0.5}
-                value={ratings}
+                value={product.ratings ? product.ratings : 0}
                 name="controlled-rating"
                 readOnly
               />
@@ -174,7 +172,13 @@ const SinglePizza = () => {
           </div>
         </section>
         {product && <PizzaInformation pizza={product} />}
-        {relatedProducts && <RelatedProducts product={relatedProducts} />}
+        {relatedProductLoading ? (
+          <div className=" w-full grid grid-cols-5 gap-4 place-items-center place-content-start h-full">
+            {Array(5).fill(<PlaceHolderCard />)}
+          </div>
+        ) : (
+          <RelatedProducts product={relatedProducts} />
+        )}
       </section>
       <HomeFooter />
     </>

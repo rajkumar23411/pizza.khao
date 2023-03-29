@@ -1,4 +1,4 @@
-export const baseUrl = "http://localhost:4000/api";
+// export const baseUrl = "http://localhost:4000/api";
 export const config = {
   headers: { "Content-Type": "application/json" },
 };
@@ -24,4 +24,4 @@ export const sortingOptions = [
   "Newest first",
   "Oldest first",
   "Average Rating",
-]
+];

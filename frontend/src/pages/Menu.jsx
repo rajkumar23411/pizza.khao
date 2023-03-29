@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/actions/productAction";
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
-import { ALL_PRODUCT_RESET } from "../redux/constants/productConstant";
 import Stack from "@mui/material/Stack";
 import { Pagination } from "@mui/material";
+import PlaceHolderCard from "../components/PlaceHolderCard";
+import NoResultFound from "../components/NoResultFound";
 
 const Menu = () => {
   const { loading, products, productsCount, resultPerPage } = useSelector(
@@ -69,7 +70,8 @@ const Menu = () => {
 
   useEffect(() => {
     sortProducts();
-  }, [dispatch, keyword, category, price]);
+  }, [keyword, category, price]);
+
   return (
     <>
       <div>
@@ -183,68 +185,63 @@ const Menu = () => {
             </div>
           </div>
         </div>
-        <div className="flex-1 flex flex-col">
-          <div className="flex w-full justify-between px-10">
-            <div className="text-gray-500">Showing 1-12 out of 34 result </div>
-            <div className="bg-gray-200 w-72 flex items-center justify-between h-14 px-4">
-              <select
-                className="bg-transparent appearance-none w-full text-gray-600 h-full"
-                value={sort}
-                onChange={handleSortChange}
-              >
-                <option defaultValue>Default Sorting</option>
-                {sortingOptions.map((option, i) => (
-                  <option key={i} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <ExpandMoreIcon fontSize="small" />
+        {loading ? (
+          <div className="flex-1">
+            <div className="grid grid-cols-3 gap-6 place-items-center place-content-start h-full">
+              {Array(8).fill(<PlaceHolderCard />)}
             </div>
           </div>
-
-          {products && products.length === 0 ? (
-            <div className="flex items-center justify-center h-96 flex-col gap-5">
-              <img src="/images/sad-cry.gif" alt="pizza gif" className="h-56" />
-              <div className="text-center">
-                <h1 className="text-2xl font-semibold text-golden">
-                  Sorry, no results found!
-                </h1>
-                <p className="text-base text-gray-500">
-                  Please check the spelling or try searching for something else
-                </p>
+        ) : (
+          <div className="flex-1 flex flex-col">
+            <div className="flex w-full justify-between px-10">
+              <div className="text-gray-500">
+                Showing 1-12 out of 34 result{" "}
               </div>
-              <Link
-                to="/menu"
-                className="bg-emerald-600 cursor-pointer uppercase font-semibold text-white p-4 text-sm rounded tracking-wider hover:bg-emerald-700"
-              >
-                Back to Menu
-              </Link>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-3 place-items-center place-content-start h-full">
-                {products &&
-                  products.map((pizza, i) => (
-                    <MenuPizzaCard pizza={pizza} key={i} />
+              <div className="bg-gray-200 w-72 flex items-center justify-between h-14 px-4">
+                <select
+                  className="bg-transparent appearance-none w-full text-gray-600 h-full"
+                  value={sort}
+                  onChange={handleSortChange}
+                >
+                  <option defaultValue>Default Sorting</option>
+                  {sortingOptions.map((option, i) => (
+                    <option key={i} value={option}>
+                      {option}
+                    </option>
                   ))}
+                </select>
+                <ExpandMoreIcon fontSize="small" />
               </div>
-              { resultPerPage < productsCount &&(
-                <div className="grid place-items-center ">
-                  <Stack>
-                    <Pagination
-                      onChange={setCurrentPageNo}
-                      page={currentPage}
-                      count={totalPages}
-                      shape="rounded"
-                      size="large"
-                    />
-                  </Stack>
+            </div>
+
+            {products && products.length === 0 ? (
+              <NoResultFound />
+            ) : (
+              <>
+                <div className="grid grid-cols-3 place-items-center place-content-start h-full">
+                  {products &&
+                    products.map((pizza, i) => (
+                      <MenuPizzaCard pizza={pizza} key={i} />
+                    ))}
                 </div>
-              )}
-            </>
-          )}
-        </div>
+
+                {resultPerPage < productsCount && (
+                  <div className="grid place-items-center ">
+                    <Stack>
+                      <Pagination
+                        onChange={setCurrentPageNo}
+                        page={currentPage}
+                        count={totalPages}
+                        shape="rounded"
+                        size="large"
+                      />
+                    </Stack>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
       </section>
       <HomeFooter />
     </>

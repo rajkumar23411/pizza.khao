@@ -4,25 +4,25 @@ import UserComment from "./UserComment";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductReviews } from "../redux/actions/productAction";
 
-const PizzaInformation = ({pizza}) => {
+const PizzaInformation = ({ pizza }) => {
   const [toggleState, setToggleState] = useState(1);
   const [isModelOpen, setIsModelOpen] = useState(false);
-  
-  const {loading, reviews, error} = useSelector(state => state.allReviews);
-  
+  const { loading, reviews, error } = useSelector((state) => state.allReviews);
+
   const dispatch = useDispatch();
 
   const toggleTag = (index) => {
     setToggleState(index);
   };
-  
+
   const handleCommentBox = (pizza) => {
     setIsModelOpen(true);
   };
 
   useEffect(() => {
-    dispatch(getProductReviews(pizza && pizza._id));
-  }, [dispatch]);
+    dispatch(getProductReviews(pizza._id));
+  }, [pizza]);
+
   return (
     <section className="py-20 relative">
       <div className="w-4/5">
@@ -49,7 +49,8 @@ const PizzaInformation = ({pizza}) => {
               toggleState === 3 ? "tab-active" : ""
             } uppercase font-roboto tracking-wide text-golden text-base font-medium hover:text-red-800 cursor-pointer`}
           >
-            Reviews {reviews && pizza.numOfReviews > 0 && `(${pizza.numOfReviews})`}
+            Reviews{" "}
+            {reviews && pizza.numOfReviews > 0 && `(${pizza.numOfReviews})`}
           </p>
         </div>
         <div className="w-full pt-6 content-tabs flex">
@@ -91,22 +92,19 @@ const PizzaInformation = ({pizza}) => {
               toggleState === 3 ? "content active-content" : "content"
             } `}
           >
-            {
-              pizza && pizza.numOfReviews > 0 && (
-                <h1 className="uppercase text-golden font-roboto pb-6 font-semibold tracking-wide">
-                  {pizza.numOfReviews} Reviews for {pizza.name}
-                </h1>
-              ) 
-            }
+            {pizza && pizza.numOfReviews > 0 && (
+              <h1 className="uppercase text-golden font-roboto pb-6 font-semibold tracking-wide">
+                {pizza.numOfReviews} Reviews for {pizza.name}
+              </h1>
+            )}
             <div className="flex flex-col gap-3">
-              {
-                reviews && 
-                reviews.length === 0 ? 
-                  (<h1 className="text-gray-500">No reviews yet</h1>) :
-                  reviews.map(review => (
-                    <UserComment key={review._id} review={review} />
-                  ))
-              }
+              {reviews && reviews.length === 0 ? (
+                <h1 className="text-gray-500">No reviews yet</h1>
+              ) : (
+                reviews.map((review) => (
+                  <UserComment key={review._id} review={review} />
+                ))
+              )}
               <div
                 onClick={handleCommentBox}
                 className="bg-red-600 w-max uppercase text-white tracking-wide  font-roboto px-4 py-2 mt-6 hover:bg-red-700 cursor-pointer"
@@ -117,7 +115,9 @@ const PizzaInformation = ({pizza}) => {
           </div>
         </div>
       </div>
-      {isModelOpen && <CommentBox onClose={() => setIsModelOpen(false)} pizza={pizza} />}
+      {isModelOpen && (
+        <CommentBox onClose={() => setIsModelOpen(false)} pizza={pizza} />
+      )}
     </section>
   );
 };
