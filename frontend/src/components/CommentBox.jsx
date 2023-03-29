@@ -18,6 +18,7 @@ const CommentBox = ({ onClose, pizza }) => {
 
   const reviewSubmitHandler = (e) => {
     e.preventDefault();
+
     dispatch(addNewReview(pizza._id, Number(rating), comment));
   };
 

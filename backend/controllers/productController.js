@@ -82,23 +82,10 @@ const productController = {
     }
   },
 
-  async getProductsByCategory(req, res, next) {
-    try {
-      const category = req.params.category;
-
-      const product = await Product.find({
-        category: { $all: category },
-      });
-
-      res.status(302).json({ product });
-    } catch (err) {
-      console.log(err);
-    }
-  },
-
   async getSingleProduct(req, res, next) {
     try {
-      const product = await Product.findById(req.params.id);
+      const productId = req.params.id;
+      const product = await Product.findById(productId);
 
       if (!product) {
         return next(CustomErrorHandler.notFound("Product does not exists"));
@@ -110,6 +97,24 @@ const productController = {
     }
   },
 
+  async getRelatedProducts(req, res, next) {
+    try {
+      const productId = req.params.id;
+      const product = await Product.findById(productId);
+      if (!product) {
+        return next(CustomErrorHandler.notFound("Product does not exists"));
+      }
+      const relatedProducts = await Product.find({
+        _id: { $ne: productId },
+        category: { $in: product.category },
+      }).limit(8);
+
+      res.status(200).json({ relatedProducts });
+    } catch (error) {
+      console.log(error);
+      return next(new Error("Something went wrong"));
+    }
+  },
   async deleteAproduct(req, res, next) {
     try {
       let product = await Product.findById(req.params.id);
@@ -130,8 +135,12 @@ const productController = {
     try {
       const { id, comment, rating } = req.body;
 
-      console.log(req.body);
-      
+      if (!comment || !rating) {
+        return next(
+          CustomErrorHandler.badRequest("Please provide comment and rating")
+        );
+      }
+
       const name = `${req.user.firstname} ${req.user.lastname}`;
       const review = {
         user: req.user._id,
@@ -175,18 +184,17 @@ const productController = {
       res.status(200).json({ message: "Review added successfully" });
     } catch (error) {
       console.log(error);
-  }
+    }
   },
   async getAllReviews(req, res, next) {
     try {
-
       const product = await Product.findById(req.query.id);
-      
+
       if (!product) {
         return next(CustomErrorHandler.notFound("Product not found"));
       }
 
-      res.status(200).json({reviews: product.reviews});
+      res.status(200).json({ reviews: product.reviews });
     } catch (error) {
       console.log(error);
     }

@@ -8,7 +8,10 @@ import PizzaInformation from "../components/PizzaInformation";
 import RelatedProducts from "../components/RelatedProducts";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getProductDetails } from "../redux/actions/productAction";
+import {
+  getProductDetails,
+  getRelatedProducts,
+} from "../redux/actions/productAction";
 import { pizzaSize } from "../utils";
 import { Rating } from "@mui/material";
 
@@ -17,6 +20,12 @@ const SinglePizza = () => {
   const { loading, product, error } = useSelector(
     (state) => state.productDetails
   );
+  const {
+    loading: relatedProductLoading,
+    relatedProducts,
+    error: relatedProductError,
+  } = useSelector((state) => state.relatedProducts);
+
   const [price, setPrice] = useState();
   const [size, setSize] = useState("");
   const { id } = useParams();
@@ -34,21 +43,19 @@ const SinglePizza = () => {
       setPrice(product.prices.extralarge);
     }
   };
-  
+
   useEffect(() => {
     dispatch(getProductDetails(id));
-    if(product){
-      const productRating = product.ratings;
-      setRatings(productRating)
-    }
-  }, [dispatch, id, product]);
+    dispatch(getRelatedProducts(id));
+    loading === false && product && setRatings(product.ratings);
+  }, [dispatch, id]);
 
   return (
     <>
       <MainNav />
       <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
         <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-          Shop
+          Shop / {product && product.name}
         </h1>
       </div>
       <section className="flex flex-col p-20">
@@ -68,7 +75,13 @@ const SinglePizza = () => {
               {product.name}
             </p>
             <div className="flex items-center gap-2">
-              <Rating size="medium" precision={0.5} value={ratings} name="controlled-rating" readOnly/>
+              <Rating
+                size="medium"
+                precision={0.5}
+                value={ratings}
+                name="controlled-rating"
+                readOnly
+              />
               {product && product.numOfReviews === 0 ? (
                 `(No reviews yet)`
               ) : (
@@ -160,11 +173,8 @@ const SinglePizza = () => {
             </div>
           </div>
         </section>
-        {
-          loading===false && product && 
-          <PizzaInformation pizza={product} />
-        }
-        <RelatedProducts />
+        {product && <PizzaInformation pizza={product} />}
+        {relatedProducts && <RelatedProducts product={relatedProducts} />}
       </section>
       <HomeFooter />
     </>

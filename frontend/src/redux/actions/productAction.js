@@ -16,6 +16,9 @@ import {
   PRODUCT_DETAILS_FAIL,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
+  RELATED_PRODUCT_FAIL,
+  RELATED_PRODUCT_REQUEST,
+  RELATED_PRODUCT_SUCCESS,
 } from "../constants/productConstant";
 
 export const createProduct =
@@ -57,13 +60,13 @@ export const createProduct =
   };
 
 export const getAllProducts =
-  (keyword = "", category, price=[0, 1000], currentPage=1) =>
+  (keyword = "", category, price = [0, 1000], currentPage = 1) =>
   async (dispatch) => {
     try {
       dispatch({ type: ALL_PRODUCT_REQUEST });
 
       let Link = `/api/products?keyword=${keyword}&prices.regular[gte]=${price[0]}&prices.regular[lte]=${price[1]}&page=${currentPage}`;
-     
+
       if (category) {
         Link = `/api/products?keyword=${keyword}&category=${category}&prices.regular[gte]=${price[0]}&prices.regular[lte]=${price[1]}&page=${currentPage}`;
       }
@@ -124,6 +127,21 @@ export const addNewReview = (id, rating, comment) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ADD_REVIEW_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getRelatedProducts = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: RELATED_PRODUCT_REQUEST });
+
+    const { data } = await axios.get(`/api/products/related/${id}`);
+
+    dispatch({ type: RELATED_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: RELATED_PRODUCT_FAIL,
       payload: error.response.data.message,
     });
   }

@@ -8,6 +8,7 @@ import {
   productDetailsReducer,
   productReducer,
   productReviewsReducer,
+  relatedProductReducer,
 } from "./reducers/productReducer";
 
 const reducer = combineReducers({
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   productDetails: productDetailsReducer,
   allReviews: productReviewsReducer,
   addReview: addReview,
+  relatedProducts: relatedProductReducer,
 });
 
 let initialState = {};

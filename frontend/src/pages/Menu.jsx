@@ -229,13 +229,15 @@ const Menu = () => {
                     <MenuPizzaCard pizza={pizza} key={i} />
                   ))}
               </div>
-              {resultPerPage < productsCount && (
+              { resultPerPage < productsCount &&(
                 <div className="grid place-items-center ">
                   <Stack>
                     <Pagination
                       onChange={setCurrentPageNo}
                       page={currentPage}
                       count={totalPages}
+                      shape="rounded"
+                      size="large"
                     />
                   </Stack>
                 </div>

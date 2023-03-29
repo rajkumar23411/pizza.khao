@@ -6,7 +6,7 @@ const {
   deleteAproduct,
   addUpdateReview,
   getAllReviews,
-  getProductsByCategory,
+  getRelatedProducts,
 } = require("../controllers/productController");
 const { auth, admin } = require("../middlewares/auth");
 const productRoutes = require("express").Router();
@@ -18,5 +18,5 @@ productRoutes.get("/pizza/:id", getSingleProduct);
 productRoutes.delete("/product/:id", [auth, admin], deleteAproduct);
 productRoutes.post("/product/add/review", [auth], addUpdateReview);
 productRoutes.get("/reviews", getAllReviews);
-productRoutes.get("/product-category/:category", getProductsByCategory);
+productRoutes.get("/products/related/:id", getRelatedProducts);
 module.exports = productRoutes;
