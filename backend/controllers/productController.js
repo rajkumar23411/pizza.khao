@@ -15,6 +15,19 @@ const productController = {
         description,
         image,
       } = req.body;
+      if (
+        !name ||
+        !regularPrice ||
+        !mediumPrice ||
+        !largePrice ||
+        !extraLargePrice ||
+        !category ||
+        !description ||
+        !image
+      ) {
+        return next(CustomErrorHandler.required("All fields are required"));
+      }
+
       const product = await Product.find();
       const isProductExists = await product.find((prod) => prod.name === name);
 
@@ -107,7 +120,7 @@ const productController = {
       const relatedProducts = await Product.find({
         _id: { $ne: productId },
         category: { $in: product.category },
-      }).limit(8);
+      }).limit(5);
 
       res.status(200).json({ relatedProducts });
     } catch (error) {
@@ -135,7 +148,7 @@ const productController = {
     try {
       const { id, comment, rating } = req.body;
 
-      if (!comment || !rating) {
+      if (!comment || !rating || !id) {
         return next(
           CustomErrorHandler.badRequest("Please provide comment and rating")
         );

@@ -20,7 +20,7 @@ const PizzaInformation = ({ pizza }) => {
   };
 
   useEffect(() => {
-    dispatch(getProductReviews(pizza._id));
+    dispatch(getProductReviews(pizza && pizza._id));
   }, [pizza]);
 
   return (
