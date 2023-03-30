@@ -63,7 +63,6 @@ export const newProductReducer = (state = {}, action) => {
     case NEW_PRODUCT_REQUEST:
       return {
         loading: true,
-
         ...state,
       };
     case NEW_PRODUCT_SUCCESS:

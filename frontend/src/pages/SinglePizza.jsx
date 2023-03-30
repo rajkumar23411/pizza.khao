@@ -47,7 +47,8 @@ const SinglePizza = () => {
   useEffect(() => {
     dispatch(getProductDetails(id));
     dispatch(getRelatedProducts(id));
-  }, [id]);
+  }, [id, dispatch]);
+
   return (
     <>
       <MainNav />
@@ -67,20 +68,20 @@ const SinglePizza = () => {
                   -14%
                 </span>
                 <img
-                  src={product.image}
+                  src={product && product.image}
                   alt="pizza"
                   className="w-full h-[70%] object-contain"
                 />
               </div>
               <div className="flex-1 flex flex-col gap-4">
                 <p className="font-semibold text-gray-800 uppercase text-2xl font-roboto tracking-wider">
-                  {product.name}
+                  {product && product.name}
                 </p>
                 <div className="flex items-center gap-2">
                   <Rating
                     size="medium"
                     precision={0.5}
-                    value={product.ratings ? product.ratings : 0}
+                    value={product && product.ratings ? product.ratings : 0}
                     name="controlled-rating"
                     readOnly
                   />
@@ -88,7 +89,7 @@ const SinglePizza = () => {
                     `(No reviews yet)`
                   ) : (
                     <div className="text-gray-700">
-                      ({product.numOfReviews} Customer review)
+                      ({product && product.numOfReviews} Customer review)
                     </div>
                   )}
                 </div>
@@ -175,7 +176,7 @@ const SinglePizza = () => {
                 </div>
               </div>
             </section>
-            {product && <PizzaInformation pizza={product} />}
+            {product && <PizzaInformation id={id} pizza={product} />}
           </>
         )}
 
@@ -184,7 +185,7 @@ const SinglePizza = () => {
             {Array(5).fill(<PlaceHolderCard />)}
           </div>
         ) : (
-          <RelatedProducts product={relatedProducts} />
+          relatedProducts && <RelatedProducts product={relatedProducts} />
         )}
       </section>
       <HomeFooter />

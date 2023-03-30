@@ -2,22 +2,25 @@ import React, { useState } from "react";
 import AccountNav from "../components/AccountNav";
 import MainNav from "../components/MainNav";
 import PromptModel from "../components/PromptModel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateName } from "../redux/actions/userAction";
+import { useSnackbar } from "notistack";
 const MyAccount = () => {
-  const { user } = useSelector((state) => state.user);
-
+  const { user, loading } = useSelector((state) => state.user);
+  const { error, isUpdated } = useSelector((state) => state.profile);
   const [readOnly, setReadOnly] = useState({
     name: true,
     email: true,
     contact: true,
   });
   const [showPrompt, setShowPrompt] = useState(false);
-  const [firstName, setFirstName] = useState(user.firstname);
-  const [lastName, setLastName] = useState(user.lastname);
-  const [phoneNo, setPhoneNo] = useState(user.contact);
-  const [email, setEmail] = useState(user.email);
+  const [firstName, setFirstName] = useState(user && user.firstname);
+  const [lastName, setLastName] = useState(user && user.lastname);
+  const [phoneNo, setPhoneNo] = useState(user && user.contact);
+  const [email, setEmail] = useState(user && user.email);
 
-  console.log(user.firstname);
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleEditClick = (filed) => {
     setReadOnly({ ...readOnly, [filed]: false });
@@ -25,7 +28,18 @@ const MyAccount = () => {
   const handleCancelClick = (filed) => {
     setReadOnly({ ...readOnly, [filed]: true });
   };
+  const handleNameChange = (e) => {
+    e.preventDefault();
+    dispatch(updateName(firstName, lastName));
+    setReadOnly({ ...readOnly, name: true });
 
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+    }
+    if (isUpdated) {
+      enqueueSnackbar("Name has been updated", { variant: "success" });
+    }
+  };
   return (
     <>
       <section>
@@ -64,7 +78,10 @@ const MyAccount = () => {
                   </div>
                 )}
               </div>
-              <div className="flex w-full items-center justify-between gap-6">
+              <form
+                className="flex w-full items-center justify-between gap-6"
+                onSubmit={handleNameChange}
+              >
                 <div
                   className={`flex items-center w-full justify-center h-12 rounded border-2 ${
                     readOnly.name ? "border-blue-100" : "border-blue-300"
@@ -101,14 +118,23 @@ const MyAccount = () => {
                     placeholder="Your last name here*"
                   />
                 </div>
-              </div>
+                {readOnly.name === false && (
+                  <div>
+                    <input
+                      type="submit"
+                      value="Save"
+                      className="bg-red-600 px-4 py-2 rounded text-white cursor-pointer hover:bg-red-700"
+                    />
+                  </div>
+                )}
+              </form>
             </div>
           </div>
           <div className="max-w-xl flex flex-col gap-4">
             <div className="flex flex-col gap-4 w-full">
               <div className="flex w-full items-center justify-between">
                 <label className="text-gray-500 text-base">Email</label>
-                {readOnly.email ? (
+                {/* {readOnly.email ? (
                   <div
                     onClick={() => handleEditClick("email")}
                     className={`uppercase text-base text-blue-500 font-semibold cursor-pointer`}
@@ -122,7 +148,7 @@ const MyAccount = () => {
                   >
                     Cancel
                   </div>
-                )}
+                )} */}
               </div>
               <div
                 className={`flex items-center w-full justify-center h-12 rounded border-2 ${
@@ -150,7 +176,7 @@ const MyAccount = () => {
                 <label className="text-gray-500 text-base">
                   Contact number
                 </label>
-                {readOnly.contact ? (
+                {/* {readOnly.contact ? (
                   <div
                     onClick={() => handleEditClick("contact")}
                     className={`uppercase text-base text-blue-500 font-semibold cursor-pointer`}
@@ -164,7 +190,7 @@ const MyAccount = () => {
                   >
                     Cancel
                   </div>
-                )}
+                )} */}
               </div>
               <div
                 className={`flex items-center w-full justify-center h-12 rounded border-2 ${

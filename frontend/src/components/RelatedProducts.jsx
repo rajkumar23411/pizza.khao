@@ -9,7 +9,7 @@ const RelatedProducts = ({ product }) => {
       </h1>
       <div className="grid grid-cols-5">
         {product.map((prod) => (
-          <SingleRelatedPizza product={prod} />
+          <SingleRelatedPizza product={prod} key={prod._id} />
         ))}
       </div>
     </section>

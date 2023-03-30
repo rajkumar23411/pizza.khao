@@ -4,7 +4,7 @@ import UserComment from "./UserComment";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductReviews } from "../redux/actions/productAction";
 
-const PizzaInformation = ({ pizza }) => {
+const PizzaInformation = ({ id, pizza }) => {
   const [toggleState, setToggleState] = useState(1);
   const [isModelOpen, setIsModelOpen] = useState(false);
   const { loading, reviews, error } = useSelector((state) => state.allReviews);
@@ -20,8 +20,8 @@ const PizzaInformation = ({ pizza }) => {
   };
 
   useEffect(() => {
-    dispatch(getProductReviews(pizza && pizza._id));
-  }, [pizza]);
+    dispatch(getProductReviews(id));
+  }, [dispatch]);
 
   return (
     <section className="py-20 relative">

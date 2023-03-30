@@ -7,6 +7,7 @@ import {
   ALL_PRODUCT_FAIL,
   ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
+  ALL_REVIEW_FAIL,
   ALL_REVIEW_REQUEST,
   ALL_REVIEW_SUCCESS,
   CLEAR_ERRORS,
@@ -108,7 +109,7 @@ export const getProductReviews = (id) => async (dispatch) => {
     dispatch({ type: ALL_REVIEW_SUCCESS, payload: data.reviews });
   } catch (error) {
     dispatch({
-      type: ALL_PRODUCT_FAIL,
+      type: ALL_REVIEW_FAIL,
       payload: error.response.data.message,
     });
   }

@@ -85,5 +85,26 @@ const userController = {
       return next(error);
     }
   },
+
+  async updateUserName(req, res, next) {
+    try {
+      const user = await User.findById(req.user.id);
+
+      if (!user) {
+        return next(CustomErrorHandler.notFound("User not found"));
+      }
+
+      const { firstname, lastname } = req.body;
+
+      user.firstname = firstname;
+      user.lastname = lastname;
+
+      await user.save();
+
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 module.exports = userController;

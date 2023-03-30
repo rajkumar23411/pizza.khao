@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import EditAddressForm from "./EditAddressForm";
 import PromptModel from "./PromptModel";
-
-const AddressBox = () => {
+const AddressBox = ({ address }) => {
   const [showMenu, setShowMenu] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isModelOpen, setIsModelOpen] = useState(false);
@@ -14,15 +13,13 @@ const AddressBox = () => {
   const toggleMenu = (index) => {
     setShowMenu(index);
   };
-  const togglePrompt = () => {
-    setShowPrompt(true);
-  };
+
   return (
     <div className="w-full flex flex-col border-b-2">
       <div className="flex items-center justify-between p-4">
         <p className="flex items-center gap-4">
-          <span className="font-semibold text-gray-800">Rajkumar Kalita</span>
-          <span className="font-semibold text-gray-800">9101121717</span>
+          <span className="font-semibold text-gray-800">{address.name}</span>
+          <span className="font-semibold text-gray-800">{address.contact}</span>
         </p>
         <div className="cursor-pointer" onMouseEnter={() => toggleMenu(1)}>
           <div className="relative">
@@ -42,7 +39,7 @@ const AddressBox = () => {
               </p>
               <p
                 className="p-2 hover:bg-slate-50 hover:text-blue-600 cursor-pointer"
-                onClick={togglePrompt}
+                onClick={(e) => setShowPrompt(true)}
               >
                 Delete
               </p>
@@ -51,8 +48,7 @@ const AddressBox = () => {
         </div>
       </div>
       <p className="text-gray-700 w-[65%] p-4">
-        Tripura road, jayanagar (Khanapara), Jwaharnagar Housefeed Apartment,
-        Guwahati, Assam - <spa>781022</spa>
+        {address.address}, {address.city}, {address.state} - {address.pinCode}
       </p>
       {isModelOpen && (
         <div className="h-screen w-screen backdrop-blur-sm backdrop-brightness-50 top-0 left-0 right-0 fixed flex items-center justify-center">
@@ -68,6 +64,7 @@ const AddressBox = () => {
             buttonText={"Yes, Delete"}
             caneclText={"Cancel"}
             onClose={() => setShowPrompt(false)}
+            id={address && address._id}
           />
         </div>
       )}

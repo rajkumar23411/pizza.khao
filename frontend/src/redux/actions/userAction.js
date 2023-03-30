@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseUrl, config } from "../../utils";
+import { config } from "../../utils";
 import {
   CLEAR_ERRORS,
   LOGIN_FAIL,
@@ -8,6 +8,9 @@ import {
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  UPDATE_NAME_FAIL,
+  UPDATE_USER_NAME_REQUEST,
+  UPDATE_USER_NAME_SUCCESS,
   USER_LOAD_FAIL,
   USER_LOAD_REQUEST,
   USER_LOAD_SUCCESS,
@@ -55,6 +58,19 @@ export const loadUser = () => async (dispatch) => {
     dispatch({ type: USER_LOAD_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: USER_LOAD_FAIL, payload: error.response.data.message });
+  }
+};
+export const updateName = (firstname, lastname) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_USER_NAME_REQUEST });
+    const { data } = await axios.post(
+      `/api/update/name`,
+      { firstname, lastname },
+      config
+    );
+    dispatch({ type: UPDATE_USER_NAME_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({ type: UPDATE_NAME_FAIL, payload: error.response.data.message });
   }
 };
 

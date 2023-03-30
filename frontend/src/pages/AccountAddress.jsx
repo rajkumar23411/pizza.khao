@@ -1,12 +1,26 @@
 import { Add } from "@mui/icons-material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import AccountNav from "../components/AccountNav";
 import AddressBox from "../components/AddressBox";
 import AddressForm from "../components/AddressForm";
 import MainNav from "../components/MainNav";
+import { myAddresses } from "../redux/actions/addressAction";
 
 const AccountAddress = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
+  const { loading, addresses, error } = useSelector(
+    (state) => state.myAddresses
+  );
+  const { success } = useSelector((state) => state.newAddress);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (success) {
+      setShowAddressForm(false);
+    }
+    dispatch(myAddresses());
+  }, [dispatch, success]);
   return (
     <>
       <section>
@@ -53,13 +67,14 @@ const AccountAddress = () => {
               )}
             </div>
 
-            {showAddressForm && <AddressForm />}
+            {showAddressForm && <AddressForm button={"Save Address"} />}
           </div>
 
           <div className="flex flex-col items-center gap-4 border-[1px] border-gray-300 w-full border-b-[1px]">
-            <AddressBox />
-            <AddressBox />
-            <AddressBox />
+            {addresses &&
+              addresses.map((address) => (
+                <AddressBox key={address._id} address={address} />
+              ))}
           </div>
         </div>
       </section>

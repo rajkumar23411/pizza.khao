@@ -13,7 +13,6 @@ const addressController = {
         landMark,
         alternatContact,
       } = req.body;
-
       if (!name || !contact || !pinCode || !address || !city || !state)
         return next(CustomErrorHandler.required("All fields are require"));
 
@@ -39,7 +38,7 @@ const addressController = {
     try {
       const user = req.user._id;
 
-      const addresses = await Address.find({ userId: user });
+      const addresses = await Address.find({ userId: user }).sort("-createdAt");
 
       if (!addresses) {
         return next(CustomErrorHandler.notFound("No address found"));
@@ -60,9 +59,10 @@ const addressController = {
     res.status(200).json({ address });
   },
   async remove(req, res, next) {
-    const address = await Address.findByIdAndDelete(req.params.id);
+    const addressID = req.body;
+    await Address.findByIdAndDelete(addressID);
 
-    res.status(200).json({ address });
+    res.status(200).json({ success: true });
   },
 };
 module.exports = addressController;

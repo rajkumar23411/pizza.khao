@@ -11,6 +11,6 @@ const addressRoutes = require("express").Router();
 addressRoutes.post("/address/add", [auth], add);
 addressRoutes.get("/address", [auth], getAddress);
 addressRoutes.put("/address/:id", [auth], update);
-addressRoutes.delete("/address/:id", [auth], remove);
+addressRoutes.delete("/address/delete", [auth], remove);
 
 module.exports = addressRoutes;

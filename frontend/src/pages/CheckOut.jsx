@@ -157,7 +157,7 @@ const CheckOut = () => {
                 </div>
                 {showAddressForm && (
                   <div className="w-full bg-white">
-                    <AddressForm />
+                    <AddressForm button={"Save and deliver here"} />
                   </div>
                 )}
               </div>

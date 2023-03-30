@@ -17,7 +17,7 @@ const userSchema = new Schema({
   otpExp: Date,
 });
 
-userSchema.pre("save", async function () {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
