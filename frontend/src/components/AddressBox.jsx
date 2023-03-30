@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import EditAddressForm from "./EditAddressForm";
 import PromptModel from "./PromptModel";
+import { useSnackbar } from "notistack";
+import { clearError } from "../redux/actions/addressAction";
+import { useDispatch, useSelector } from "react-redux";
 const AddressBox = ({ address }) => {
   const [showMenu, setShowMenu] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isModelOpen, setIsModelOpen] = useState(false);
-
+  const { enqueueSnackbar } = useSnackbar();
+  const { isDeleted, error } = useSelector((state) => state.deleteAddress);
+  const dispatch = useDispatch();
   const handleAddressModel = () => {
     setIsModelOpen(true);
   };
   const toggleMenu = (index) => {
     setShowMenu(index);
   };
+
+  useEffect(() => {
+    if (isDeleted) {
+      enqueueSnackbar("Address deleted successfully", { variant: "success" });
+    }
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+      dispatch(clearError());
+    }
+  }, [isDeleted, error, address]);
 
   return (
     <div className="w-full flex flex-col border-b-2">

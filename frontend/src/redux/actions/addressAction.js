@@ -64,8 +64,12 @@ export const myAddresses = () => async (dispatch) => {
 export const deleteAddress = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_ADDRESS_REQUEST });
-
-    const { data } = await axios.post("/api/addess/delete", id, config);
+    console.log(id);
+    const { data } = await axios.delete(
+      `/api/delete/address/${id}`,
+      id,
+      config
+    );
 
     dispatch({ type: DELETE_ADDRESS_SUCCESS, payload: data.success });
   } catch (error) {

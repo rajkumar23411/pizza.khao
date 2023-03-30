@@ -58,11 +58,17 @@ const addressController = {
 
     res.status(200).json({ address });
   },
-  async remove(req, res, next) {
-    const addressID = req.body;
-    await Address.findByIdAndDelete(addressID);
+  async deleteAddress(req, res, next) {
+    try {
+      const address = await Address.findById(req.params.id);
+      if (!address)
+        return next(CustomErrorHandler.notFound("Address not found"));
 
-    res.status(200).json({ success: true });
+      await address.deleteOne();
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
 module.exports = addressController;
