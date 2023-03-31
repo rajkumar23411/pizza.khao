@@ -6,21 +6,25 @@ import AddressBox from "../components/AddressBox";
 import AddressForm from "../components/AddressForm";
 import MainNav from "../components/MainNav";
 import { myAddresses } from "../redux/actions/addressAction";
+import { useSnackbar } from "notistack";
 
 const AccountAddress = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const { loading, addresses, error } = useSelector(
-    (state) => state.myAddresses
-  );
-  const { success } = useSelector((state) => state.newAddress);
+  const { loading, addresses } = useSelector((state) => state.myAddresses);
+  const { success, error } = useSelector((state) => state.newAddress);
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (success) {
+      enqueueSnackbar("Address added successfully", { variant: "success" });
       setShowAddressForm(false);
     }
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+    }
     dispatch(myAddresses());
-  }, [dispatch, success]);
+  }, [dispatch, success, error, enqueueSnackbar]);
   return (
     <>
       <section>
@@ -40,19 +44,23 @@ const AccountAddress = () => {
             Manage Address
           </h1>
 
-          <div className="border-[1px] flex flex-col">
+          <div className="flex flex-col">
             <div
               className={`flex items-center justify-between ${
-                showAddressForm ? "px-8 py-2" : "p-2"
-              }`}
+                showAddressForm
+                  ? "bg-none"
+                  : "bg-red-600 w-max rounded hover:bg-red-700"
+              }  ${showAddressForm ? "px-8 py-2" : "p-2"}`}
             >
               <div
-                className={`flex items-center gap-4 border-gray-300 cursor-pointer`}
+                className={`flex items-center gap-2 cursor-pointer`}
                 onClick={() => setShowAddressForm(true)}
               >
-                {showAddressForm === false && <Add className="text-blue-600" />}
+                {showAddressForm === false && <Add className="text-white" />}
                 <span
-                  className={`tracking-wide text-blue-600 font-semibold uppercase`}
+                  className={`tracking-wide ${
+                    showAddressForm ? "text-gray-700" : "text-white"
+                  } font-semibold uppercase`}
                 >
                   Add a new address
                 </span>
@@ -70,12 +78,24 @@ const AccountAddress = () => {
             {showAddressForm && <AddressForm button={"Save Address"} />}
           </div>
 
-          <div className="flex flex-col items-center gap-4 border-[1px] border-gray-300 w-full border-b-[1px]">
-            {addresses &&
-              addresses.map((address) => (
-                <AddressBox key={address._id} address={address} />
-              ))}
-          </div>
+          {addresses.length === 0 ? (
+            <div
+              className={`h-96 w-full ${
+                showAddressForm ? "hidden" : "flex"
+              } items-center justify-center`}
+            >
+              <p className="text-gray-600 text-lg">
+                You have not any addresses to show yet
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-4 border-gray-300 w-full">
+              {addresses &&
+                addresses.map((address) => (
+                  <AddressBox key={address._id} address={address} />
+                ))}
+            </div>
+          )}
         </div>
       </section>
     </>

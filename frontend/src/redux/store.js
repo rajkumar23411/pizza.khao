@@ -14,6 +14,7 @@ import {
   deleteAddressReducer,
   myAddressReducer,
   newAddressReducer,
+  updateAddressReducer,
 } from "./reducers/addressReducer";
 
 const reducer = combineReducers({
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   newAddress: newAddressReducer,
   myAddresses: myAddressReducer,
   deleteAddress: deleteAddressReducer,
+  updateAddress: updateAddressReducer,
 });
 
 let initialState = {};

@@ -9,6 +9,9 @@ import {
   GET_ALL_ADDRESS_FAIL,
   GET_ALL_ADDRESS_REQUEST,
   GET_ALL_ADDRESS_SUCCESS,
+  UPDATE_ADDRESS_FAIL,
+  UPDATE_ADDRESS_REQUEST,
+  UPDATE_ADDRESS_SUCCESS,
 } from "../constants/addressConstant";
 
 export const newAddressReducer = (state = {}, action) => {
@@ -79,6 +82,33 @@ export const deleteAddressReducer = (state = {}, action) => {
         isDeleted: action.payload,
       };
     case DELETE_ADDRESS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const updateAddressReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_ADDRESS_REQUEST:
+      return {
+        loading: true,
+        ...state,
+      };
+    case UPDATE_ADDRESS_SUCCESS:
+      return {
+        loading: false,
+        isUpdated: action.payload,
+      };
+    case UPDATE_ADDRESS_FAIL:
       return {
         loading: false,
         error: action.payload,

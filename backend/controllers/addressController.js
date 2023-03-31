@@ -50,13 +50,13 @@ const addressController = {
     }
   },
   async update(req, res, next) {
-    const address = await Address.findOneAndUpdate(req.params.id, req.body, {
+    await Address.findOneAndUpdate(req.params.id, req.body, {
       runValidators: true,
       useFindAndModify: false,
       new: true,
     });
 
-    res.status(200).json({ address });
+    res.status(200).json({ success: true });
   },
   async deleteAddress(req, res, next) {
     try {

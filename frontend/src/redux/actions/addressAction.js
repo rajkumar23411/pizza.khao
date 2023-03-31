@@ -11,6 +11,9 @@ import {
   GET_ALL_ADDRESS_FAIL,
   GET_ALL_ADDRESS_REQUEST,
   GET_ALL_ADDRESS_SUCCESS,
+  UPDATE_ADDRESS_FAIL,
+  UPDATE_ADDRESS_REQUEST,
+  UPDATE_ADDRESS_SUCCESS,
 } from "../constants/addressConstant";
 
 export const addAddress =
@@ -75,6 +78,21 @@ export const deleteAddress = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_ADDRESS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updateAddress = (id, addressData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_ADDRESS_REQUEST });
+
+    const { data } = await axios.put(`/api/address/${id}`, addressData, config);
+
+    dispatch({ type: UPDATE_ADDRESS_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_ADDRESS_FAIL,
       payload: error.response.data.message,
     });
   }

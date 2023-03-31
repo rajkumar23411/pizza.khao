@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addAddress, clearError } from "../redux/actions/addressAction";
-import { useSnackbar } from "notistack";
-import { NEW_ADDRESS_RESET } from "../redux/constants/addressConstant";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addAddress } from "../redux/actions/addressAction";
 
 const AddressForm = ({ button }) => {
-  const { error, success } = useSelector((state) => state.newAddress);
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
   const [name, setName] = useState("");
   const [contact, setContact] = useState();
   const [pincode, setPincode] = useState();
@@ -35,16 +31,6 @@ const AddressForm = ({ button }) => {
     );
   };
 
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, { variant: "error" });
-      dispatch(clearError());
-    }
-
-    if (success) {
-      enqueueSnackbar("Address added successfully", { variant: "success" });
-    }
-  }, [dispatch, error, success, enqueueSnackbar]);
   return (
     <form className="flex flex-col gap-4 p-10" onSubmit={handleAddressSubmit}>
       <div className="flex w-full gap-4">
