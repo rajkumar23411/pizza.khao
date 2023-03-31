@@ -1,118 +1,98 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import KeyboardArrowUpSharpIcon from "@mui/icons-material/KeyboardArrowUpSharp";
 import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSharp";
-// import CloseIcon from "@mui/icons-material/Close";
+import { pizzaSize } from "../utils";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearError,
+  deleteCartItem,
+  getCartItems,
+} from "../redux/actions/cartActions";
+import { useSnackbar } from "notistack";
 
-const CartItem = () => {
-  return (
-    <section className="flex flex-col gap-4">
-      <div className="w-full flex items-center justify-center border-b-2 border-dotted gap-2 border-[#B7903C]">
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-semibold items-center justify-center"></div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center text-golden">
-          Product
+const CartItem = ({ cart }) => {
+  const dispatch = useDispatch();
+  const { success, error } = useSelector((state) => state.myCart);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const removeCartItem = (id, size) => {
+    dispatch(deleteCartItem(id, size));
+  };
+  useEffect(() => {
+    if (success) {
+      enqueueSnackbar("Product removed from cart", { variant: "success" });
+      dispatch(getCartItems());
+    }
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+      dispatch(clearError());
+    }
+  }, [dispatch, success, error, enqueueSnackbar]);
+  return cart.map((item, index) => (
+    <div className="flex flex-col gap-4 h-max border-b-2 py-5" key={index}>
+      <div className="flex items-start gap-6 h-full">
+        <div className="flex items-center justify-center flex-col gap-4 h-full">
+          <img src={item.productId.image} alt="pizza" className="h-28" />
+          <div className="flex items-center justify-between gap-4">
+            <select className="capitalize border-2 border-gray-300 p-1 text-gray-600 rounded">
+              {pizzaSize.map((size) => (
+                <option value={size} className="capitalize">
+                  {size}
+                </option>
+              ))}
+            </select>
+            <div className="flex gap-1 border-2 rounded py-1">
+              <span>
+                <KeyboardArrowUpSharpIcon
+                  fontSize="medium"
+                  className="text-gray-600"
+                />
+              </span>
+              <span className="px-1">1</span>
+              <span>
+                <KeyboardArrowDownSharpIcon
+                  fontSize="medium"
+                  className="text-gray-600"
+                />
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center text-golden">
-          Price
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center text-golden">
-          Quantity
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center text-golden">
-          Subtotal
+        <div className="flex items-start justify-between w-full h-full">
+          <div className="flex flex-col gap-1">
+            <span className="text-gray-800 font-semibold uppercase tracking-wider text-xl">
+              {item.productId.name}
+            </span>
+            <span className="text-golden font-semibold">
+              ₹{item.productId.prices[item.size]}
+            </span>
+            <span>{item.size}</span>
+            <span>Quantity: {item.quantity}</span>
+          </div>
+          <div className="flex flex-col items-end justify-between h-40">
+            <div className="text-red-600 text-xl font-semibold">
+              ₹{item.quantity * item.productId.prices[item.size]}
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-base flex items-center justify-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded cursor-pointer">
+                <FavoriteBorderRoundedIcon fontSize="small" />
+                Favourite
+              </span>
+              <span
+                className="text-base flex items-center justify-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded cursor-pointer"
+                onClick={() => removeCartItem(item.productId._id, item.size)}
+              >
+                <DeleteOutlineOutlinedIcon fontSize="small" />
+                Remove
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="w-full flex items-center justify-center">
-        <div className="flex flex-1 text-center uppercase font-semibold items-center justify-center gap-2">
-          <div className="text-sm bg-red-600 flex-1 py-2 text-white rounded-sm hover:bg-red-800  cursor-pointer">
-            Remove
-          </div>
-          <div className="text-sm bg-blue-600 flex-1 py-2 text-white rounded-sm hover:bg-blue-800 cursor-pointer">
-            Save for Later
-          </div>
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          <img src="/images/pizza-3.png" alt="pizza" className="h-28" />
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-medium items-center justify-center text-gray-700">
-          $50.00
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          <div className="flex items-center justify-center w-min gap-1">
-            <KeyboardArrowDownSharpIcon className="cursor-pointe" />
-            <input
-              type="text"
-              value="1"
-              className="w-8 border-2 border-gray-400 px-2 text-gray-600"
-            />
-            <KeyboardArrowUpSharpIcon className="cursor-pointer" />
-          </div>
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          $200.00
-        </div>
-      </div>
-      <div className="w-full flex items-center justify-center">
-        <div className="flex flex-1 text-center uppercase font-semibold items-center justify-center gap-2">
-          <div className="text-sm bg-red-600 flex-1 py-2 text-white rounded-sm hover:bg-red-800  cursor-pointer">
-            Remove
-          </div>
-          <div className="text-sm bg-blue-600 flex-1 py-2 text-white rounded-sm hover:bg-blue-800 cursor-pointer">
-            Save for Later
-          </div>
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          <img src="/images/pizza-3.png" alt="pizza" className="h-28" />
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-medium items-center justify-center text-gray-700">
-          $50.00
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          <div className="flex items-center justify-center w-min gap-1">
-            <KeyboardArrowDownSharpIcon className="cursor-pointe" />
-            <input
-              type="text"
-              value="1"
-              className="w-8 border-2 border-gray-400 px-2 text-gray-600"
-            />
-            <KeyboardArrowUpSharpIcon className="cursor-pointer" />
-          </div>
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          $200.00
-        </div>
-      </div>
-      <div className="w-full flex items-center justify-center">
-        <div className="flex flex-1 text-center uppercase font-semibold items-center justify-center gap-2">
-          <div className="text-sm bg-red-600 flex-1 py-2 text-white rounded-sm hover:bg-red-800  cursor-pointer">
-            Remove
-          </div>
-          <div className="text-sm bg-blue-600 flex-1 py-2 text-white rounded-sm hover:bg-blue-800 cursor-pointer">
-            Save for Later
-          </div>
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          <img src="/images/pizza-3.png" alt="pizza" className="h-28" />
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-medium items-center justify-center text-gray-700">
-          $50.00
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          <div className="flex items-center justify-center w-min gap-1">
-            <KeyboardArrowDownSharpIcon className="cursor-pointe" />
-            <input
-              type="text"
-              value="1"
-              className="w-8 border-2 border-gray-400 px-2 text-gray-600"
-            />
-            <KeyboardArrowUpSharpIcon className="cursor-pointer" />
-          </div>
-        </div>
-        <div className="flex flex-1 text-center uppercase text-lg tracking-wider font-bold items-center justify-center">
-          $200.00
-        </div>
-      </div>
-    </section>
-  );
+    </div>
+  ));
 };
 
 export default CartItem;

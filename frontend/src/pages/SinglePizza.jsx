@@ -16,38 +16,57 @@ import { pizzaSize } from "../utils";
 import { Rating } from "@mui/material";
 import PlaceHolderCard from "../components/PlaceHolderCard";
 import SinglePizzaLoader from "../components/SinglePizzaLoader";
+import { addToCart, clearError } from "../redux/actions/cartActions";
+import { useSnackbar } from "notistack";
+
 const SinglePizza = () => {
   const dispatch = useDispatch();
-  const { loading, product, error } = useSelector(
-    (state) => state.productDetails
+  const { loading, product } = useSelector((state) => state.productDetails);
+  const { success, error } = useSelector((state) => state.myCart);
+  const { loading: relatedProductLoading, relatedProducts } = useSelector(
+    (state) => state.relatedProducts
   );
-  const {
-    loading: relatedProductLoading,
-    relatedProducts,
-    error: relatedProductError,
-  } = useSelector((state) => state.relatedProducts);
-
   const [price, setPrice] = useState();
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState(product ? "regular" : "");
+  const [quantity, setQuantity] = useState(1);
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSelectSize = (e) => {
     setSize(e.target.value);
-    if (e.target.value === "Regular") {
+    if (e.target.value === "regular") {
       setPrice(product.prices.regular);
-    } else if (e.target.value === "Medium") {
+    } else if (e.target.value === "medium") {
       setPrice(product.prices.medium);
-    } else if (e.target.value === "Large") {
+    } else if (e.target.value === "large") {
       setPrice(product.prices.large);
-    } else if (e.target.value === "Extra Large") {
+    } else if (e.target.value === "extralarge") {
       setPrice(product.prices.extralarge);
     }
   };
-
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
+  };
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+  const handleAddToCart = () => {
+    dispatch(addToCart(id, quantity, size));
+  };
   useEffect(() => {
     dispatch(getProductDetails(id));
     dispatch(getRelatedProducts(id));
-  }, [id, dispatch]);
+
+    if (success) {
+      enqueueSnackbar("Item added to cart", { variant: "success" });
+    }
+    if (error) {
+      enqueueSnackbar(error, { variant: "info" });
+      dispatch(clearError());
+    }
+  }, [id, dispatch, success, error, enqueueSnackbar]);
 
   return (
     <>
@@ -135,7 +154,11 @@ const SinglePizza = () => {
                       >
                         <option defaultValue>Select Size</option>
                         {pizzaSize.map((size, index) => (
-                          <option key={index} value={size}>
+                          <option
+                            key={index}
+                            value={size}
+                            className="capitalize"
+                          >
                             {size}
                           </option>
                         ))}
@@ -143,10 +166,10 @@ const SinglePizza = () => {
                       <ExpandMoreIcon fontSize="small" sx={{ color: "gray" }} />
                     </div>
                   </div>
-                  {size && (
+                  {price && (
                     <div className="pt-6 flex items-center gap-2">
                       <span className="text-red-700 font-bold text-3xl">
-                        ₹{price}
+                        {`₹${price}`}
                       </span>
                     </div>
                   )}
@@ -155,21 +178,26 @@ const SinglePizza = () => {
                       <input
                         type="number"
                         className="w-full h-full pl-2 text-xl outer"
-                        value="1"
+                        value={quantity}
                         readOnly={true}
                       />
                       <div className="flex flex-col justify-between items-center ">
                         <KeyboardArrowUpIcon
                           className="cursor-pointer"
                           sx={{ color: "brown" }}
+                          onClick={handleIncrement}
                         />
                         <KeyboardArrowDownIcon
                           className="cursor-pointer"
                           sx={{ color: "brown" }}
+                          onClick={handleDecrement}
                         />
                       </div>
                     </div>
-                    <div className="bg-red-600 text-white uppercase tracking-wide font-semibold h-full flex items-center justify-center px-6 hover:bg-red-700 cursor-pointer">
+                    <div
+                      className="bg-red-600 text-white uppercase tracking-wide font-semibold h-full flex items-center justify-center px-6 hover:bg-red-700 cursor-pointer"
+                      onClick={handleAddToCart}
+                    >
                       Add to cart
                     </div>
                   </div>

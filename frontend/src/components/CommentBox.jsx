@@ -4,35 +4,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Rating } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { addNewReview, clearError } from "../redux/actions/productAction";
+import {
+  addNewReview,
+  clearError,
+  getProductDetails,
+  getProductReviews,
+} from "../redux/actions/productAction";
 
 const CommentBox = ({ onClose, pizza }) => {
-  const { loading, user } = useSelector((state) => state.user);
-  const { success, error } = useSelector(
-    (state) => state.addReview
-  );
+  const { success, error } = useSelector((state) => state.addReview);
   const dispatch = useDispatch();
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const reviewSubmitHandler = (e) => {
     e.preventDefault();
-
     dispatch(addNewReview(pizza._id, Number(rating), comment));
   };
 
-  useEffect(()=>{
-    if(error){
-      enqueueSnackbar(error, {variant: "error"})
+  useEffect(() => {
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
       dispatch(clearError());
     }
 
-    if(success){
-      enqueueSnackbar("Review has been submitted", {variant: "success"});
+    if (success) {
+      enqueueSnackbar("Review has been submitted", { variant: "success" });
       onClose();
+      dispatch(getProductReviews(pizza._id));
+      dispatch(getProductDetails(pizza._id));
     }
-   
   }, [dispatch, error, enqueueSnackbar, success, pizza]);
   return (
     <div
@@ -43,7 +45,9 @@ const CommentBox = ({ onClose, pizza }) => {
           <h1 className="text-golden uppercase font-bold font-roboto text-lg tracking-wider text-center">
             Add your review
           </h1>
-          <p className="w-full text-center text-gray-500">Share your valuable feedback with us!</p>
+          <p className="w-full text-center text-gray-500">
+            Share your valuable feedback with us!
+          </p>
           <div className="flex flex-col">
             <label className="text-gray-400">Your rating*</label>
             <span>

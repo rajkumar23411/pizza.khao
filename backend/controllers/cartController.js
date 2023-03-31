@@ -1,23 +1,25 @@
 const Cart = require("../models/cart");
 const Product = require("../models/product");
 const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
+
 const cartController = {
   async addToCart(req, res, next) {
     try {
-      const { productId, quantity } = req.body;
+      const { productId, quantity, size } = req.body;
       const userId = req.user._id;
       let cart = await Cart.findOne({ userId });
       const product = await Product.findById(productId);
+      let price = product.prices[size];
 
       if (!cart) {
         cart = new Cart({ userId, items: [] });
       }
 
       if (cart.items.length === 0) {
-        cart.items.push({ productId, quantity });
+        cart.items.push({ productId, quantity, size });
 
-        cart.totalPrice = product.prices.regular * quantity;
-
+        cart.totalPrice = price * quantity;
+        console.log(cart.totalPrice);
         await cart.save();
 
         res.status(200).json({ cart });
@@ -36,7 +38,7 @@ const cartController = {
 
         cart.items.push({ productId, quantity });
 
-        cart.totalPrice += product.price * quantity;
+        cart.totalPrice += price * quantity;
         await cart.save();
         res.status(200).json({ cart });
       }
@@ -79,20 +81,25 @@ const cartController = {
   },
   async deleteFromCart(req, res, next) {
     const cart = await Cart.findOne({ userId: req.user.id });
-    const { productId } = req.body;
-    const product = await Product.findById(productId);
+    const { productId, size } = req.body;
     if (!productId) {
       return next(CustomErrorHandler.required("Product id is required"));
     }
-
+    if (!size) {
+      return next(CustomErrorHandler.required("Size is required"));
+    }
+    const product = await Product.findById(productId);
+    if (!product) {
+      return next(CustomErrorHandler.notFound("Product not found"));
+    }
     const productIndex = cart.items.findIndex(
       (item) => item.productId.toString() === productId.toString()
     );
-    cart.totalPrice -= product.price * cart.items[productIndex].quantity;
+    cart.totalPrice -= product.prices[size] * cart.items[productIndex].quantity;
     cart.items.splice(productIndex, 1);
 
     await cart.save();
-    res.status(200).json({ cart });
+    res.status(200).json({ success: true });
   },
 
   async getCartItems(req, res, next) {
@@ -100,7 +107,9 @@ const cartController = {
     if (!userId) {
       return next(CustomErrorHandler.unAuthorized("Please login to access"));
     }
-    const cart = await Cart.findOne({ userId: req.user.id });
+    const cart = await Cart.findOne({ userId: req.user.id }).populate(
+      "items.productId"
+    );
     res.status(200).json({ cart });
   },
 };
