@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const SingleRelatedPizza = ({ product }) => {
   return (
     <div className="flex flex-col w-80 py-6 gap-6 pizza-box overflow-hidden relative h-[22rem]">
-      <Link to="/pizza/alpasto">
+      <Link to={`/pizza/${product._id}`}>
         <div className="pizza-image w-full flex items-center justify-center">
           <img
             src={product.image}

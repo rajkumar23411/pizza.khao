@@ -25,7 +25,6 @@ const Menu = () => {
   const [price, setPrice] = useState([0, 1000]);
   const [sort, setSort] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
   const handlePriceChange = (event, newValue) => {
     setPrice(newValue);
   };
@@ -42,9 +41,6 @@ const Menu = () => {
     setSort(e.target.value);
   };
   const totalPages = Math.ceil(productsCount / resultPerPage);
-  useEffect(() => {
-    sortProducts();
-  }, [sort]);
 
   const sortProducts = () => {
     const sortedProducts = [...products];
@@ -70,7 +66,7 @@ const Menu = () => {
 
   useEffect(() => {
     sortProducts();
-  }, [keyword, category, price]);
+  }, [keyword, category, price, sort]);
 
   return (
     <>
@@ -89,34 +85,6 @@ const Menu = () => {
               Products
             </h1>
             <div className="flex flex-col gap-4 pt-4">
-              <div className="flex gap-2">
-                <img src="/images/pizza-1.png" alt="pizza" className="h-16" />
-                <div className="flex justify-center flex-col">
-                  <p className="uppercase text-golden font-semibold font-roboto tracking-wider">
-                    LIGURIA PIZZA
-                  </p>
-                  <p className="flex gap-2">
-                    <span className="line-through text-gray-400 font-semibold">
-                      $35.00
-                    </span>
-                    <span className="text-red-700 font-extrabold">$30.00</span>
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <img src="/images/pizza-1.png" alt="pizza" className="h-16" />
-                <div className="flex justify-center flex-col">
-                  <p className="uppercase text-golden font-semibold font-roboto tracking-wider">
-                    LIGURIA PIZZA
-                  </p>
-                  <p className="flex gap-2">
-                    <span className="line-through text-gray-400 font-semibold">
-                      $35.00
-                    </span>
-                    <span className="text-red-700 font-extrabold">$30.00</span>
-                  </p>
-                </div>
-              </div>
               <div className="flex gap-2">
                 <img src="/images/pizza-1.png" alt="pizza" className="h-16" />
                 <div className="flex justify-center flex-col">

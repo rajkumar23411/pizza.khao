@@ -46,9 +46,9 @@ const cartController = {
       console.log(err);
     }
   },
-  async updateQty(req, res, next) {
+  async updateCart(req, res, next) {
     try {
-      const { productId, quantity } = req.body;
+      const { productId, quantity, size } = req.body;
       const userId = req.user._id;
       const product = await Product.findById(productId);
 
@@ -56,24 +56,26 @@ const cartController = {
 
       cart.items.forEach((item) => {
         if (item.productId.toString() === productId.toString()) {
+          item.size = size;
           item.quantity = quantity;
         }
       });
 
       if (cart.items.length === 1) {
-        cart.totalPrice = product.price * quantity;
+        cart.items[0].size = size;
+        cart.totalPrice = product.prices[size] * quantity;
         await cart.save();
-        res.status(200).json({ cart });
+        res.status(200).json({ isUpdated: true });
       } else {
         let totalPrice = 0;
         for (let i = 0; i < cart.items.length; i++) {
           const product = await Product.findById(cart.items[i].productId);
-          totalPrice += product.price * cart.items[i].quantity;
+          totalPrice += product.prices[size] * cart.items[i].quantity;
         }
         cart.totalPrice = totalPrice;
 
         await cart.save();
-        res.status(200).json({ cart });
+        res.status(200).json({ isUpdated: true });
       }
     } catch (err) {
       console.log(err);

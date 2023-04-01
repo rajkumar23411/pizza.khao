@@ -2,22 +2,15 @@ import axios from "axios";
 import { config } from "../../utils";
 import {
   ADD_TO_CART_FAIL,
-  ADD_TO_CART_REQUEST,
   ADD_TO_CART_SUCCESS,
   CLEAR_ERRORS,
-  GET_CART_ITEMS_FAIL,
-  GET_CART_ITEMS_REQUEST,
   GET_CART_ITEMS_SUCCESS,
-  REMOVE_CART_ITEM_FAIL,
-  REMOVE_CART_ITEM_REQUEST,
-  REMOVE_CART_ITEM_SUCCESS,
+  REMOVE_CART_ITEM,
+  UPDATE_CART_ITEM,
 } from "../constants/cartConstant";
 
 export const addToCart = (productId, quantity, size) => async (dispatch) => {
   try {
-    dispatch({
-      type: ADD_TO_CART_REQUEST,
-    });
     const { data } = await axios.post(
       "/api/add_to_cart",
       { productId, quantity, size },
@@ -37,22 +30,17 @@ export const addToCart = (productId, quantity, size) => async (dispatch) => {
 
 export const getCartItems = () => async (dispatch) => {
   try {
-    dispatch({ type: GET_CART_ITEMS_REQUEST });
     const { data } = await axios.get("/api/my/cart", config);
     dispatch({
       type: GET_CART_ITEMS_SUCCESS,
       payload: data.cart,
     });
   } catch (error) {
-    dispatch({
-      type: GET_CART_ITEMS_FAIL,
-      payload: error.response.data.message,
-    });
+    console.log(error);
   }
 };
 export const deleteCartItem = (productId, size) => async (dispatch) => {
   try {
-    dispatch({ type: REMOVE_CART_ITEM_REQUEST });
     const { data } = await axios.post(
       `/api/cart/delete`,
       { productId, size },
@@ -60,14 +48,26 @@ export const deleteCartItem = (productId, size) => async (dispatch) => {
     );
 
     dispatch({
-      type: REMOVE_CART_ITEM_SUCCESS,
+      type: REMOVE_CART_ITEM,
       payload: data.success,
     });
   } catch (error) {
+    console.log(error);
+  }
+};
+export const updateCart = (productId, quantity, size) => async (dispatch) => {
+  try {
+    const { data } = await axios.put(
+      `/api/update/cart`,
+      { productId, quantity, size },
+      config
+    );
     dispatch({
-      type: REMOVE_CART_ITEM_FAIL,
-      payload: error.response.data.message,
+      type: UPDATE_CART_ITEM,
+      payload: data.isUpdated,
     });
+  } catch (error) {
+    console.log(error);
   }
 };
 

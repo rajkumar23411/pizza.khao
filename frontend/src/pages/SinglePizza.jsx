@@ -16,7 +16,11 @@ import { pizzaSize } from "../utils";
 import { Rating } from "@mui/material";
 import PlaceHolderCard from "../components/PlaceHolderCard";
 import SinglePizzaLoader from "../components/SinglePizzaLoader";
-import { addToCart, clearError } from "../redux/actions/cartActions";
+import {
+  addToCart,
+  clearError,
+  getCartItems,
+} from "../redux/actions/cartActions";
 import { useSnackbar } from "notistack";
 
 const SinglePizza = () => {
@@ -61,6 +65,7 @@ const SinglePizza = () => {
 
     if (success) {
       enqueueSnackbar("Item added to cart", { variant: "success" });
+      dispatch(getCartItems());
     }
     if (error) {
       enqueueSnackbar(error, { variant: "info" });
