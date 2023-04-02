@@ -10,7 +10,7 @@ import { getCartItems } from "../redux/actions/cartActions";
 const BannerNav = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [isModelOpen, setIsModelOpen] = useState(0);
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.myCart);
   const dispatch = useDispatch();
   const handleShowSearchBar = () => {
@@ -80,11 +80,13 @@ const BannerNav = () => {
               <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
                 Coming Soon
               </li>
-              <NavLink to="/add/pizza">
-                <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                  Add a pizza
-                </li>
-              </NavLink>
+              {isAuthenticated && user && user.role === "admin" && (
+                <NavLink to="/add/pizza">
+                  <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
+                    Add a pizza
+                  </li>
+                </NavLink>
+              )}
             </ul>
           </Link>
           <Link
@@ -133,9 +135,9 @@ const BannerNav = () => {
           )}
         </div>
         <div className="flex items-center justify-center gap-8">
-          <div className="flex items-center justify-center gap-1 relative">
+          <div className="flex items-center justify-center gap-1 relative cursor-pointer">
             {cart && cart.items && (
-              <span className="absolute -left-2 -top-1 bg-white text-gray-800 font-semibold h-4 w-4 rounded-full flex items-center justify-center text-xs">
+              <span className="absolute -left-2 -top-1 bg-white text-red-600 font-extrabold h-4 w-4 rounded-full flex items-center justify-center text-xs">
                 {cart.items.length === 0 ? 0 : cart.items.length}
               </span>
             )}

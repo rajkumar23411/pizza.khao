@@ -3,23 +3,18 @@ import MainNav from "../components/MainNav";
 import { Link } from "react-router-dom";
 import CartItem from "../components/CartItem";
 import { useDispatch, useSelector } from "react-redux";
-import { clearError, getCartItems } from "../redux/actions/cartActions";
-import { useSnackbar } from "notistack";
+import { getCartItems } from "../redux/actions/cartActions";
 import HomeFooter from "../components/HomeFooter";
 const Cart = () => {
-  const { loading, error, cart } = useSelector((state) => state.myCart);
-  const { enqueueSnackbar } = useSnackbar();
+  const { loading, cartItems } = useSelector((state) => state.myCart);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, { variant: "error" });
-      dispatch(clearError());
-    }
     dispatch(getCartItems());
-  }, [dispatch, error, enqueueSnackbar]);
-  const totalPrice = cart && cart.totalPrice;
-  const tax = cart && Number((cart.totalPrice / 100) * 5);
-  const shipping = cart && Number(cart.totalPrice <= 300 ? 50 : 0);
+  }, [dispatch]);
+
+  const totalPrice = cartItems && cartItems.totalPrice;
+  const tax = cartItems && Number((cartItems.totalPrice / 100) * 5);
+  const shipping = cartItems && Number(cartItems.totalPrice <= 300 ? 50 : 0);
   const total = Number(totalPrice + tax + shipping).toFixed(2);
   return (
     <>
@@ -28,7 +23,7 @@ const Cart = () => {
       </section>
       <section className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
         <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide">
-          CART
+          MY CART
         </h1>
       </section>
       {loading ? (
@@ -37,7 +32,7 @@ const Cart = () => {
         </div>
       ) : (
         <>
-          {cart && cart.items && cart.items.length === 0 ? (
+          {cartItems && cartItems.items && cartItems.items.length === 0 ? (
             <div className="w-full flex items-center justify-center flex-col py-20 gap-4">
               <img
                 src="/images/empty_cart.jpg"
@@ -79,9 +74,14 @@ const Cart = () => {
               <section className="flex gap-4 p-10">
                 <div className="flex-1">
                   <h1 className="text-2xl font-roboto uppercase font-bold text-gray-800 mb-6">
-                    Cart Items
+                    Cart Items (
+                    {cartItems && cartItems.items && cartItems.items.length})
                   </h1>
-                  {cart && <CartItem cart={cart.items} />}
+                  {cartItems &&
+                    cartItems.items &&
+                    cartItems.items.map((item) => (
+                      <CartItem key={item._id} item={item} />
+                    ))}
                 </div>
                 <div className="flex-[0.6] flex items-center flex-col h-max">
                   <div>
@@ -90,24 +90,55 @@ const Cart = () => {
                     </h1>
                     <div className="flex gap-20 py-10">
                       <div className="flex flex-col gap-4">
-                        <div className="text-lg uppercase">Subtotal</div>
-                        <div className="text-lg uppercase">Shipping</div>
-                        <div className="text-lg uppercase">Tax</div>
-                        <div className="text-lg uppercase font-bold">Total</div>
+                        <div className="text-lg capitalize text-gray-900">
+                          Subtotal
+                        </div>
+                        <div className="text-lg capitalize text-gray-900">
+                          Shipping
+                        </div>
+                        <div className="text-lg capitalize text-gray-900">
+                          Tax
+                        </div>
+                        <div className="text-lg capitalize font-bold text-red-600">
+                          Total
+                        </div>
                       </div>
                       <div className="flex flex-col gap-4">
-                        <div className="text-lg font-semibold">
-                          ₹{cart && cart.totalPrice}
+                        <div className="text-lg text-gray-700">
+                          ₹
+                          {cartItems &&
+                            cartItems.totalPrice &&
+                            cartItems.totalPrice.toFixed(2)}
                         </div>
-                        <div className="text-lg font-semibold">₹{shipping}</div>
-                        <div className="text-lg font-semibold">
-                          ₹{tax.toFixed(2)}
+                        {shipping === 0 ? (
+                          <div className="text-lg text-gray-700 flex items-center justify-center gap-2">
+                            <span className="line-through text-gray-700">
+                              ₹50
+                            </span>
+                            <span className="text-green-600 text-sm font-semibold">
+                              Free Shipping
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="text-lg text-gray-700">
+                            ₹{shipping}
+                          </div>
+                        )}
+                        <div className="text-lg text-gray-700">
+                          ₹{cartItems && tax.toFixed(2)}
                         </div>
-                        <div className="text-lg font-bold">₹{total}</div>
+                        <div className="text-lg font-bold text-red-600">
+                          ₹{total}
+                        </div>
                       </div>
                     </div>
-                    <div className="bg-red-600 text-white font-roboto uppercase w-max p-3 tracking-wider cursor-pointer hover:bg-red-800 font-medium">
-                      Proceed to checkout
+                    <div className="flex flex-col gap-3">
+                      <div className="bg-green-600 text-center text-white rounded-lg py-3 uppercase font-semibold text-sm tracking-wider hover:bg-green-700 cursor-pointer">
+                        Proceed to checkout
+                      </div>
+                      <div className="text-center text-blue-600 rounded-lg py-3 uppercase font-semibold text-sm tracking-wider  border-2 border-blue-600 hover:text-blue-700 hover:border-blue-700 cursor-pointer">
+                        Continue Shopping
+                      </div>
                     </div>
                   </div>
                 </div>

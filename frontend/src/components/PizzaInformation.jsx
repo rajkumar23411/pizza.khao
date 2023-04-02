@@ -7,7 +7,7 @@ import { getProductReviews } from "../redux/actions/productAction";
 const PizzaInformation = ({ id, pizza }) => {
   const [toggleState, setToggleState] = useState(1);
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const { loading, reviews, error } = useSelector((state) => state.allReviews);
+  const { reviews } = useSelector((state) => state.allReviews);
 
   const dispatch = useDispatch();
 

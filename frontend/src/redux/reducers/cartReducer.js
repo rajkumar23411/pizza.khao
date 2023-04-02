@@ -1,42 +1,67 @@
 import {
   ADD_TO_CART_FAIL,
+  ADD_TO_CART_REQUEST,
+  ADD_TO_CART_RESET,
   ADD_TO_CART_SUCCESS,
   CLEAR_ERRORS,
+  GET_CART_ITEMS_FAIL,
+  GET_CART_ITEMS_REQUEST,
   GET_CART_ITEMS_SUCCESS,
-  REMOVE_CART_ITEM,
-  UPDATE_CART_ITEM,
+  REMOVE_CART_ITEM_FAIL,
+  REMOVE_CART_ITEM_SUCCESS,
 } from "../constants/cartConstant";
 
-export const cartReducer = (state = { cartItems: [] }, action) => {
+export const cartReducer = (state = { cart: [] }, action) => {
   switch (action.type) {
-    case GET_CART_ITEMS_SUCCESS:
+    case ADD_TO_CART_REQUEST:
       return {
-        loading: false,
-        cart: action.payload,
+        ...state,
+        success: false,
       };
     case ADD_TO_CART_SUCCESS:
       return {
-        loading: false,
-        success: true,
         ...state,
+        cart: action.payload.cart,
+        success: action.payload.success,
       };
     case ADD_TO_CART_FAIL:
       return {
-        loading: false,
+        ...state,
         error: action.payload,
       };
-    case UPDATE_CART_ITEM:
-      return {
-        loading: false,
-        isUpdated: action.payload,
-        ...state,
-      };
-    case REMOVE_CART_ITEM:
+    case ADD_TO_CART_RESET:
       return {
         ...state,
-        loading: false,
-        success: action.payload,
+        success: false,
       };
+    case GET_CART_ITEMS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_CART_ITEMS_SUCCESS:
+      return {
+        ...state,
+        cart: action.payload,
+      };
+    case GET_CART_ITEMS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case REMOVE_CART_ITEM_SUCCESS:
+      return {
+        ...state,
+        message: action.payload,
+      };
+
+    case REMOVE_CART_ITEM_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     case CLEAR_ERRORS:
       return {
         ...state,

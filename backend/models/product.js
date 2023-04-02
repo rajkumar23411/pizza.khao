@@ -10,12 +10,6 @@ const productSchema = new Schema({
     large: { type: Number, required: true },
     extralarge: { type: Number, required: true },
   },
-  // oldPrice: {
-  //   regular: { type: Number, required: true },
-  //   medium: { type: Number, required: true },
-  //   large: { type: Number, required: true },
-  //   extralarge: { type: Number, required: true },
-  // },
   description: { type: String, required: true },
   ratings: { type: Number, default: 0 },
   category: { type: [String], required: true },
@@ -34,5 +28,16 @@ const productSchema = new Schema({
     default: Date.now(),
   },
 });
-
+productSchema.methods.getPriceBySize = function (size) {
+  switch (size) {
+    case "medium":
+      return this.prices.medium;
+    case "large":
+      return this.prices.large;
+    case "extralarge":
+      return this.prices.extralarge;
+    default:
+      return this.prices.regular;
+  }
+};
 module.exports = mongoose.model("Product", productSchema);

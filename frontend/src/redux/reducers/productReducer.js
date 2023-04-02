@@ -1,6 +1,7 @@
 import {
   ADD_REVIEW_FAIL,
   ADD_REVIEW_REQUEST,
+  ADD_REVIEW_RESET,
   ADD_REVIEW_SUCCESS,
   ALL_PRODUCT_FAIL,
   ALL_PRODUCT_REQUEST,
@@ -159,6 +160,12 @@ export const addReview = (state = {}, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+    case ADD_REVIEW_RESET:
+      return {
+        ...state,
+        loading: false,
+        success: false,
       };
     case CLEAR_ERRORS:
       return {

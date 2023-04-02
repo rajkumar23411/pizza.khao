@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Product = require("./product");
 const Schema = mongoose.Schema;
 
 const cartSchema = new Schema({
@@ -10,7 +11,7 @@ const cartSchema = new Schema({
   },
   items: [
     {
-      productId: {
+      product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
         required: true,
@@ -21,5 +22,21 @@ const cartSchema = new Schema({
   ],
   totalPrice: { type: Number, required: true },
 });
+cartSchema.pre("save", async function (next) {
+  try {
+    let totalPrice = 0;
 
+    for (const item of this.items) {
+      const product = await Product.findById(item.product);
+      const price = product.getPriceBySize(item.size);
+      totalPrice += price * item.quantity;
+    }
+
+    this.totalPrice = totalPrice;
+    next();
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 module.exports = mongoose.model("Cart", cartSchema);

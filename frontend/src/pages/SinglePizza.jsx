@@ -26,7 +26,7 @@ import { useSnackbar } from "notistack";
 const SinglePizza = () => {
   const dispatch = useDispatch();
   const { loading, product } = useSelector((state) => state.productDetails);
-  const { success, error } = useSelector((state) => state.myCart);
+  const { success } = useSelector((state) => state.myCart);
   const { loading: relatedProductLoading, relatedProducts } = useSelector(
     (state) => state.relatedProducts
   );
@@ -56,22 +56,19 @@ const SinglePizza = () => {
       setQuantity(quantity - 1);
     }
   };
+
   const handleAddToCart = () => {
     dispatch(addToCart(id, quantity, size));
   };
-  useEffect(() => {
-    dispatch(getProductDetails(id));
-    dispatch(getRelatedProducts(id));
 
+  useEffect(() => {
     if (success) {
-      enqueueSnackbar("Item added to cart", { variant: "success" });
+      enqueueSnackbar("Pizza added to cart", { variant: "success" });
       dispatch(getCartItems());
     }
-    if (error) {
-      enqueueSnackbar(error, { variant: "info" });
-      dispatch(clearError());
-    }
-  }, [id, dispatch, success, error, enqueueSnackbar]);
+    dispatch(getProductDetails(id));
+    dispatch(getRelatedProducts(id));
+  }, [id, dispatch, success, enqueueSnackbar]);
 
   return (
     <>

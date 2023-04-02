@@ -10,6 +10,7 @@ import {
   getProductDetails,
   getProductReviews,
 } from "../redux/actions/productAction";
+import { ADD_REVIEW_RESET } from "../redux/constants/productConstant";
 
 const CommentBox = ({ onClose, pizza }) => {
   const { success, error } = useSelector((state) => state.addReview);
@@ -32,9 +33,10 @@ const CommentBox = ({ onClose, pizza }) => {
     if (success) {
       enqueueSnackbar("Review has been submitted", { variant: "success" });
       onClose();
-      dispatch(getProductReviews(pizza._id));
-      dispatch(getProductDetails(pizza._id));
+      dispatch({ type: ADD_REVIEW_RESET });
     }
+    dispatch(getProductDetails(pizza._id));
+    dispatch(getProductReviews(pizza._id));
   }, [dispatch, error, enqueueSnackbar, success, pizza]);
   return (
     <div

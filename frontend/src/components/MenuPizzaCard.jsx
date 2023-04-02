@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import QuickViewModel from "../components/QuickViewModel";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  clearError,
-  getCartItems,
-} from "../redux/actions/cartActions";
+import { addToCart, clearError } from "../redux/actions/cartActions";
 import { useSnackbar } from "notistack";
+import { getCartItems } from "../redux/actions/cartActions";
+import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 const MenuPizzaCard = ({ pizza }) => {
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const { success, error } = useSelector((state) => state.myCart);
+  const { success, error, cart } = useSelector((state) => state.myCart);
+  const [handleAddtoCartStatus, setHandleAddToCartStatus] = useState(false);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -18,20 +17,19 @@ const MenuPizzaCard = ({ pizza }) => {
     setIsModelOpen(true);
   };
 
-  const handleAddtoCart = () => {
+  const handleAddtoCart = (e) => {
+    e.preventDefault();
     dispatch(addToCart(pizza._id, 1, "regular"));
+    showMessage();
+    setHandleAddToCartStatus(!handleAddtoCartStatus);
   };
 
-  useEffect(() => {
+  const showMessage = () => {
     if (success) {
       enqueueSnackbar("Pizza added to cart", { variant: "success" });
-      dispatch(getCartItems());
+      dispatch({ type: ADD_TO_CART_RESET });
     }
-    if (error) {
-      enqueueSnackbar(error, { variant: "info" });
-      dispatch(clearError());
-    }
-  }, [dispatch, success, error, enqueueSnackbar]);
+  };
   return (
     <>
       <div className="flex flex-col w-80 py-6 gap-6 pizza-box overflow-hidden cursor-pointer">

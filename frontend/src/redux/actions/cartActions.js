@@ -2,11 +2,13 @@ import axios from "axios";
 import { config } from "../../utils";
 import {
   ADD_TO_CART_FAIL,
+  ADD_TO_CART_REQUEST,
   ADD_TO_CART_SUCCESS,
   CLEAR_ERRORS,
+  GET_CART_ITEMS_FAIL,
   GET_CART_ITEMS_SUCCESS,
-  REMOVE_CART_ITEM,
-  UPDATE_CART_ITEM,
+  REMOVE_CART_ITEM_FAIL,
+  REMOVE_CART_ITEM_SUCCESS,
 } from "../constants/cartConstant";
 
 export const addToCart = (productId, quantity, size) => async (dispatch) => {
@@ -16,58 +18,37 @@ export const addToCart = (productId, quantity, size) => async (dispatch) => {
       { productId, quantity, size },
       config
     );
-    dispatch({
-      type: ADD_TO_CART_SUCCESS,
-      payload: data.success,
-    });
+    dispatch({ type: ADD_TO_CART_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({
-      type: ADD_TO_CART_FAIL,
-      payload: error.response.data.message,
-    });
+    dispatch({ type: ADD_TO_CART_FAIL, payload: error.response.data.message });
   }
 };
 
 export const getCartItems = () => async (dispatch) => {
   try {
-    const { data } = await axios.get("/api/my/cart", config);
-    dispatch({
-      type: GET_CART_ITEMS_SUCCESS,
-      payload: data.cart,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-export const deleteCartItem = (productId, size) => async (dispatch) => {
-  try {
-    const { data } = await axios.post(
-      `/api/cart/delete`,
-      { productId, size },
-      config
-    );
+    dispatch({ type: ADD_TO_CART_REQUEST });
 
-    dispatch({
-      type: REMOVE_CART_ITEM,
-      payload: data.success,
-    });
+    const { data } = await axios.get("/api/my/cart", config);
+
+    dispatch({ type: GET_CART_ITEMS_SUCCESS, payload: data.cart });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: GET_CART_ITEMS_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };
-export const updateCart = (productId, quantity, size) => async (dispatch) => {
+
+export const removeCartItem = (product) => async (dispatch) => {
   try {
-    const { data } = await axios.put(
-      `/api/update/cart`,
-      { productId, quantity, size },
-      config
-    );
-    dispatch({
-      type: UPDATE_CART_ITEM,
-      payload: data.isUpdated,
-    });
+    const { data } = await axios.delete(`/api/cart`, product, config);
+
+    dispatch({ type: REMOVE_CART_ITEM_SUCCESS, payload: data.message });
   } catch (error) {
-    console.log(error);
+    dispatch({
+      type: REMOVE_CART_ITEM_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };
 
