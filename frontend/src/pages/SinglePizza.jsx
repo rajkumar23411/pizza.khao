@@ -22,6 +22,7 @@ import {
   getCartItems,
 } from "../redux/actions/cartActions";
 import { useSnackbar } from "notistack";
+import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 
 const SinglePizza = () => {
   const dispatch = useDispatch();
@@ -64,11 +65,14 @@ const SinglePizza = () => {
   useEffect(() => {
     if (success) {
       enqueueSnackbar("Pizza added to cart", { variant: "success" });
-      dispatch(getCartItems());
+      dispatch({ type: ADD_TO_CART_RESET });
     }
+  }, [success, enqueueSnackbar]);
+
+  useEffect(() => {
     dispatch(getProductDetails(id));
     dispatch(getRelatedProducts(id));
-  }, [id, dispatch, success, enqueueSnackbar]);
+  }, [id, dispatch]);
 
   return (
     <>

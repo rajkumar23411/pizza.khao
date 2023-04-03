@@ -42,7 +42,10 @@ const cartController = {
 
   async deleteFromCart(req, res, next) {
     try {
-      const { product } = req.body;
+      const product = req.params.id;
+      if (!product) {
+        return next(CustomErrorHandler.required("Please provide product id"));
+      }
 
       const cart = await Cart.findOne({ userId: req.user._id });
 
@@ -70,7 +73,9 @@ const cartController = {
     if (!userId) {
       return next(CustomErrorHandler.unAuthorized("Please login to access"));
     }
-    const cart = await Cart.findOne({ userId: req.user.id });
+    const cart = await Cart.findOne({ userId: req.user.id }).populate(
+      "items.product"
+    );
     res.status(200).json({ cart });
   },
 };

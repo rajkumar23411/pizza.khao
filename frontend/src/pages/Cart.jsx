@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartItems } from "../redux/actions/cartActions";
 import HomeFooter from "../components/HomeFooter";
 const Cart = () => {
-  const { loading, cartItems } = useSelector((state) => state.myCart);
+  const { loading, cart } = useSelector((state) => state.myCart);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCartItems());
   }, [dispatch]);
 
-  const totalPrice = cartItems && cartItems.totalPrice;
-  const tax = cartItems && Number((cartItems.totalPrice / 100) * 5);
-  const shipping = cartItems && Number(cartItems.totalPrice <= 300 ? 50 : 0);
+  const totalPrice = cart && cart.totalPrice;
+  const tax = cart && Number((cart.totalPrice / 100) * 5);
+  const shipping = cart && Number(cart.totalPrice <= 300 ? 50 : 0);
   const total = Number(totalPrice + tax + shipping).toFixed(2);
   return (
     <>
@@ -32,7 +32,7 @@ const Cart = () => {
         </div>
       ) : (
         <>
-          {cartItems && cartItems.items && cartItems.items.length === 0 ? (
+          {cart && cart.items && cart.items.length === 0 ? (
             <div className="w-full flex items-center justify-center flex-col py-20 gap-4">
               <img
                 src="/images/empty_cart.jpg"
@@ -74,14 +74,9 @@ const Cart = () => {
               <section className="flex gap-4 p-10">
                 <div className="flex-1">
                   <h1 className="text-2xl font-roboto uppercase font-bold text-gray-800 mb-6">
-                    Cart Items (
-                    {cartItems && cartItems.items && cartItems.items.length})
+                    Cart Items ({cart && cart.items && cart.items.length})
                   </h1>
-                  {cartItems &&
-                    cartItems.items &&
-                    cartItems.items.map((item) => (
-                      <CartItem key={item._id} item={item} />
-                    ))}
+                  <CartItem />
                 </div>
                 <div className="flex-[0.6] flex items-center flex-col h-max">
                   <div>
@@ -106,9 +101,9 @@ const Cart = () => {
                       <div className="flex flex-col gap-4">
                         <div className="text-lg text-gray-700">
                           ₹
-                          {cartItems &&
-                            cartItems.totalPrice &&
-                            cartItems.totalPrice.toFixed(2)}
+                          {cart &&
+                            cart.totalPrice &&
+                            cart.totalPrice.toFixed(2)}
                         </div>
                         {shipping === 0 ? (
                           <div className="text-lg text-gray-700 flex items-center justify-center gap-2">
@@ -125,7 +120,7 @@ const Cart = () => {
                           </div>
                         )}
                         <div className="text-lg text-gray-700">
-                          ₹{cartItems && tax.toFixed(2)}
+                          ₹{cart && tax.toFixed(2)}
                         </div>
                         <div className="text-lg font-bold text-red-600">
                           ₹{total}

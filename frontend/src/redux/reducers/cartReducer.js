@@ -8,6 +8,7 @@ import {
   GET_CART_ITEMS_REQUEST,
   GET_CART_ITEMS_SUCCESS,
   REMOVE_CART_ITEM_FAIL,
+  REMOVE_CART_ITEM_RESET,
   REMOVE_CART_ITEM_SUCCESS,
 } from "../constants/cartConstant";
 
@@ -42,6 +43,7 @@ export const cartReducer = (state = { cart: [] }, action) => {
     case GET_CART_ITEMS_SUCCESS:
       return {
         ...state,
+        loading: false,
         cart: action.payload,
       };
     case GET_CART_ITEMS_FAIL:
@@ -55,7 +57,11 @@ export const cartReducer = (state = { cart: [] }, action) => {
         ...state,
         message: action.payload,
       };
-
+    case REMOVE_CART_ITEM_RESET:
+      return {
+        ...state,
+        message: null,
+      };
     case REMOVE_CART_ITEM_FAIL:
       return {
         ...state,

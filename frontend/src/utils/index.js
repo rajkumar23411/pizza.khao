@@ -14,7 +14,7 @@ export const Categories = [
   "Veggie",
 ];
 
-export const pizzaSize = ["regular", "medium", "Large", "extralarge"];
+export const pizzaSize = ["regular", "medium", "large", "extralarge"];
 
 export const sortingOptions = [
   "Price Low to High",

@@ -5,10 +5,11 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import SearchBar from "./SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartItems } from "../redux/actions/cartActions";
+import { cardActionAreaClasses } from "@mui/material";
 const MainNav = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [isModelOpen, setIsModelOpen] = useState(0);
-  const { cartItems } = useSelector((state) => state.myCart);
+  const { cart } = useSelector((state) => state.myCart);
   const dispatch = useDispatch();
   const toggleMenu = (index) => {
     setIsModelOpen(index);
@@ -133,9 +134,9 @@ const MainNav = () => {
         <div className="flex items-center justify-center gap-12">
           <Link to="/cart">
             <div className="cursor-pointer uppercase text-xs text-gray-700 font-bold tracking-wide flex items-center justify-center gap-1 relative">
-              {cartItems && cartItems.items && (
+              {cart && cart.items && (
                 <span className="absolute -left-3 -top-1 bg-gray-700 text-white h-4 w-4 rounded-full flex items-center justify-center text-xs">
-                  {cartItems.items.length === 0 ? 0 : cartItems.items.length}
+                  {cart.items.length === 0 ? 0 : cart.items.length}
                 </span>
               )}
               <MopedOutlinedIcon fontSize="medium" className="text-gray-600" />

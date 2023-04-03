@@ -39,9 +39,9 @@ export const getCartItems = () => async (dispatch) => {
   }
 };
 
-export const removeCartItem = (product) => async (dispatch) => {
+export const removeCartItem = (id) => async (dispatch) => {
   try {
-    const { data } = await axios.delete(`/api/cart`, product, config);
+    const { data } = await axios.delete(`/api/cart/delete/${id}`);
 
     dispatch({ type: REMOVE_CART_ITEM_SUCCESS, payload: data.message });
   } catch (error) {
