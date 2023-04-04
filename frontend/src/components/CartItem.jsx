@@ -62,7 +62,10 @@ const CartItem = () => {
       {cart &&
         cart.items &&
         cart.items.map((item) => (
-          <div className="flex flex-col gap-4 h-max border-b-2 py-5">
+          <div
+            className="flex flex-col gap-4 h-max border-b-2 py-5"
+            key={item.product._id}
+          >
             <div className="flex items-start gap-6 h-full">
               <div className="flex items-center justify-center flex-col gap-4 h-full">
                 <img src={item.product.image} alt="pizza" className="h-28" />

@@ -1,16 +1,37 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import QuickViewModel from "../components/QuickViewModel";
-const MenuPizzaCard = ({ pizza, handleAddtoCart }) => {
-  const [isModelOpen, setIsModelOpen] = useState(false);
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 
+const MenuPizzaCard = ({
+  pizza,
+  handleAddtoCart,
+  handleAddtoFavourite,
+  wishlist,
+}) => {
+  const [isModelOpen, setIsModelOpen] = useState(false);
   const handleQuickView = () => {
     setIsModelOpen(true);
   };
-
+  const isItemInWishlist =
+    wishlist &&
+    wishlist.items &&
+    wishlist.items.find((item) => item.product._id === pizza._id);
+  console.log(isItemInWishlist);
   return (
     <>
-      <div className="flex flex-col w-80 py-6 gap-6 pizza-box overflow-hidden cursor-pointer">
+      <div className="flex flex-col w-80 py-6 gap-6 pizza-box overflow-hidden cursor-pointer relative">
+        <div
+          className={`absolute top-0 right-0 font-light cursor-pointer`}
+          onClick={handleAddtoFavourite}
+        >
+          {isItemInWishlist ? (
+            <FavoriteRoundedIcon className="text-red-500" />
+          ) : (
+            <FavoriteBorderRoundedIcon className="text-gray-400" />
+          )}
+        </div>
         <Link to={`/pizza/${pizza._id}`}>
           <div className="pizza-image w-full flex items-center justify-center">
             <img

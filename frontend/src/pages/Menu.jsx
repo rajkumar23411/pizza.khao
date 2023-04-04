@@ -17,12 +17,18 @@ import NoResultFound from "../components/NoResultFound";
 import { useSnackbar } from "notistack";
 import { addToCart, getCartItems } from "../redux/actions/cartActions";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
+import {
+  addRemoveFromWishlist,
+  getWishlist,
+} from "../redux/actions/wishListAction";
+import { RESET_ADD_TO_FAVOURITE } from "../redux/constants/wishListConstant";
 
 const Menu = () => {
   const { loading, products, productsCount, resultPerPage } = useSelector(
     (state) => state.products
   );
-  const { cart, success } = useSelector((state) => state.myCart);
+  const { success } = useSelector((state) => state.myCart);
+  const { wishlist, message } = useSelector((state) => state.wishlist);
 
   const [category, setCategory] = useState("");
   const { keyword } = useParams();
@@ -43,6 +49,12 @@ const Menu = () => {
   const handleAddtoCart = useCallback(
     (pizzaId) => {
       dispatch(addToCart(pizzaId, 1, "regular"));
+    },
+    [dispatch]
+  );
+  const handleAddtoFavourite = useCallback(
+    (pizzaId) => {
+      dispatch(addRemoveFromWishlist(pizzaId));
     },
     [dispatch]
   );
@@ -84,9 +96,13 @@ const Menu = () => {
       dispatch({ type: ADD_TO_CART_RESET });
       dispatch(getCartItems());
     }
-
+    if (message) {
+      enqueueSnackbar(message, { variant: "success" });
+      dispatch({ type: RESET_ADD_TO_FAVOURITE });
+      dispatch(getWishlist());
+    }
     sortProducts();
-  }, [keyword, category, price, sort, success]);
+  }, [keyword, category, price, sort, success, message]);
 
   return (
     <>
@@ -213,6 +229,10 @@ const Menu = () => {
                         pizza={pizza}
                         key={i}
                         handleAddtoCart={() => handleAddtoCart(pizza._id)}
+                        handleAddtoFavourite={() =>
+                          handleAddtoFavourite(pizza._id)
+                        }
+                        wishlist={wishlist}
                       />
                     ))}
                 </div>

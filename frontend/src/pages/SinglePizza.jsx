@@ -7,7 +7,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PizzaInformation from "../components/PizzaInformation";
 import RelatedProducts from "../components/RelatedProducts";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getProductDetails,
   getRelatedProducts,
@@ -16,18 +16,14 @@ import { pizzaSize } from "../utils";
 import { Rating } from "@mui/material";
 import PlaceHolderCard from "../components/PlaceHolderCard";
 import SinglePizzaLoader from "../components/SinglePizzaLoader";
-import {
-  addToCart,
-  clearError,
-  getCartItems,
-} from "../redux/actions/cartActions";
+import { addToCart, getCartItems } from "../redux/actions/cartActions";
 import { useSnackbar } from "notistack";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 
 const SinglePizza = () => {
   const dispatch = useDispatch();
   const { loading, product } = useSelector((state) => state.productDetails);
-  const { success } = useSelector((state) => state.myCart);
+  const { success, cart } = useSelector((state) => state.myCart);
   const { loading: relatedProductLoading, relatedProducts } = useSelector(
     (state) => state.relatedProducts
   );
@@ -36,6 +32,7 @@ const SinglePizza = () => {
   const [quantity, setQuantity] = useState(1);
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const handleSelectSize = (e) => {
     setSize(e.target.value);
@@ -66,6 +63,7 @@ const SinglePizza = () => {
     if (success) {
       enqueueSnackbar("Pizza added to cart", { variant: "success" });
       dispatch({ type: ADD_TO_CART_RESET });
+      dispatch(getCartItems());
     }
   }, [success, enqueueSnackbar]);
 
@@ -74,6 +72,12 @@ const SinglePizza = () => {
     dispatch(getRelatedProducts(id));
   }, [id, dispatch]);
 
+  const isItemPresetInCart = cart?.items?.findIndex(
+    (item) => item.product._id === id
+  );
+  const goTocart = () => {
+    navigate("/cart");
+  };
   return (
     <>
       <MainNav />
@@ -96,6 +100,7 @@ const SinglePizza = () => {
                   src={product && product.image}
                   alt="pizza"
                   className="w-full h-[70%] object-contain"
+                  draggable="false"
                 />
               </div>
               <div className="flex-1 flex flex-col gap-4">
@@ -201,10 +206,16 @@ const SinglePizza = () => {
                       </div>
                     </div>
                     <div
-                      className="bg-red-600 text-white uppercase tracking-wide font-semibold h-full flex items-center justify-center px-6 hover:bg-red-700 cursor-pointer"
-                      onClick={handleAddToCart}
+                      className={`${
+                        isItemPresetInCart === -1
+                          ? "bg-red-600 hover:bg-red-700"
+                          : "bg-yellow-600 hover:bg-yellow-700"
+                      } text-white uppercase tracking-wide font-semibold h-full flex items-center justify-center px-6  cursor-pointer`}
+                      onClick={
+                        isItemPresetInCart === -1 ? handleAddToCart : goTocart
+                      }
                     >
-                      Add to cart
+                      {isItemPresetInCart === -1 ? "Add to cart" : "Go to cart"}
                     </div>
                   </div>
                 </div>

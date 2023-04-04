@@ -2,71 +2,41 @@ const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
 const Wishlist = require("../models/wishlist");
 
 const wishlistController = {
-  async addToWishlist(req, res, next) {
-    const { productId } = req.body;
-    const user = req.user._id;
-
+  async addRemoveWishlist(req, res, next) {
     try {
-      let wishlist = await Wishlist.findOne({ userId: user });
+      const product = req.params.id;
+
+      let wishlist = await Wishlist.findOne({ userId: req.user._id });
 
       if (!wishlist) {
-        wishlist = new Wishlist({ userId: user, items: [] });
+        wishlist = new Wishlist({ userId: req.user._id, items: [] });
       }
 
-      if (wishlist.items.length === 0) {
-        wishlist.items.push({ productId });
-
-        await wishlist.save();
-
-        res.status(200).json({ wishlist });
-      } else {
-        const isProductExists = wishlist.items.find(
-          (item) => item.productId.toString() === productId.toString()
-        );
-
-        if (isProductExists) {
-          return next(
-            CustomErrorHandler.AlreadyExists(
-              "This product already in your wishlist"
-            )
-          );
-        }
-
-        wishlist.items.push({ productId });
-
-        await wishlist.save();
-        res.status(200).json({ wishlist });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  },
-  async removeFromWishList(req, res, next) {
-    const { productId } = req.body;
-    const user = req.user._id;
-    try {
-      let wishlist = await Wishlist.findOne({ userId: user });
-      if (!wishlist) {
-        return next(CustomErrorHandler.NotFound("Wishlist not found"));
-      }
-      const productIndex = wishlist.items.findIndex(
-        (item) => item.productId.toString() === productId.toString()
+      const itemIndex = wishlist.items.findIndex(
+        (item) => item.product.toString() === product.toString()
       );
-      if (productIndex === -1) {
-        return next(CustomErrorHandler.NotFound("Product not found"));
+
+      if (itemIndex >= 0) {
+        wishlist.items.splice(itemIndex, 1);
+        await wishlist.save();
+        return res
+          .status(200)
+          .json({ message: "Product removed from wishlist" });
+      } else {
+        wishlist.items.push({ product });
+        await wishlist.save();
+        res.status(200).json({ message: "Product added to wishlist" });
       }
-      wishlist.items.splice(productIndex, 1);
-      await wishlist.save();
-      res.status(200).json({ wishlist });
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   },
   async getWishlist(req, res, next) {
     const user = req.user._id;
-
     try {
-      let wishlist = await Wishlist.findOne({ userId: user });
+      let wishlist = await Wishlist.findOne({ userId: user }).populate(
+        "items.product"
+      );
       if (!wishlist) {
         return next(CustomErrorHandler.NotFound("Wishlist not found"));
       }
