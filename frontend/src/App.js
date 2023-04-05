@@ -15,6 +15,7 @@ import { loadUser } from "./redux/actions/userAction";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import AddPizza from "./pages/AddPizza";
+import WishList from "./pages/WishList";
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -31,6 +32,7 @@ const App = () => {
       <Route path="/checkout" element={<CheckOut />} />
       <Route path="/account/settings" element={<MyAccount />} />
       <Route path="/account/address" element={<AccountAddress />} />
+      <Route path="/account/favourites" element={<WishList />} />
       <Route path="/register" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/add/pizza" element={<AddPizza />} />

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import MainNav from "../components/MainNav";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuPizzaCard from "../components/MenuPizzaCard";
@@ -8,35 +8,23 @@ import HomeFooter from "../components/HomeFooter";
 import { Categories, sortingOptions } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/actions/productAction";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import { Pagination } from "@mui/material";
 import PlaceHolderCard from "../components/PlaceHolderCard";
 import NoResultFound from "../components/NoResultFound";
-import { useSnackbar } from "notistack";
-import { addToCart, getCartItems } from "../redux/actions/cartActions";
-import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
-import {
-  addRemoveFromWishlist,
-  getWishlist,
-} from "../redux/actions/wishListAction";
-import { RESET_ADD_TO_FAVOURITE } from "../redux/constants/wishListConstant";
 
 const Menu = () => {
   const { loading, products, productsCount, resultPerPage } = useSelector(
     (state) => state.products
   );
-  const { success } = useSelector((state) => state.myCart);
-  const { wishlist, message } = useSelector((state) => state.wishlist);
-
   const [category, setCategory] = useState("");
   const { keyword } = useParams();
   const dispatch = useDispatch();
   const [price, setPrice] = useState([0, 1000]);
   const [sort, setSort] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const { enqueueSnackbar } = useSnackbar();
 
   const handlePriceChange = (event, newValue) => {
     setPrice(newValue);
@@ -45,19 +33,6 @@ const Menu = () => {
   const setCurrentPageNo = (e, page) => {
     setCurrentPage(page);
   };
-
-  const handleAddtoCart = useCallback(
-    (pizzaId) => {
-      dispatch(addToCart(pizzaId, 1, "regular"));
-    },
-    [dispatch]
-  );
-  const handleAddtoFavourite = useCallback(
-    (pizzaId) => {
-      dispatch(addRemoveFromWishlist(pizzaId));
-    },
-    [dispatch]
-  );
 
   useEffect(() => {
     dispatch(getAllProducts(keyword, category, price, currentPage));
@@ -91,18 +66,8 @@ const Menu = () => {
   };
 
   useEffect(() => {
-    if (success) {
-      enqueueSnackbar("Pizza added to cart", { variant: "success" });
-      dispatch({ type: ADD_TO_CART_RESET });
-      dispatch(getCartItems());
-    }
-    if (message) {
-      enqueueSnackbar(message, { variant: "success" });
-      dispatch({ type: RESET_ADD_TO_FAVOURITE });
-      dispatch(getWishlist());
-    }
     sortProducts();
-  }, [keyword, category, price, sort, success, message]);
+  }, [keyword, category, price, sort]);
 
   return (
     <>
@@ -222,20 +187,7 @@ const Menu = () => {
               <NoResultFound />
             ) : (
               <>
-                <div className="grid grid-cols-3 place-items-center place-content-start h-full">
-                  {products &&
-                    products.map((pizza, i) => (
-                      <MenuPizzaCard
-                        pizza={pizza}
-                        key={i}
-                        handleAddtoCart={() => handleAddtoCart(pizza._id)}
-                        handleAddtoFavourite={() =>
-                          handleAddtoFavourite(pizza._id)
-                        }
-                        wishlist={wishlist}
-                      />
-                    ))}
-                </div>
+                {products && <MenuPizzaCard pizza={products} />}
 
                 {resultPerPage < productsCount && (
                   <div className="grid place-items-center ">

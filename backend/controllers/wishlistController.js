@@ -1,11 +1,16 @@
 const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
 const Wishlist = require("../models/wishlist");
+const Product = require("../models/product");
 
 const wishlistController = {
   async addRemoveWishlist(req, res, next) {
     try {
       const product = req.params.id;
-
+      await Product.findById(product).then((product) => {
+        if (!product) {
+          return next(CustomErrorHandler.notFound("Product not found"));
+        }
+      });
       let wishlist = await Wishlist.findOne({ userId: req.user._id });
 
       if (!wishlist) {
@@ -37,9 +42,6 @@ const wishlistController = {
       let wishlist = await Wishlist.findOne({ userId: user }).populate(
         "items.product"
       );
-      if (!wishlist) {
-        return next(CustomErrorHandler.NotFound("Wishlist not found"));
-      }
       res.status(200).json({ wishlist });
     } catch (err) {
       console.log(err);

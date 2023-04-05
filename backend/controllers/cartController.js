@@ -7,7 +7,11 @@ const cartController = {
     const { productId, quantity, size } = req.body;
     try {
       let cart = await Cart.findOne({ userId: req.user._id });
-
+      await Product.findById(productId).then((product) => {
+        if (!product) {
+          return next(CustomErrorHandler.notFound("Product not found"));
+        }
+      });
       if (!cart) {
         cart = new Cart({
           userId: req.user._id,
