@@ -15,6 +15,7 @@ const SingleWishListItem = ({ wishlist }) => {
   const { message } = useSelector((state) => state.wishlist);
   const { enqueueSnackbar } = useSnackbar();
   const handleRemoveFromWishlist = (id) => {
+    console.log("calling....");
     dispatch(addRemoveFromWishlist(id));
   };
   useEffect(() => {
@@ -23,7 +24,7 @@ const SingleWishListItem = ({ wishlist }) => {
       dispatch({ type: RESET_ADD_TO_FAVOURITE });
       dispatch(getWishlist());
     }
-  }, [dispatch]);
+  }, [dispatch, message]);
   return (
     <>
       {wishlist?.items?.map((item) => (

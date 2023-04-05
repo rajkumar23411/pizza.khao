@@ -4,6 +4,7 @@ import AccountNav from "../components/AccountNav";
 import SingleWishListItem from "../components/SingleWishListItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getWishlist } from "../redux/actions/wishListAction";
+import { Link } from "react-router-dom";
 const WishList = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
@@ -27,13 +28,18 @@ const WishList = () => {
         <AccountNav />
         <div className="flex-1 bg-white shadow-md p-10 flex flex-col min-h-full gap-6">
           <h1 className="uppercase text-golden font-semibold tracking-wider text-xl">
-            Favourites (10)
+            Favourites ({wishlist?.items?.length})
           </h1>
           {wishlist && wishlist.items && wishlist.items.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center flex-col gap-4">
               <h1 className="text-gray-500 font-semibold text-xl">
                 No Favourites
               </h1>
+              <Link to="/menu">
+                <p className="bg-red-500 text-white uppercase font-semibold tracking-wider p-3 rounded text-sm hover:bg-red-600 cursor-pointer">
+                  Add items
+                </p>
+              </Link>
             </div>
           ) : (
             <div className="flex flex-col gap-4">
