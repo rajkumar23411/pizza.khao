@@ -8,6 +8,7 @@ const addressSchema = new Schema({
   address: { type: String, required: true },
   city: { type: String, required: true },
   state: { type: String, required: true },
+  locality: { type: String, required: true },
   landMark: String,
   alternatContact: String,
   userId: { type: mongoose.Types.ObjectId, required: true },

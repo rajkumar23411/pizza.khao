@@ -1,17 +1,46 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MainNav from "../components/MainNav";
-import AddIcon from "@mui/icons-material/Add";
-import { Done } from "@mui/icons-material";
 import OrderedItems from "../components/OrderedItems";
 import AddressForm from "../components/AddressForm";
+import { useDispatch, useSelector } from "react-redux";
+import CheckoutLoginForm from "../components/CheckoutLoginForm";
+import { myAddresses } from "../redux/actions/addressAction";
+const CheckoutStep = (props) => {
+  return (
+    <div className="bg-white shadow-sm w-full">
+      <div
+        onClick={props.onClick}
+        className={`w-full ${props.active && "bg-red-600"}`}
+      >
+        <div className="flex items-center gap-6 px-10 py-3 ">
+          <p className="h-6 w-6 flex items-center justify-center font-semibold text-gray-600 rounded bg-slate-100 ">
+            {props.stepNumber}
+          </p>
+          <p className="uppercase tracking-wider text-gray-800 font-semibold">
+            {props.title}
+          </p>
+        </div>
+      </div>
+      <div className="px-10 py-3">{props.body && props.body}</div>
+    </div>
+  );
+};
+const Address = () => {
+  return (
+    <div>
+      <p>{}</p>
+    </div>
+  );
+};
 const CheckOut = () => {
-  const [showDeliverButton, setShowDeliverButton] = useState();
-  const [showAddressForm, setShowAddressForm] = useState(false);
-  // const [showOrderedItems, setShowOrderedItems] = useState(false);
-  const radioRef = useRef(true);
-  const handleOptionChange = (index) => {
-    setShowDeliverButton(index);
-  };
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { address } = useSelector((state) => state.myAddresses);
+  const [confirmAddress, setConfirmAddress] = useState(false);
+
+  useEffect(() => {
+    dispatch(myAddresses());
+  }, [address]);
   return (
     <>
       <MainNav />
@@ -22,147 +51,33 @@ const CheckOut = () => {
       </div>
       <div className="min-h-screen w-full bg-slate-50 py-20 px-40 flex gap-4">
         <div className="flex-1 flex flex-col gap-4">
-          <div className="flex gap-6 items-start justify-start bg-white px-10 py-5 shadow-md">
-            <div className="h-6 w-6 bg-slate-100 rounded-sm flex items-center justify-center">
-              <span className="text-red-600 font-semibold">1</span>
-            </div>
-            <div className="flex flex-col items-start justify-start gap-2">
-              <div className="flex items-center gap-3">
-                <span className="uppercase text-gray-500 font-semibold">
-                  login
-                </span>
-                <span>
-                  <Done fontSize="small" className="text-blue-600" />
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">Rajkumar Kalita</span>
-                <span>9101121717</span>
-              </div>
-            </div>
-          </div>
-          <div className="shadow-md">
-            <div className="bg-white">
-              <div className="bg-red-600 px-10 py-3 flex gap-6">
-                <span className="h-6 w-6 bg-slate-100 text-red-600 font-semibold flex items-center justify-center rounded-sm">
-                  2
-                </span>
-                <span className="uppercase font-semibold text-white tracking-wide">
-                  Delivery Address
-                </span>
-              </div>
-              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
-                <div>
-                  <input
-                    type="radio"
-                    className="h-4 w-4"
-                    name="address"
-                    onChange={() => {
-                      handleOptionChange(1);
-                      setShowAddressForm(false);
-                    }}
-                    ref={radioRef}
-                  />
+          <CheckoutStep
+            stepNumber={1}
+            title="Login"
+            active={!isAuthenticated}
+            body={
+              isAuthenticated ? (
+                <div className="flex items-center gap-4 font-semibold">
+                  <span className="capitalize">
+                    {user.firstname} {user.lastname}
+                  </span>
+                  <span>{user.contact}</span>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <span className="font-semibold">Rajkumar Kalita</span>
-                    <span className="font-semibold">9101121717</span>
-                  </div>
-                  <div className="text-gray-600">
-                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
-                    Nalbari <br />
-                    Assam - 781339
-                  </div>
-                  {showDeliverButton === 1 && <DeliverButton />}
-                </div>
-              </div>
-              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
-                <div>
-                  <input
-                    type="radio"
-                    className="h-4 w-4"
-                    name="address"
-                    onChange={() => {
-                      handleOptionChange(2);
-                      setShowAddressForm(false);
-                    }}
-                    ref={radioRef}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <span className="font-semibold">Rajkumar Kalita</span>
-                    <span className="font-semibold">9101121717</span>
-                  </div>
-                  <div className="text-gray-600">
-                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
-                    Nalbari <br />
-                    Assam - 781339
-                  </div>
-                  {showDeliverButton === 2 && <DeliverButton />}
-                </div>
-              </div>
-              <div className="flex px-10 py-4 gap-6 border-b-[1px]">
-                <div>
-                  <input
-                    type="radio"
-                    className="h-4 w-4"
-                    name="address"
-                    onChange={() => {
-                      handleOptionChange(3);
-                      setShowAddressForm(false);
-                    }}
-                    ref={radioRef}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <span className="font-semibold">Rajkumar Kalita</span>
-                    <span className="font-semibold">9101121717</span>
-                  </div>
-                  <div className="text-gray-600">
-                    Karia, Hajo-Nalbari Road, Near Shirmanta Sankardev Vidalay,
-                    Nalbari <br />
-                    Assam - 781339
-                  </div>
-                  {showDeliverButton === 3 && <DeliverButton />}
-                </div>
-              </div>
-            </div>
-            <div className="bg-white">
-              <div className="flex flex-col w-full px-10 py-4">
-                <div className="flex justify-between">
-                  <div
-                    className="flex items-center  gap-4 cursor-pointer"
-                    onClick={() => {
-                      radioRef.current.checked = false;
-                      setShowAddressForm(true);
-                      handleOptionChange(0);
-                    }}
-                  >
-                    <AddIcon className="text-blue-600" fontSize="small" />
-                    <span className="text-blue-600 font-semibold">
-                      Add a new address
-                    </span>
-                  </div>
-                  <div
-                    className={`uppercase text-red-500 font-semibold tracking-wide cursor-pointer hover:text-red-700 ${
-                      showAddressForm === true ? "block" : "hidden"
-                    }`}
-                    onClick={() => setShowAddressForm(false)}
-                  >
-                    Cancel
-                  </div>
-                </div>
-                {showAddressForm && (
-                  <div className="w-full bg-white">
-                    <AddressForm button={"Save and deliver here"} />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+              ) : (
+                <CheckoutLoginForm />
+              )
+            }
+          />
+          <CheckOut
+            stepNumber={2}
+            title="Delivery Address"
+            active={!confirmAddress && isAuthenticated}
+            body={
+              confirmAddress
+                ? null
+                : address?.map((adr) => <Address address={adr} />)
+            }
+          />
           <div className="flex bg-white gap-4 cursor-pointer shadow-md flex-col">
             <div className="flex items-center gap-4 bg-red-600 px-10 py-3">
               <div className="h-6 w-6 bg-slate-100 rounded-sm flex items-center justify-center">

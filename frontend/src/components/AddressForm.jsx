@@ -7,10 +7,10 @@ const AddressForm = ({ button }) => {
   const [name, setName] = useState("");
   const [contact, setContact] = useState();
   const [pincode, setPincode] = useState();
-  const [locality, setLocality] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [locality, setLocality] = useState("");
   const [landmark, setLandmark] = useState("");
   const [altContact, setAltContact] = useState();
 
@@ -21,10 +21,10 @@ const AddressForm = ({ button }) => {
         name,
         contact,
         pincode,
-        locality,
         address,
         city,
         state,
+        locality,
         landmark,
         altContact
       )
@@ -46,7 +46,7 @@ const AddressForm = ({ button }) => {
           placeholder="Phone number*"
           className="w-full border-[1px] border-gray-400 p-3 bg-transparent focus:border-red-600 focus:placeholder:text-red-400 rounded"
           onChange={(e) => setContact(e.target.value)}
-          valuec={contact}
+          value={contact}
         />
       </div>
       <div className="flex w-full gap-4">

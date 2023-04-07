@@ -11,6 +11,7 @@ import {
   GET_ALL_ADDRESS_SUCCESS,
   UPDATE_ADDRESS_FAIL,
   UPDATE_ADDRESS_REQUEST,
+  UPDATE_ADDRESS_RESET,
   UPDATE_ADDRESS_SUCCESS,
 } from "../constants/addressConstant";
 
@@ -112,6 +113,11 @@ export const updateAddressReducer = (state = {}, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+    case UPDATE_ADDRESS_RESET:
+      return {
+        ...state,
+        isUpdated: false,
       };
     case CLEAR_ERRORS:
       return {

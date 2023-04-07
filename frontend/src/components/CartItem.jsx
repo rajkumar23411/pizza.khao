@@ -128,7 +128,7 @@ const CartItem = () => {
               <div className="flex flex-col items-end justify-between h-40">
                 {item.product && item.product.prices && (
                   <div className="text-red-600 text-xl font-semibold">
-                    {item.quantity * item.product.prices[item.size]}
+                    ₹{item.quantity * item.product.prices[item.size]}
                   </div>
                 )}
                 <div className="flex items-center gap-4">

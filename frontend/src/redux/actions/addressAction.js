@@ -17,7 +17,17 @@ import {
 } from "../constants/addressConstant";
 
 export const addAddress =
-  (name, contact, pinCode, address, city, state, landMark, alternatContact) =>
+  (
+    name,
+    contact,
+    pinCode,
+    address,
+    city,
+    state,
+    locality,
+    landMark,
+    alternatContact
+  ) =>
   async (dispatch) => {
     try {
       dispatch({ type: ADD_NEW_ADDRESS_REQUEST });
@@ -31,6 +41,7 @@ export const addAddress =
           address,
           city,
           state,
+          locality,
           landMark,
           alternatContact,
         },

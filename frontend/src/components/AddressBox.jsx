@@ -49,7 +49,8 @@ const AddressBox = ({ address }) => {
         </div>
       </div>
       <p className="text-gray-700 w-[65%] p-4">
-        {address.address}, {address.city}, {address.state} - {address.pinCode}
+        {address.locality}, {address.address}, {address.city}, <br />
+        {address.state} - {address.pinCode}
       </p>
       {isModelOpen && (
         <div className="h-screen w-screen backdrop-blur-sm backdrop-brightness-50 top-0 left-0 right-0 fixed flex items-center justify-center">

@@ -128,12 +128,18 @@ const Cart = () => {
                       </div>
                     </div>
                     <div className="flex flex-col gap-3">
-                      <div className="bg-green-600 text-center text-white rounded-lg py-3 uppercase font-semibold text-sm tracking-wider hover:bg-green-700 cursor-pointer">
+                      <Link
+                        to="/checkout"
+                        className="bg-green-600 text-center text-white rounded py-3 uppercase font-semibold text-sm tracking-wider hover:bg-green-700 cursor-pointer"
+                      >
                         Proceed to checkout
-                      </div>
-                      <div className="text-center text-blue-600 rounded-lg py-3 uppercase font-semibold text-sm tracking-wider  border-2 border-blue-600 hover:text-blue-700 hover:border-blue-700 cursor-pointer">
+                      </Link>
+                      <Link
+                        to="/menu"
+                        className="text-center text-blue-600 rounded py-3 uppercase font-semibold text-sm tracking-wider  border-2 border-blue-600 hover:text-blue-700 hover:border-blue-700 cursor-pointer"
+                      >
                         Continue Shopping
-                      </div>
+                      </Link>
                     </div>
                   </div>
                 </div>

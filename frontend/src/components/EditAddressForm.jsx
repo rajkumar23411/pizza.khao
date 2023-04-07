@@ -7,43 +7,22 @@ import {
   clearError,
 } from "../redux/actions/addressAction";
 import { useSnackbar } from "notistack";
+import { UPDATE_ADDRESS_RESET } from "../redux/constants/addressConstant";
 
 const EditAddressForm = ({ onClose, address }) => {
   const { error, isUpdated } = useSelector((state) => state.updateAddress);
-  const [name, setName] = useState("");
-  const [contact, setContact] = useState();
-  const [pinCode, setPinCode] = useState();
-  const [locality, setLocality] = useState("");
-  const [userAddress, setUserAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [landmark, setLandmark] = useState("");
-  const [altContact, setAltContact] = useState();
+  const [name, setName] = useState(address.name);
+  const [contact, setContact] = useState(address.contact);
+  const [pinCode, setPinCode] = useState(address.pinCode);
+  const [userAddress, setUserAddress] = useState(address.address);
+  const [city, setCity] = useState(address.city);
+  const [state, setState] = useState(address.state);
+  const [locality, setLocality] = useState(address.locality);
+  const [landmark, setLandmark] = useState(address.landMark);
+  const [altContact, setAltContact] = useState(address.alternatContact);
+
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  useEffect(() => {
-    if (address) {
-      setName(address.name);
-      setContact(address.contact);
-      setPinCode(address.pinCode);
-      setLocality(address.locality);
-      setUserAddress(address.address);
-      setCity(address.city);
-      setState(address.state);
-      setLandmark(address.landmark);
-      setAltContact(address.altContact);
-    }
-
-    if (error) {
-      enqueueSnackbar(error, { variant: "error" });
-      dispatch(clearError());
-    }
-    if (isUpdated) {
-      onClose();
-      enqueueSnackbar("Address updated successfully", { variant: "success" });
-      dispatch(myAddresses());
-    }
-  }, [address, dispatch, isUpdated, onClose, enqueueSnackbar]);
 
   const updateAddressSubmit = (e) => {
     e.preventDefault();
@@ -61,6 +40,18 @@ const EditAddressForm = ({ onClose, address }) => {
 
     dispatch(updateAddress(address._id, myFom));
   };
+  useEffect(() => {
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+      dispatch(clearError());
+    }
+    if (isUpdated) {
+      onClose();
+      enqueueSnackbar("Address updated successfully", { variant: "success" });
+      dispatch({ type: UPDATE_ADDRESS_RESET });
+      dispatch(myAddresses());
+    }
+  }, [address, dispatch, isUpdated, onClose, enqueueSnackbar]);
   return (
     <form className="flex flex-col gap-4 p-10" onSubmit={updateAddressSubmit}>
       <h1 className="uppercase text-golden font-semibold text-lg">
@@ -91,7 +82,7 @@ const EditAddressForm = ({ onClose, address }) => {
           onChange={(e) => setPinCode(e.target.value)}
         />
         <input
-          type="number"
+          type="text"
           placeholder="Locality*"
           className="w-full border-[1px] border-gray-400 p-3 bg-transparent focus:border-red-600 focus:placeholder:text-red-400 rounded"
           value={locality}

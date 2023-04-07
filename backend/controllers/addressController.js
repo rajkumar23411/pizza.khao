@@ -10,10 +10,20 @@ const addressController = {
         address,
         city,
         state,
+        locality,
         landMark,
         alternatContact,
       } = req.body;
-      if (!name || !contact || !pinCode || !address || !city || !state)
+
+      if (
+        !name ||
+        !contact ||
+        !pinCode ||
+        !address ||
+        !city ||
+        !state ||
+        !locality
+      )
         return next(CustomErrorHandler.required("All fields are require"));
 
       const newAddress = await Address.create({
@@ -23,6 +33,7 @@ const addressController = {
         address,
         city,
         state,
+        locality,
         landMark,
         alternatContact,
         userId: req.user.id,
