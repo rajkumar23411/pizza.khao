@@ -5,6 +5,7 @@ import AddressForm from "../components/AddressForm";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutLoginForm from "../components/CheckoutLoginForm";
 import { myAddresses } from "../redux/actions/addressAction";
+import { Radio } from "@mui/material";
 const CheckoutStep = (props) => {
   return (
     <div className="bg-white shadow-sm w-full">
@@ -29,36 +30,99 @@ const CheckoutStep = (props) => {
           </p>
         </div>
       </div>
-      <div className="px-10 py-3">{props.body && props.body}</div>
-    </div>
-  );
-};
-const DeliverButton = () => {
-  return (
-    <div className="bg-red-500 text-white uppercase w-max text-sm tracking-wider px-4 py-2 rounded-sm font-semibold mt-4 hover:bg-red-600 cursor-pointer">
-      Deliver here
-    </div>
-  );
-};
-const Address = ({ address }) => {
-  return address.map((adr) => (
-    <div>
-      <div className="flex gap-6">
-        <p className="text-gray-800 font-semibold tracking-wider">Test User</p>
-        <p className="text-gray-800 font-semibold tracking-wider">9101121717</p>
+      <div className={props.body && "px-10 py-3"}>
+        {props.body && props.body}
       </div>
     </div>
-  ));
+  );
+};
+const Address = ({ address, confirmDeliveryAddress, selectAddress }) => {
+  return (
+    <div
+      className={`flex flex-col gap-6 ${address.length > 1 && "border-b-2"}`}
+    >
+      <div className="flex items-start justify-start gap-6">
+        <Radio onClick={() => selectAddress(address)} />
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-5">
+            <p className="text-gray-800 font-semibold">{address.name}</p>
+            <p className="text-gray-800 font-semibold">{address.contact}</p>
+          </div>
+          <div className="text-gray-800">
+            {address.locality}, {address.address}, {address.landMark},{" "}
+            {address.alternateContact} <br /> {address.state} -{" "}
+            {address.pinCode}
+          </div>
+          {address.selected && (
+            <button
+              className="text-red-500 border-2 border-red-500 font-medium hover:bg-red-500 hover:text-white cursor-pointer w-max px-4 py-1 rounded-sm"
+              onClick={() => confirmDeliveryAddress(address)}
+            >
+              Deliver here
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 const CheckOut = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.myCart);
   const dispatch = useDispatch();
   const { addresses } = useSelector((state) => state.myAddresses);
   const [confirmAddress, setConfirmAddress] = useState(false);
+  const [selectedAddress, setSelctedAddress] = useState({});
+  const [address, setAddress] = useState([]);
+  const [orderSummary, setOrderSummary] = useState(false);
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
+  const [showOrderSummary, setShowOrderSummary] = useState(false);
+  const [paymentOption, setPaymentOption] = useState(false);
+  const [selectPaymentOption, setSelectPaymentOption] = useState("");
 
+  const totalPrice = cart?.totalPrice;
+  const tax = cart && Number((cart.totalPrice / 100) * 5);
+  const shipping = cart && Number(cart.totalPrice <= 300 ? 50 : 0);
+  const total = Number(totalPrice + tax + shipping).toFixed(2);
+
+  const selectAddress = (adrs) => {
+    const address = addresses.map((adr) =>
+      adr._id === adrs._id
+        ? { ...adr, selected: true }
+        : { ...adr, selected: false }
+    );
+    setAddress(address);
+  };
+
+  const confirmDeliveryAddress = (addr) => {
+    setConfirmAddress(true);
+    setSelctedAddress(addr);
+    setOrderSummary(true);
+  };
+
+  const proceedNext = () => {
+    setOrderSummary(false);
+    setOrderConfirmed(true);
+    setShowOrderSummary(true);
+    setPaymentOption(true);
+  };
+  const confirmOrder = () => {
+    setPaymentOption(false);
+    if (paymentOption === "cod") {
+      alert("Order Confirmed");
+    }
+    if (paymentOption === "online") {
+      //do further process
+    }
+  };
   useEffect(() => {
     dispatch(myAddresses());
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    const address = addresses.map((adr) => ({ ...adr, selected: false }));
+    setAddress(address);
+  }, [addresses]);
   return (
     <>
       <MainNav />
@@ -89,33 +153,132 @@ const CheckOut = () => {
           <CheckoutStep
             stepNumber={2}
             title="Delivery Address"
-            active={true}
-            body={confirmAddress ? null : <Address address={addresses} />}
+            active={!confirmAddress && isAuthenticated}
+            body={
+              confirmAddress
+                ? selectedAddress && (
+                    <div className="flex flex-col gap-2 pl-12">
+                      <p className="text-gray-700 font-semibold">
+                        {selectedAddress.name} - {selectedAddress.contact}
+                      </p>
+                      <p className="text-gray-600">
+                        {selectedAddress.locality}, {selectedAddress.address},{" "}
+                        {selectedAddress.landMark},{" "}
+                        {selectedAddress.alternateContact} <br />{" "}
+                        {selectedAddress.state} - {selectedAddress.pinCode}
+                      </p>
+                    </div>
+                  )
+                : address.map((address) => (
+                    <Address
+                      address={address}
+                      confirmDeliveryAddress={confirmDeliveryAddress}
+                      selectAddress={selectAddress}
+                    />
+                  ))
+            }
           />
-          <div className="flex bg-white gap-4 cursor-pointer shadow-md flex-col">
-            <div className="flex items-center gap-4 bg-red-600 px-10 py-3">
-              <div className="h-6 w-6 bg-slate-100 rounded-sm flex items-center justify-center">
-                <span className="text-red-600 font-semibold">3</span>
-              </div>
-              <span className="text-white font-semibold uppercase tracking-wide">
-                Order Summary
-              </span>
-            </div>
-            <div className="w-full flex gap-6 flex-col">
-              <OrderedItems />
-              <OrderedItems />
-              <OrderedItems />
-              <OrderedItems />
-            </div>
-          </div>
-          <div className="flex items-center bg-white px-10 py-3 gap-4 cursor-pointer shadow-md">
-            <div className="h-6 w-6 bg-slate-100 rounded-sm flex items-center justify-center">
-              <span className="text-red-600 font-semibold">4</span>
-            </div>
-            <span className="text-red-600 font-semibold uppercase tracking-wide">
-              Payment options
-            </span>
-          </div>
+          <CheckoutStep
+            stepNumber={3}
+            title="ORDER SUMMARY"
+            active={orderSummary}
+            body={
+              <>
+                {orderSummary ? (
+                  <>
+                    <OrderedItems items={cart.items} />
+                    <div className="mt-4 flex items-center justify-end">
+                      <button
+                        className="text-white bg-green-600 font-medium capitalize hover:bg-green-700 cursor-pointer w-max px-4 py-2 rounded-sm"
+                        onClick={proceedNext}
+                      >
+                        Continue
+                      </button>
+                    </div>
+                  </>
+                ) : null}
+                {showOrderSummary && (
+                  <div className="flex-col gap-6 flex">
+                    {cart.items.map((item) => (
+                      <div
+                        key={item._id}
+                        className="flex items-center gap-6 px-10"
+                      >
+                        <div className="h-24 w-24">
+                          <img
+                            src={item.product.image}
+                            alt={item.product.image}
+                            className="h-full w-full"
+                          />
+                        </div>
+                        <div className="leading-5">
+                          <p className="text-gray-800 font-semibold uppercase tracking-wide">
+                            {item.product.name}
+                          </p>
+                          <p className="capitalize text-gray-600">
+                            {item.size}
+                          </p>
+                          <p className="text-gray-600">{item.quantity}</p>
+                          <p className="font-semibold text-red-600 text-lg">
+                            ₹{item.quantity * item.product.prices[item.size]}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            }
+          />
+          <CheckoutStep
+            stepNumber={4}
+            title="Payment Options"
+            active={paymentOption}
+            body={
+              paymentOption ? (
+                <div className="flex flex-col gap-4 pl-12">
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="cod"
+                      className="h-4 w-4"
+                      onChange={(e) => setSelectPaymentOption(e.target.value)}
+                    />
+                    <label htmlFor="cod">Cash on Delivery</label>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="online"
+                      className="h-4 w-4"
+                      onChange={(e) => setSelectPaymentOption(e.target.value)}
+                    />
+                    <label htmlFor="online">Online Payment</label>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="wallet"
+                      className="h-4 w-4"
+                      onChange={(e) => setSelectPaymentOption(e.target.value)}
+                    />
+                    <label htmlFor="wallet">Wallet</label>
+                  </div>
+                  {selectPaymentOption !== "" && (
+                    <button
+                      className="bg-purple-600 font-medium uppercase text-white  py-2 rounded-sm w-max px-4 mt-4 mx-auto hover:bg-purple-700"
+                      onClick={confirmOrder}
+                    >
+                      Confirm Order
+                    </button>
+                  )}
+                </div>
+              ) : null
+            }
+          />
         </div>
         <div className="flex-[0.5] bg-white h-max shadow-md">
           <h1 className="uppercase font-semibold tracking-wide text-golden w-full border-b-2 border-golden border-dashed px-4 py-2">
@@ -123,19 +286,31 @@ const CheckOut = () => {
           </h1>
           <div className="flex flex-col gap-2 border-b-[1px] p-4">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Price (4 items)</span>
-              <span className="text-gray-800 font-semibold">$ 190.67</span>
+              <span className="text-gray-600">
+                Price ({cart?.items.length})
+              </span>
+              <span className="text-gray-800 font-semibold">
+                ₹{totalPrice?.toFixed(2)}
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Delivery Charge</span>
-              <span className="text-gray-800 font-semibold">$ 5.34</span>
+              <span className="text-gray-800 font-semibold">
+                ₹{shipping?.toFixed(2)}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600">Tax</span>
+              <span className="text-gray-800 font-semibold">
+                ₹{tax?.toFixed(2)}
+              </span>
             </div>
           </div>
           <div className="flex justify-between items-center p-4 border-b-[1px]">
             <span className="text-lg font-semibold text-gray-800">
               Total Payable:
             </span>
-            <span className="text-red-600 font-semibold text-lg">$ 400.56</span>
+            <span className="text-red-600 font-semibold text-lg">₹{total}</span>
           </div>
           <div className="flex justify-between items-center p-4 text-golden font-semibold">
             *Your total savings in this order is $45.98
