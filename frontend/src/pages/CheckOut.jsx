@@ -13,10 +13,18 @@ const CheckoutStep = (props) => {
         className={`w-full ${props.active && "bg-red-600"}`}
       >
         <div className="flex items-center gap-6 px-10 py-3 ">
-          <p className="h-6 w-6 flex items-center justify-center font-semibold text-gray-600 rounded bg-slate-100 ">
+          <p
+            className={`h-6 w-6 flex items-center justify-center font-semibold ${
+              props.active ? "text-red-700" : "text-gray-600"
+            }  rounded bg-slate-100`}
+          >
             {props.stepNumber}
           </p>
-          <p className="uppercase tracking-wider text-gray-800 font-semibold">
+          <p
+            className={`uppercase tracking-wider text-gray-800 font-semibold ${
+              props.active && "text-white"
+            }`}
+          >
             {props.title}
           </p>
         </div>
@@ -25,22 +33,32 @@ const CheckoutStep = (props) => {
     </div>
   );
 };
-const Address = () => {
+const DeliverButton = () => {
   return (
-    <div>
-      <p>{}</p>
+    <div className="bg-red-500 text-white uppercase w-max text-sm tracking-wider px-4 py-2 rounded-sm font-semibold mt-4 hover:bg-red-600 cursor-pointer">
+      Deliver here
     </div>
   );
+};
+const Address = ({ address }) => {
+  return address.map((adr) => (
+    <div>
+      <div className="flex gap-6">
+        <p className="text-gray-800 font-semibold tracking-wider">Test User</p>
+        <p className="text-gray-800 font-semibold tracking-wider">9101121717</p>
+      </div>
+    </div>
+  ));
 };
 const CheckOut = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { address } = useSelector((state) => state.myAddresses);
+  const { addresses } = useSelector((state) => state.myAddresses);
   const [confirmAddress, setConfirmAddress] = useState(false);
 
   useEffect(() => {
     dispatch(myAddresses());
-  }, [address]);
+  }, [dispatch]);
   return (
     <>
       <MainNav />
@@ -68,15 +86,11 @@ const CheckOut = () => {
               )
             }
           />
-          <CheckOut
+          <CheckoutStep
             stepNumber={2}
             title="Delivery Address"
-            active={!confirmAddress && isAuthenticated}
-            body={
-              confirmAddress
-                ? null
-                : address?.map((adr) => <Address address={adr} />)
-            }
+            active={true}
+            body={confirmAddress ? null : <Address address={addresses} />}
           />
           <div className="flex bg-white gap-4 cursor-pointer shadow-md flex-col">
             <div className="flex items-center gap-4 bg-red-600 px-10 py-3">
@@ -131,11 +145,5 @@ const CheckOut = () => {
     </>
   );
 };
-const DeliverButton = () => {
-  return (
-    <div className="bg-red-500 text-white uppercase w-max text-sm tracking-wider px-4 py-2 rounded-sm font-semibold mt-4 hover:bg-red-600 cursor-pointer">
-      Deliver here
-    </div>
-  );
-};
+
 export default CheckOut;
