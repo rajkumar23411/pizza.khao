@@ -1,11 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import MainNav from "../components/MainNav";
 import OrderedItems from "../components/OrderedItems";
-import AddressForm from "../components/AddressForm";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutLoginForm from "../components/CheckoutLoginForm";
 import { myAddresses } from "../redux/actions/addressAction";
 import { Radio } from "@mui/material";
+import { clearErrors, createOrder } from "../redux/actions/orderAction";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import axios from "axios";
+import useRazorpay from "react-razorpay";
+import { config } from "../utils";
+import { NEW_ORDER_RESET } from "../redux/constants/orderConstant";
 const CheckoutStep = (props) => {
   return (
     <div className="bg-white shadow-sm w-full">
@@ -38,9 +44,7 @@ const CheckoutStep = (props) => {
 };
 const Address = ({ address, confirmDeliveryAddress, selectAddress }) => {
   return (
-    <div
-      className={`flex flex-col gap-6 ${address.length > 1 && "border-b-2"}`}
-    >
+    <div className={`flex flex-col  border-b-2 p-6`}>
       <div className="flex items-start justify-start gap-6">
         <Radio onClick={() => selectAddress(address)} />
         <div className="flex flex-col gap-4">
@@ -50,8 +54,7 @@ const Address = ({ address, confirmDeliveryAddress, selectAddress }) => {
           </div>
           <div className="text-gray-800">
             {address.locality}, {address.address}, {address.landMark},{" "}
-            {address.alternateContact} <br /> {address.state} -{" "}
-            {address.pinCode}
+            {address.alternateContact}, {address.state} - {address.pinCode}
           </div>
           {address.selected && (
             <button
@@ -69,7 +72,9 @@ const Address = ({ address, confirmDeliveryAddress, selectAddress }) => {
 const CheckOut = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.myCart);
+  const { order } = useSelector((state) => state.newOrder);
   const dispatch = useDispatch();
+  const Razorpay = useRazorpay();
   const { addresses } = useSelector((state) => state.myAddresses);
   const [confirmAddress, setConfirmAddress] = useState(false);
   const [selectedAddress, setSelctedAddress] = useState({});
@@ -79,9 +84,11 @@ const CheckOut = () => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [paymentOption, setPaymentOption] = useState(false);
   const [selectPaymentOption, setSelectPaymentOption] = useState("");
-
+  const navigate = useNavigate();
+  const { success, error } = useSelector((state) => state.newOrder);
+  const { enqueSnackbar } = useSnackbar();
   const totalPrice = cart?.totalPrice;
-  const tax = cart && Number((cart.totalPrice / 100) * 5);
+  const tax = Math.round((cart?.totalPrice / 100) * 5);
   const shipping = cart && Number(cart.totalPrice <= 300 ? 50 : 0);
   const total = Number(totalPrice + tax + shipping).toFixed(2);
 
@@ -106,18 +113,100 @@ const CheckOut = () => {
     setShowOrderSummary(true);
     setPaymentOption(true);
   };
-  const confirmOrder = () => {
-    setPaymentOption(false);
-    if (paymentOption === "cod") {
-      alert("Order Confirmed");
+
+  const confirmOrder = async () => {
+    const addressId = selectedAddress._id;
+    const orderItems = cart?.items?.map((item) => ({
+      productId: item.product._id,
+      quantity: item.quantity,
+      size: item.size,
+    }));
+
+    const orderData = {
+      items: orderItems,
+      addressId,
+      itemsPrice: totalPrice,
+      tax: tax,
+      deliveryCharge: shipping,
+      totalAmount: Number(total),
+      paymentMode: selectPaymentOption,
+    };
+
+    if (selectPaymentOption === "cod") {
+      dispatch(createOrder(orderData));
+      setPaymentOption(false);
     }
-    if (paymentOption === "online") {
-      //do further process
+    if (selectPaymentOption === "online") {
+      try {
+        const { data } = await axios.get("/api/getapikey");
+        const {
+          data: { order },
+        } = await axios.post("/api/create-rzp-order", {
+          amount: orderData.totalAmount,
+        });
+        const options = {
+          key: data.key,
+          amount: orderData.totalAmount * 100,
+          currency: "INR",
+          name: "Pizza-Khao",
+          description: "Pizza-khao payment",
+          order_id: order.id,
+          image:
+            "https://avatars.githubusercontent.com/u/90103892?s=400&u=1147637f019bbb8a63f51fed38a6f0a5e02371d2&v=4",
+          handler: function (response) {
+            axios
+              .post("/api/verifypayment", {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              })
+              .then((res) => {
+                if (res.data.success === true) {
+                  orderData.paymentInfo = {
+                    transactionId: res.data.razorpay_payment_id,
+                    transactionStatus: "success",
+                    paidAt: Date.now(),
+                  };
+                  dispatch(createOrder(orderData));
+
+                  setPaymentOption(false);
+                }
+              })
+              .catch((err) => {
+                setPaymentOption(false);
+                navigate("/transaction/fail");
+              });
+          },
+          prefill: {
+            name: `${user.firstName} ${user.lastName}}`,
+            email: user.email,
+            contact: user.contact,
+          },
+          notes: {
+            address: selectedAddress.address,
+          },
+        };
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   useEffect(() => {
+    if (success) {
+      navigate("/order/success");
+      dispatch({ type: NEW_ORDER_RESET });
+    }
+    if (error) {
+      enqueSnackbar(error, { variant: "error" });
+      dispatch(clearErrors());
+    }
+  }, [success, error, navigate, enqueSnackbar]);
+
+  useEffect(() => {
     dispatch(myAddresses());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const address = addresses.map((adr) => ({ ...adr, selected: false }));
@@ -269,10 +358,12 @@ const CheckOut = () => {
                   </div>
                   {selectPaymentOption !== "" && (
                     <button
-                      className="bg-purple-600 font-medium uppercase text-white  py-2 rounded-sm w-max px-4 mt-4 mx-auto hover:bg-purple-700"
+                      className="bg-red-600 font-medium text-white  py-2 rounded-sm w-max px-4 mt-4 tracking-wide hover:bg-red-700"
                       onClick={confirmOrder}
                     >
-                      Confirm Order
+                      {selectPaymentOption === "cod"
+                        ? "Place order"
+                        : "Proceed to payment"}
                     </button>
                   )}
                 </div>
@@ -287,7 +378,7 @@ const CheckOut = () => {
           <div className="flex flex-col gap-2 border-b-[1px] p-4">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">
-                Price ({cart?.items.length})
+                Price ({cart?.items?.length})
               </span>
               <span className="text-gray-800 font-semibold">
                 ₹{totalPrice?.toFixed(2)}

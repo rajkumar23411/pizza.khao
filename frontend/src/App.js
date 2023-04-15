@@ -16,6 +16,10 @@ import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import AddPizza from "./pages/AddPizza";
 import WishList from "./pages/WishList";
+import OrderSuccess from "./pages/OrderSuccess";
+import VerifyPayment from "./pages/VerifyPayment";
+import TransactionFail from "./pages/TransactionFail";
+import ProtectedRoute from "./protectedRoute";
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -28,16 +32,75 @@ const App = () => {
       <Route path="/pizza/:id" element={<SinglePizza />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/resturent-menu" element={<ResturentMenu />} />
-      <Route path="/my-order" element={<MyOrder />} />
+      <Route
+        path="/my-order"
+        element={
+          <ProtectedRoute>
+            <MyOrder />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/checkout" element={<CheckOut />} />
-      <Route path="/account/settings" element={<MyAccount />} />
-      <Route path="/account/address" element={<AccountAddress />} />
-      <Route path="/account/favourites" element={<WishList />} />
+      <Route
+        path="/account/settings"
+        element={
+          <ProtectedRoute>
+            <MyAccount />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/account/address"
+        element={
+          <ProtectedRoute>
+            <AccountAddress />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/account/favourites"
+        element={
+          <ProtectedRoute>
+            <WishList />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/register" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/add/pizza" element={<AddPizza />} />
+      <Route
+        path="/add/pizza"
+        element={
+          <ProtectedRoute>
+            <AddPizza />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/menu/:keyword" element={<Menu />} />
       <Route path="/pizza/:keyword" element={<Menu />} />
+      <Route
+        path="/order/success"
+        element={
+          <ProtectedRoute>
+            <OrderSuccess />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/verifypayment"
+        element={
+          <ProtectedRoute>
+            <VerifyPayment />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/transaction/fail"
+        element={
+          <ProtectedRoute>
+            <TransactionFail />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

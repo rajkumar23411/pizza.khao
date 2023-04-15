@@ -3,6 +3,8 @@ import {
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGOUT_FAIL,
+  LOGOUT_SUCCESS,
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -47,6 +49,18 @@ export const userReducer = (state = { user: {} }, action) => {
         loading: false,
         isAuthenticated: false,
         user: null,
+        error: action.payload,
+      };
+
+    case LOGOUT_SUCCESS:
+      return {
+        loading: false,
+        isAuthenticated: false,
+        user: null,
+      };
+    case LOGOUT_FAIL:
+      return {
+        ...state,
         error: action.payload,
       };
     case CLEAR_ERRORS: {

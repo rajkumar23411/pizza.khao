@@ -1,21 +1,33 @@
 import React from "react";
 
-const OrderItemBox = () => {
+const OrderItemBox = ({ item }) => {
   return (
     <div className="flex items-center justify-between border-b-2 p-4 w-full">
-      <div className="flex items-start justify-center gap-4">
-        <img src="/images/pizza-3.png" alt="pizza" className="h-20" />
+      <div className="flex items-start justify-start gap-4 flex-1">
+        <img
+          src={item.productId.image}
+          alt={item.productId.name}
+          className="h-20"
+        />
         <div className="flex flex-col">
           <span className="uppercase font-semibold text-sm tracking-wide text-golden">
-            Margherita
+            {item.productId.name}
           </span>
-          <span className="text-gray-600 font-semibold text-sm">$40.87</span>
-          <span className="text-xs text-gray-500">Size: Regular</span>
-          <span className="text-xs text-gray-500">Quantity: 2</span>
+          <span className="text-xs text-gray-500">Size: {item.size}</span>
+          <span className="text-xs text-gray-500">
+            Quantity: {item.quantity}
+          </span>
+          <span className="text-gray-600 font-semibold text-sm">
+            ₹{item.productId.prices[item.size]}
+          </span>
         </div>
       </div>
-      <div className="text-base text-gray-600 font-semibold">2 x $40.89</div>
-      <div className="font-semibold text-red-600">$80.79</div>
+      <div className="text-base text-gray-600 font-semibold justify-center flex items-center flex-1w">{`${
+        item.quantity
+      } x ₹${item.productId.prices[item.size]}`}</div>
+      <div className="font-semibold text-red-600 flex-[0.5] flex items-center justify-end">
+        ₹{(item?.quantity * item?.productId?.prices[item.size]).toFixed(2)}
+      </div>
     </div>
   );
 };

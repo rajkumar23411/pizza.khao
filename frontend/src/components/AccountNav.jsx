@@ -4,9 +4,15 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import DriveFileMoveIcon from "@mui/icons-material/DriveFileMove";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/actions/userAction";
+import { useSnackbar } from "notistack";
 
 const AccountNav = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const settingsOption = [
     { name: "Personal Information", link: "/account/settings" },
     { name: "Manage Address", link: "/account/address" },
@@ -17,7 +23,11 @@ const AccountNav = () => {
     { name: "My Cart", link: "/cart" },
     { name: "My Coupons", link: "/account/coupons" },
   ];
-
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+    enqueueSnackbar("Logged out successfully", { variant: "success" });
+  };
   return (
     <div className="flex-[0.3] flex flex-col min-h-full bg-white shadow-md">
       <div className="flex items-center gap-4 p-4 border-b-[1px]">
@@ -29,12 +39,12 @@ const AccountNav = () => {
       </div>
       <div className="w-full h-full">
         <div className="flex items-center justify-between p-4 border-b-[1px]">
-          <p className="flex items-center gap-6">
+          <Link to="/my-order" className="flex items-center gap-6">
             <DriveFileMoveIcon className="text-red-400" />
             <span className="uppercase font-semibold text-gray-500 tracking-wide">
               My orders
             </span>
-          </p>
+          </Link>
           <ArrowForwardIosIcon fontSize="small" className="text-gray-500" />
         </div>
 
@@ -83,7 +93,10 @@ const AccountNav = () => {
         </div>
       </div>
       <div className="flex items-center justify-between p-4">
-        <p className="flex items-center gap-6 cursor-pointer hover:text-blue-700">
+        <p
+          className="flex items-center gap-6 cursor-pointer hover:text-blue-700"
+          onClick={logoutHandler}
+        >
           <PowerSettingsNewIcon className="text-red-400" />
           <span className="uppercase font-semibold text-gray-500 tracking-wide hover:font-semibold hover:text-red-600">
             Logout

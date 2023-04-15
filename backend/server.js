@@ -11,6 +11,8 @@ const addressRoutes = require("./routes/addressRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+
 const fileUpload = require("express-fileupload");
 const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
@@ -30,6 +32,7 @@ app.use("/api", addressRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", wishlistRoutes);
 app.use("/api", orderRoutes);
+app.use("/api", paymentRoutes);
 
 app.use(errorHandler);
 

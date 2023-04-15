@@ -7,9 +7,10 @@ const orderSchema = new Schema({
       productId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "address",
+        ref: "Product",
       },
       quantity: { type: Number, required: true },
+      size: { type: String, required: true },
     },
   ],
   userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },

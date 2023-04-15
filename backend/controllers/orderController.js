@@ -1,6 +1,6 @@
 const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
 const Order = require("../models/order");
-
+const Cart = require("../models/cart");
 const orderController = {
   async newOrder(req, res, next) {
     try {
@@ -12,7 +12,9 @@ const orderController = {
         deliveryCharge,
         totalAmount,
         paymentMode,
+        paymentInfo,
       } = req.body;
+
       const userId = req.user._id;
 
       const order = await Order.create({
@@ -24,9 +26,14 @@ const orderController = {
         deliveryCharge,
         totalAmount,
         paymentMode,
+        paymentInfo,
       });
 
-      res.status(201).json({ order });
+      const cart = await Cart.findOne({ userId });
+      cart.items = [];
+      await cart.save();
+
+      res.status(201).json({ order, success: true });
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +53,12 @@ const orderController = {
 
   async getMyOrders(req, res, next) {
     const userId = req.user._id;
-    const order = await Order.find({ userId });
+    const order = await Order.find({ userId })
+      .populate(
+        "items.productId",
+        "-__v -createdAt -updatedAt -numOfReviews -category -description -ratings -reviews -user"
+      )
+      .populate("addressId", "-_id -__v -createdAt -updatedAt -userId");
 
     if (!order) {
       return next(CustomErrorHandler.notFound("No order found"));

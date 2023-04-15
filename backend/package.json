@@ -12,6 +12,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.1",
     "otp-generator": "^4.0.1",
+    "razorpay": "^2.8.6",
     "twilio": "^4.8.0"
   },
   "scripts": {

@@ -80,7 +80,7 @@ const productController = {
 
   async getAllproducts(req, res, next) {
     try {
-      const resultPerPage = 8;
+      const resultPerPage = 9;
       const totalProducts = await Product.countDocuments();
       const features = new Features(Product.find(), req.query)
         .search()

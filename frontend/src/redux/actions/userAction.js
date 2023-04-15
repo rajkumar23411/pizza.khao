@@ -5,6 +5,8 @@ import {
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGOUT_FAIL,
+  LOGOUT_SUCCESS,
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -71,6 +73,15 @@ export const updateName = (firstname, lastname) => async (dispatch) => {
     dispatch({ type: UPDATE_USER_NAME_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({ type: UPDATE_NAME_FAIL, payload: error.response.data.message });
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    await axios.get(`/api/logout`);
+    dispatch({ type: LOGOUT_SUCCESS });
+  } catch (error) {
+    dispatch({ type: LOGOUT_FAIL, payload: error.response.data.message });
   }
 };
 

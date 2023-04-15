@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import PhoneEnabledOutlinedIcon from "@mui/icons-material/PhoneEnabledOutlined";
 import MopedOutlinedIcon from "@mui/icons-material/MopedOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import SearchBar from "./SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartItems } from "../redux/actions/cartActions";
+import { useSnackbar } from "notistack";
+import { logout } from "../redux/actions/userAction";
 
 const BannerNav = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -13,13 +15,20 @@ const BannerNav = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.myCart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleShowSearchBar = () => {
     setShowSearchBar(true);
   };
   const toggleMenu = (index) => {
     setIsModelOpen(index);
   };
-
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+    enqueueSnackbar("Logged out successfully", { variant: "success" });
+  };
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 900) {
@@ -122,7 +131,10 @@ const BannerNav = () => {
             Blog
           </Link>
           {isAuthenticated ? (
-            <Link className="uppercase tracking-wider text-white font-bold text-sm">
+            <Link
+              className="uppercase tracking-wider text-white font-bold text-sm"
+              onClick={handleLogout}
+            >
               Logout
             </Link>
           ) : (

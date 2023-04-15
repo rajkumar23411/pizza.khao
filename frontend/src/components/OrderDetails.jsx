@@ -1,7 +1,8 @@
 import React from "react";
 import DescriptionIcon from "@mui/icons-material/Description";
+import { getDate } from "../utils";
 
-const OrderDetails = () => {
+const OrderDetails = ({ order }) => {
   return (
     <div className="px-4">
       <div className="flex justify-between items-center border-b-2 border-dashed py-2">
@@ -18,25 +19,41 @@ const OrderDetails = () => {
           <span className=" font-semibold text-gray-800 text-sm">
             Order ID:
           </span>
-          <span className="text-gray-700">3i4872t73gqsy217</span>
+          <span className="text-gray-700 uppercase text-sm">{order._id}</span>
         </div>
         <div className="flex items-center gap-1">
           <span className="capitalize font-semibold text-gray-800 text-sm">
             order date:
           </span>
-          <span className="text-gray-700">11 March 2023 at 09:30 pm</span>
+          <span className="text-gray-700 text-sm">
+            {getDate(order.orderDate)}
+          </span>
         </div>
         <div className="flex items-center gap-1">
           <span className="capitalize font-semibold text-gray-800 text-sm">
             Deliverd to:
           </span>
-          <span className="text-gray-700">Karia, Nalbari, 781339</span>
+          <span className="text-sm font-semibold text-blue-600">
+            {order.addressId.name}
+          </span>
+        </div>
+        <div className="flex  items-center gap-1">
+          <span className="capitalize font-semibold text-gray-800 text-sm">
+            Address:
+          </span>
+          <span className="text-gray-700 text-sm ">
+            {order.addressId.locality}, {order.addressId.address},{" "}
+            {order.addressId.landMark}, {order.addressId.alternateContact},{" "}
+            {order.addressId.state} - {order.addressId.pinCode}
+          </span>
         </div>
         <div className="flex items-center gap-1">
-          <span className="capitalize font-semibold text-gray-800">
+          <span className="capitalize font-semibold text-gray-800 text-sm">
             Order Status:
           </span>
-          <span className="text-red-700 font-semibold">Delivered</span>
+          <span className="text-red-700 font-semibold">
+            {order.orderStatus}
+          </span>
         </div>
       </div>
     </div>
