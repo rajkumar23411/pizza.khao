@@ -5,6 +5,7 @@ import {
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGIN_USING_OTP_REQUEST,
   LOGOUT_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_FAIL,
@@ -82,6 +83,20 @@ export const logout = () => async (dispatch) => {
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
     dispatch({ type: LOGOUT_FAIL, payload: error.response.data.message });
+  }
+};
+
+export const verifyLoginOtp = (contact, otp) => async (dispatch) => {
+  try {
+    dispatch({ type: LOGIN_USING_OTP_REQUEST });
+    const { data } = await axios.post(
+      `/api/verify/login/otp`,
+      { contact, otp },
+      config
+    );
+    dispatch({ type: LOGIN_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
   }
 };
 

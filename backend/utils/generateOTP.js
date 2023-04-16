@@ -1,7 +1,7 @@
 const optGenerator = require("otp-generator");
 
-const generateOTP = async () => {
-  const otp = await optGenerator.generate(6, {
+const generateOTP = () => {
+  const otp = optGenerator.generate(6, {
     digits: true,
     lowerCaseAlphabets: false,
     upperCaseAlphabets: false,

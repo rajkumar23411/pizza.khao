@@ -3,6 +3,9 @@ import {
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGIN_USING_OTP_FAIL,
+  LOGIN_USING_OTP_REQUEST,
+  LOGIN_USING_OTP_SUCCESS,
   LOGOUT_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_FAIL,
@@ -22,6 +25,7 @@ export const userReducer = (state = { user: {} }, action) => {
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
     case USER_LOAD_REQUEST:
+    case LOGIN_USING_OTP_REQUEST:
       return {
         loading: true,
         isAuthenticated: false,
@@ -29,6 +33,7 @@ export const userReducer = (state = { user: {} }, action) => {
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
     case USER_LOAD_SUCCESS:
+    case LOGIN_USING_OTP_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -59,6 +64,7 @@ export const userReducer = (state = { user: {} }, action) => {
         user: null,
       };
     case LOGOUT_FAIL:
+    case LOGIN_USING_OTP_FAIL:
       return {
         ...state,
         error: action.payload,

@@ -1,7 +1,6 @@
 const Product = require("../models/product");
 const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
 const Features = require("../utils/Features");
-const cloudinary = require("cloudinary").v2;
 const productController = {
   async create(req, res, next) {
     try {

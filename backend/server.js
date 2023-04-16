@@ -12,9 +12,8 @@ const cartRoutes = require("./routes/cartRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
-
 const fileUpload = require("express-fileupload");
-const cloudinary = require("cloudinary").v2;
+
 const cors = require("cors");
 dotenv.config({ path: "./.env" });
 
