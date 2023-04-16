@@ -11,6 +11,9 @@ import {
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  RESET_PASSWORD_FAIL,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
   UPDATE_NAME_FAIL,
   UPDATE_USER_NAME_REQUEST,
   UPDATE_USER_NAME_SUCCESS,
@@ -97,6 +100,25 @@ export const verifyLoginOtp = (contact, otp) => async (dispatch) => {
     dispatch({ type: LOGIN_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+  }
+};
+
+export const resetPassword = (contact, password) => async (dispatch) => {
+  try {
+    dispatch({ type: RESET_PASSWORD_REQUEST });
+
+    const { data } = await axios.post(
+      "/api/reset/password",
+      { contact, password },
+      config
+    );
+
+    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: RESET_PASSWORD_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };
 

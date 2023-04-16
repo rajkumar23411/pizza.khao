@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addAddress } from "../redux/actions/addressAction";
 
-const AddressForm = ({ button }) => {
+const AddressForm = ({ button, onCancel, bg }) => {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [contact, setContact] = useState();
@@ -32,7 +32,10 @@ const AddressForm = ({ button }) => {
   };
 
   return (
-    <form className="flex flex-col gap-4 p-10" onSubmit={handleAddressSubmit}>
+    <form
+      className={`flex flex-col gap-4 p-10 bg-white`}
+      onSubmit={handleAddressSubmit}
+    >
       <div className="flex w-full gap-4">
         <input
           type="text"
@@ -110,8 +113,16 @@ const AddressForm = ({ button }) => {
       <input
         type="submit"
         value={button}
-        className="uppercase bg-red-600 text-white p-4 font-semibold tracking-wider hover:bg-red-700 cursor-pointer rounded"
+        className="uppercase bg-purple-600 text-white p-3 font-semibold tracking-wider hover:bg-red-700 cursor-pointer rounded"
       />
+      {onCancel && (
+        <div
+          onClick={onCancel}
+          className="text-center text-red-600 font-semibold cursor-pointer hover:text-red-700"
+        >
+          Cancel
+        </div>
+      )}
     </form>
   );
 };

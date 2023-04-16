@@ -33,7 +33,7 @@ const MenuPizzaCard = ({ pizza }) => {
   };
 
   const isItemInWishlist = (id) => {
-    return wishlist.items?.find((item) => item.product._id === id);
+    return wishlist?.items?.find((item) => item.product._id === id);
   };
 
   useEffect(() => {

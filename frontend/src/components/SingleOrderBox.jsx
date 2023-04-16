@@ -24,7 +24,7 @@ const SingleOrderBox = ({ order }) => {
               {order.items[0].productId.name}
             </span>
             <span className="text-base text-gray-500">
-              {order.addressId.locality}, {order.addressId.city}
+              {order.addressId?.locality}, {order.addressId?.city}
             </span>
           </div>
         </div>

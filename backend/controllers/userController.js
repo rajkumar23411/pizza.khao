@@ -60,10 +60,11 @@ const userController = {
       console.log(error);
     }
   },
+  // login using otp
   async loginUsingContact(req, res, next) {
     try {
       const { contact } = req.body;
-      console.log(contact);
+
       if (!contact) {
         return next(
           CustomErrorHandler.required(
@@ -97,6 +98,7 @@ const userController = {
       console.log(error);
     }
   },
+  // verify login otp
   async verifyLoginOTP(req, res, next) {
     try {
       const { contact, otp } = req.body;
@@ -110,7 +112,7 @@ const userController = {
       if (!user) {
         return next(CustomErrorHandler.notFound("User not found"));
       }
-      console.log(user.otp === otp, user.otpExp > Date.now());
+
       const isOTPMatched = user && user.otp === otp && user.otpExp > Date.now();
 
       if (!isOTPMatched) {
@@ -173,6 +175,94 @@ const userController = {
       res.status(200).json({ success: true });
     } catch (error) {
       console.log(error);
+    }
+  },
+  async forgotPassword(req, res, next) {
+    try {
+      const { contact } = req.body;
+      if (!contact) {
+        return next(
+          CustomErrorHandler.required("Please enter your contact number")
+        );
+      }
+      const user = await User.findOne({ contact });
+
+      if (!user) {
+        return next(
+          CustomErrorHandler.notFound("No user exists with this contact number")
+        );
+      }
+      const otp = generateOTP();
+      try {
+        await sendMsg(otp, contact);
+        user.otp = Number(otp);
+        user.otpExp = new Date(Date.now() + 5 * 60 * 1000);
+        await user.save();
+        res.status(200).json({
+          success: true,
+          message: "OTP sent successfully",
+        });
+      } catch (err) {
+        user.otp = undefined;
+        user.otpExp = undefined;
+        await user.save();
+        return next(CustomErrorHandler.serverError());
+      }
+    } catch (error) {
+      console.log(error);
+      return next(CustomErrorHandler.serverError());
+    }
+  },
+  async verifyForgotPasswordOTP(req, res, next) {
+    try {
+      const { contact, otp } = req.body;
+
+      if (!contact || !otp) {
+        return next(CustomErrorHandler.required("All fields are required"));
+      }
+      const user = await User.findOne({ contact });
+
+      if (!user) {
+        return next(CustomErrorHandler.notFound("User not found"));
+      }
+
+      const isOTPMatched = user.otp === Number(otp) && user.otpExp > Date.now();
+
+      if (!isOTPMatched) {
+        return next(
+          CustomErrorHandler.notFound("Invaid OTP or OTP has expired")
+        );
+      } else {
+        user.otp = undefined;
+        user.otpExp = undefined;
+        await user.save();
+        res
+          .status(200)
+          .json({ success: true, message: "OTP verified successfully" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async resetPassword(req, res, next) {
+    try {
+      const { contact, password } = req.body;
+      console.log(contact, password);
+      if (!contact || !password) {
+        return next(CustomErrorHandler.required("All fields are required"));
+      }
+      const user = await User.findOne({ contact });
+
+      if (!user) {
+        return next(CustomErrorHandler.notFound("User not found"));
+      }
+
+      user.password = password;
+      await user.save();
+      sendToken(user, 200, res);
+    } catch (error) {
+      console.log(error);
+      return next(CustomErrorHandler.serverError());
     }
   },
 };

@@ -9,7 +9,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { error, isAuthenticated } = useSelector((state) => state.user);
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState();
   const [password, setPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState();
@@ -118,9 +118,12 @@ const Login = () => {
                 Register now
               </Link>
             </div>
-            <div className="w-full text-center text-slate-100 cursor-pointer hover:text-sky-300">
+            <Link
+              to="/forgot/password"
+              className="w-full text-center text-slate-100 cursor-pointer hover:text-sky-300"
+            >
               <span>Forgot password ?</span>
-            </div>
+            </Link>
           </form>
         )}
       </div>

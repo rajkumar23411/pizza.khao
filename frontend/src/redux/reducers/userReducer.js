@@ -11,6 +11,9 @@ import {
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  RESET_PASSWORD_FAIL,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
   UPDATE_NAME_FAIL,
   UPDATE_NAME_RESET,
   UPDATE_USER_NAME_REQUEST,
@@ -26,6 +29,7 @@ export const userReducer = (state = { user: {} }, action) => {
     case REGISTER_REQUEST:
     case USER_LOAD_REQUEST:
     case LOGIN_USING_OTP_REQUEST:
+    case RESET_PASSWORD_REQUEST:
       return {
         loading: true,
         isAuthenticated: false,
@@ -40,6 +44,14 @@ export const userReducer = (state = { user: {} }, action) => {
         isAuthenticated: true,
         user: action.payload,
       };
+    case RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: true,
+        success: action.payload.success,
+        user: action.payload.user,
+      };
     case LOGIN_FAIL:
     case REGISTER_FAIL:
       return {
@@ -47,6 +59,15 @@ export const userReducer = (state = { user: {} }, action) => {
         loading: false,
         isAuthenticated: false,
         user: null,
+        error: action.payload,
+      };
+    case RESET_PASSWORD_FAIL:
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false,
+        user: null,
+        success: false,
         error: action.payload,
       };
     case USER_LOAD_FAIL:

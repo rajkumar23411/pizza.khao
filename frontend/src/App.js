@@ -20,6 +20,9 @@ import OrderSuccess from "./pages/OrderSuccess";
 import VerifyPayment from "./pages/VerifyPayment";
 import TransactionFail from "./pages/TransactionFail";
 import ProtectedRoute from "./protectedRoute";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyOTP from "./pages/VerifyOTP";
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -67,6 +70,9 @@ const App = () => {
       />
       <Route path="/register" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot/password" element={<ForgotPassword />} />
+      <Route path="/verify/otp" element={<VerifyOTP />} />
+      <Route path="/reset/password" element={<ResetPassword />} />
       <Route
         path="/add/pizza"
         element={

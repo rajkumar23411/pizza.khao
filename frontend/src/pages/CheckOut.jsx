@@ -12,6 +12,7 @@ import axios from "axios";
 import useRazorpay from "react-razorpay";
 import { config } from "../utils";
 import { NEW_ORDER_RESET } from "../redux/constants/orderConstant";
+import AddressForm from "./../components/AddressForm";
 const CheckoutStep = (props) => {
   return (
     <div className="bg-white shadow-sm w-full">
@@ -75,6 +76,7 @@ const CheckOut = () => {
   const { order } = useSelector((state) => state.newOrder);
   const dispatch = useDispatch();
   const Razorpay = useRazorpay();
+  const [newAddress, setNewAddress] = useState(false);
   const { addresses } = useSelector((state) => state.myAddresses);
   const [confirmAddress, setConfirmAddress] = useState(false);
   const [selectedAddress, setSelctedAddress] = useState({});
@@ -100,7 +102,6 @@ const CheckOut = () => {
     );
     setAddress(address);
   };
-
   const confirmDeliveryAddress = (addr) => {
     setConfirmAddress(true);
     setSelctedAddress(addr);
@@ -244,29 +245,48 @@ const CheckOut = () => {
             title="Delivery Address"
             active={!confirmAddress && isAuthenticated}
             body={
-              confirmAddress
-                ? selectedAddress && (
-                    <div className="flex flex-col gap-2 pl-12">
-                      <p className="text-gray-700 font-semibold">
-                        {selectedAddress.name} - {selectedAddress.contact}
-                      </p>
-                      <p className="text-gray-600">
-                        {selectedAddress.locality}, {selectedAddress.address},{" "}
-                        {selectedAddress.landMark},{" "}
-                        {selectedAddress.alternateContact} <br />{" "}
-                        {selectedAddress.state} - {selectedAddress.pinCode}
-                      </p>
-                    </div>
-                  )
-                : address.map((address) => (
-                    <Address
-                      address={address}
-                      confirmDeliveryAddress={confirmDeliveryAddress}
-                      selectAddress={selectAddress}
-                    />
-                  ))
+              address.length === 0 ? (
+                <AddressForm
+                  onCancel={() => setNewAddress(false)}
+                  button={"Save and Deliver here"}
+                />
+              ) : confirmAddress ? (
+                selectedAddress && (
+                  <div className="flex flex-col gap-2 pl-12">
+                    <p className="text-gray-700 font-semibold">
+                      {selectedAddress.name} - {selectedAddress.contact}
+                    </p>
+                    <p className="text-gray-600">
+                      {selectedAddress.locality}, {selectedAddress.address},{" "}
+                      {selectedAddress.landMark},{" "}
+                      {selectedAddress.alternateContact} <br />{" "}
+                      {selectedAddress.state} - {selectedAddress.pinCode}
+                    </p>
+                  </div>
+                )
+              ) : (
+                address.map((address) => (
+                  <Address
+                    address={address}
+                    confirmDeliveryAddress={confirmDeliveryAddress}
+                    selectAddress={selectAddress}
+                  />
+                ))
+              )
             }
           />
+          {address.length !== 0 &&
+            (confirmAddress ? null : newAddress ? (
+              <AddressForm button={"Save and Deliver here"} />
+            ) : isAuthenticated ? (
+              <CheckoutStep
+                stepNumber={"+"}
+                title={"ADD NEW ADDRESS"}
+                active={false}
+                onClick={() => setNewAddress(true)}
+                bg="bg-white"
+              />
+            ) : null)}
           <CheckoutStep
             stepNumber={3}
             title="ORDER SUMMARY"
