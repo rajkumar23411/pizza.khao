@@ -14,22 +14,22 @@ import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 import { addToCart, getCartItems } from "../redux/actions/cartActions";
 
 const MenuPizzaCard = ({ pizza }) => {
-  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { success } = useSelector((state) => state.myCart);
   const { wishlist, message } = useSelector((state) => state.wishlist);
-  const [isInWishlist, setIsInWishlist] = useState(false);
-
+  const [modelItem, setModelItem] = useState({});
   const dispatch = useDispatch();
 
-  const handleQuickView = () => {
-    setIsModelOpen(true);
-  };
   const handleAddtoCart = (id, count, size) => {
     dispatch(addToCart(id, count, size));
   };
   const handleAddtoFavourite = (id) => {
     dispatch(addRemoveFromWishlist(id));
+  };
+  const handleClickOpen = (item) => {
+    setModelItem(item);
+    setOpen(true);
   };
 
   const isItemInWishlist = (id) => {
@@ -40,6 +40,7 @@ const MenuPizzaCard = ({ pizza }) => {
     if (success) {
       enqueueSnackbar("Pizza added to cart", { variant: "success" });
       dispatch({ type: ADD_TO_CART_RESET });
+      setOpen(false);
       dispatch(getCartItems());
     }
     if (message) {
@@ -90,21 +91,19 @@ const MenuPizzaCard = ({ pizza }) => {
                   Add to cart
                 </span>
                 <span
-                  onClick={() => handleQuickView(item)}
+                  onClick={() => handleClickOpen(item)}
                   className="bg-slate-200 text-center py-2 px-6 cursor-pointer hover:bg-slate-300 text-sm font-semibold font-roboto tracking-wider text-gray-800 uppercase"
                 >
                   Quick View
                 </span>
               </div>
             </div>
-            {isModelOpen && (
+            {open && (
               <QuickViewModel
-                path={item.image}
-                name={item.name}
-                prices={item.prices}
-                description={item.description}
-                onClose={() => setIsModelOpen(false)}
-                isModelOpen={isModelOpen}
+                pizza={modelItem}
+                onClose={() => setOpen(false)}
+                isItemInWishlist={isItemInWishlist(item._id)}
+                wishListItems={wishlist?.items}
               />
             )}
           </div>

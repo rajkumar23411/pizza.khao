@@ -68,7 +68,7 @@ const DialogBoxData = ({ pizza, onClose }) => {
           </div>
         </div>
         <p className="text-xl text-red-600 font-bold">
-          ₹{pizza.prices.regular} - ₹{pizza.prices.extralarge}
+          ₹{pizza.prices?.regular} - ₹{pizza.prices?.extralarge}
         </p>
         <p className="text-base text-gray-500 pt-6">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolore
@@ -136,11 +136,11 @@ const DialogBoxData = ({ pizza, onClose }) => {
         </div>
         {size === "" ? (
           <div className="text-2xl text-red-600 font-bold pb-8">
-            ₹{pizza.prices.regular}
+            ₹{pizza.prices?.regular}
           </div>
         ) : (
           <div className="text-2xl text-red-600 font-bold pb-8">
-            ₹{pizza.prices[size]}
+            ₹{pizza.prices && pizza.prices[size]}
           </div>
         )}
         <div className="flex gap-2">

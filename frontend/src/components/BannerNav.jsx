@@ -153,11 +153,11 @@ const BannerNav = () => {
                 {cart.items.length === 0 ? 0 : cart.items.length}
               </span>
             )}
-            <MopedOutlinedIcon sx={{ color: "white" }} fontSize="large" />
             <Link
               className="text-white uppercase tracking-wider font-bold text-sm"
               to="/cart"
             >
+              <MopedOutlinedIcon sx={{ color: "white" }} fontSize="large" />
               Cart
             </Link>
           </div>
