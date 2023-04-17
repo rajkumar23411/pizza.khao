@@ -16,7 +16,7 @@ const VerifyOTP = () => {
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/verify/login/otp", {
+      const { data } = await axios.post("/api/verify/forgot/password/otp", {
         contact,
         otp,
       });

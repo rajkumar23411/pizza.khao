@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainNav from "../components/MainNav";
 import OrderedItems from "../components/OrderedItems";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutLoginForm from "../components/CheckoutLoginForm";
-import { myAddresses } from "../redux/actions/addressAction";
+import { clearError, myAddresses } from "../redux/actions/addressAction";
 import { Radio } from "@mui/material";
 import { clearErrors, createOrder } from "../redux/actions/orderAction";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import axios from "axios";
 import useRazorpay from "react-razorpay";
-import { config } from "../utils";
 import { NEW_ORDER_RESET } from "../redux/constants/orderConstant";
 import AddressForm from "./../components/AddressForm";
+import { ADD_NEW_ADDRESS_RESET } from "../redux/constants/addressConstant";
 const CheckoutStep = (props) => {
   return (
     <div className="bg-white shadow-sm w-full">
@@ -78,6 +78,9 @@ const CheckOut = () => {
   const Razorpay = useRazorpay();
   const [newAddress, setNewAddress] = useState(false);
   const { addresses } = useSelector((state) => state.myAddresses);
+  const { success: addAddressSuccess, error: addAddressError } = useSelector(
+    (state) => state.newAddress
+  );
   const [confirmAddress, setConfirmAddress] = useState(false);
   const [selectedAddress, setSelctedAddress] = useState({});
   const [address, setAddress] = useState([]);
@@ -88,7 +91,7 @@ const CheckOut = () => {
   const [selectPaymentOption, setSelectPaymentOption] = useState("");
   const navigate = useNavigate();
   const { success, error } = useSelector((state) => state.newOrder);
-  const { enqueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const totalPrice = cart?.totalPrice;
   const tax = Math.round((cart?.totalPrice / 100) * 5);
   const shipping = cart && Number(cart.totalPrice <= 300 ? 50 : 0);
@@ -200,14 +203,23 @@ const CheckOut = () => {
       dispatch({ type: NEW_ORDER_RESET });
     }
     if (error) {
-      enqueSnackbar(error, { variant: "error" });
+      enqueueSnackbar(error, { variant: "error" });
       dispatch(clearErrors());
     }
-  }, [success, error, navigate, enqueSnackbar]);
+  }, [success, error, navigate, enqueueSnackbar]);
 
   useEffect(() => {
+    if (addAddressSuccess) {
+      setNewAddress(false);
+      enqueueSnackbar("Address added successfully", { variant: "success" });
+      dispatch({ type: ADD_NEW_ADDRESS_RESET });
+    }
+    if (addAddressError) {
+      enqueueSnackbar(addAddressError, { variant: "error" });
+      dispatch(clearError());
+    }
     dispatch(myAddresses());
-  }, [dispatch]);
+  }, [dispatch, addAddressSuccess, addAddressError, enqueueSnackbar]);
 
   useEffect(() => {
     const address = addresses.map((adr) => ({ ...adr, selected: false }));

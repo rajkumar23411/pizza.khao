@@ -1,18 +1,31 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import pizza from "../pizza";
 import { getAllProducts } from "../redux/actions/productAction";
 import SinglePizzaCard from "./SinglePizzaCard";
-
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { settings } from "../utils/Arrows";
+import ItemSkeleton from "./ItemSkeleton";
+import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
+import { useSnackbar } from "notistack";
 const HomeMenu = () => {
   const dispatch = useDispatch();
   const { loading, products } = useSelector((state) => state.products);
+  const { success } = useSelector((state) => state.myCart);
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    if (success) {
+      enqueueSnackbar("Pizza added to cart", { variant: "success" });
+      dispatch({ type: ADD_TO_CART_RESET });
+    }
+  }, [success, enqueueSnackbar]);
   useEffect(() => {
     dispatch(getAllProducts());
   }, [dispatch]);
   return (
-    <div className="min-h-screen py-20">
-      <div className="w-full flex items-center justify-center flex-col gap-1">
+    <div className="min-h-screen pt-20">
+      <div className="w-full flex items-center justify-center flex-col gap-1 pb-10">
         <h3 className="text-base uppercase tracking-wider text-[#D1411E] font-bold">
           Choose your flavor
         </h3>
@@ -25,11 +38,15 @@ const HomeMenu = () => {
           obcaecati consequatur?
         </p>
       </div>
-      <div className="grid grid-cols-4 gap-y-14 place-content-center place-items-center pt-10 px-20">
-        {products.map((pizza) => (
-          <SinglePizzaCard pizza={pizza} key={pizza.path} />
-        ))}
-      </div>
+      {loading ? (
+        <ItemSkeleton />
+      ) : (
+        <Slider {...settings} className="overflow-hidden">
+          {products?.map((pizza) => (
+            <SinglePizzaCard pizza={pizza} key={pizza.path} />
+          ))}
+        </Slider>
+      )}
     </div>
   );
 };

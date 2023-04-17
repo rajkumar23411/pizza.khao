@@ -119,12 +119,13 @@ const userController = {
         return next(
           CustomErrorHandler.notFound("Invaid OTP or OTP has expired")
         );
-      } else {
-        user.otp = undefined;
-        user.otpExp = undefined;
-        await user.save();
-        sendToken(user, 200, res);
       }
+      console.log(user);
+      user.otp = undefined;
+      user.otpExp = undefined;
+      await user.save();
+
+      sendToken(user, 200, res);
     } catch (error) {
       console.log(error);
       return next(CustomErrorHandler.serverError());

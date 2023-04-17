@@ -1,4 +1,5 @@
-// export const baseUrl = "http://localhost:4000/api";
+import { NextBtn, PreviousBtn } from "./Arrows";
+
 export const config = {
   headers: { "Content-Type": "application/json" },
 };

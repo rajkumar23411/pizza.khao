@@ -1,6 +1,7 @@
 import {
   ADD_NEW_ADDRESS_FAIL,
   ADD_NEW_ADDRESS_REQUEST,
+  ADD_NEW_ADDRESS_RESET,
   ADD_NEW_ADDRESS_SUCCESS,
   CLEAR_ERRORS,
   DELETE_ADDRESS_FAIL,
@@ -32,6 +33,11 @@ export const newAddressReducer = (state = {}, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+    case ADD_NEW_ADDRESS_RESET:
+      return {
+        ...state,
+        success: false,
       };
     case CLEAR_ERRORS:
       return {

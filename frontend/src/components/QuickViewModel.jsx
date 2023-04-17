@@ -6,9 +6,9 @@ import StarOutlineIcon from "@mui/icons-material/StarOutline";
 const QuickViewModel = ({ name, path, prices, onClose, description }) => {
   return (
     <div
-      className={`h-screen w-full fixed top-0 left-0 right-0 z-20 flex items-center justify-center backdrop-brightness-50`}
+      className={`h-screen w-full absolute top-0 left-0 right-0 z-20 flex items-center justify-center backdrop-brightness-50`}
     >
-      <div className="flex bg-white w-4/5 h-[92vh] rounded-md relative overflow-hidden">
+      <div className="flex bg-white w-4/5 h-[92vh] rounded-md overflow-hidden">
         <div className="qucikViewClose" onClick={onClose}></div>
         <div className="flex-1 flex items-center justify-center bg-gray-100 m-10">
           <img src={path} alt={path} draggable="false" />

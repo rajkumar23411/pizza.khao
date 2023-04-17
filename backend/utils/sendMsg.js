@@ -1,4 +1,5 @@
 require("dotenv").config();
+const CustomErrorHandler = require("../middlewares/CustomErrorHandler.js");
 // const twilio = require("twilio")(process.env.accountSid, process.env.authToken);
 
 // const sendMsg = async (otp, phone) => {
@@ -25,9 +26,7 @@ const sendMsg = async (otp, phone) => {
   const to = "91" + phone;
   nexmo.message.sendSms(from, to, `Your OTP is ${otp}`, (err, responseData) => {
     if (err) {
-      console.log("Error is: " + err);
-    } else {
-      console.log(responseData);
+      return next(CustomErrorHandler.serverError(err));
     }
   });
 };

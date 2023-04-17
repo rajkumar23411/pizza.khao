@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import MainNav from "../components/MainNav";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuPizzaCard from "../components/MenuPizzaCard";
 import Slider from "@mui/material/Slider";
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,7 +10,13 @@ import { getAllProducts } from "../redux/actions/productAction";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
-import { Pagination } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+} from "@mui/material";
 import PlaceHolderCard from "../components/PlaceHolderCard";
 import NoResultFound from "../components/NoResultFound";
 
@@ -157,29 +162,37 @@ const Menu = () => {
         {loading ? (
           <div className="flex-1">
             <div className="grid grid-cols-3 gap-6 place-items-center place-content-start h-full">
-              {Array(8).fill(<PlaceHolderCard />)}
+              {Array(8)
+                .fill(null)
+                .map((_, i) => (
+                  <PlaceHolderCard key={i} />
+                ))}
             </div>
           </div>
         ) : (
           <div className="flex-1 flex flex-col">
             <div className="flex w-full justify-between px-10">
-              <div className="text-gray-500">
-                Showing 1-12 out of 34 result{" "}
-              </div>
-              <div className="bg-gray-200 w-72 flex items-center justify-between h-14 px-4">
-                <select
-                  className="bg-transparent appearance-none w-full text-gray-600 h-full"
+              <FormControl sx={{ minWidth: 250 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Sort items
+                </InputLabel>
+                <Select
                   value={sort}
+                  label="Sort items"
                   onChange={handleSortChange}
                 >
-                  <option defaultValue>Default Sorting</option>
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
                   {sortingOptions.map((option, i) => (
-                    <option key={i} value={option}>
+                    <MenuItem key={i} value={option}>
                       {option}
-                    </option>
+                    </MenuItem>
                   ))}
-                </select>
-                <ExpandMoreIcon fontSize="small" />
+                </Select>
+              </FormControl>
+              <div className="text-gray-500">
+                Showing 1-12 out of 34 result{" "}
               </div>
             </div>
 

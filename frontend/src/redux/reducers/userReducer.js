@@ -62,6 +62,7 @@ export const userReducer = (state = { user: {} }, action) => {
         error: action.payload,
       };
     case RESET_PASSWORD_FAIL:
+    case LOGIN_USING_OTP_FAIL:
       return {
         ...state,
         loading: false,
@@ -85,7 +86,6 @@ export const userReducer = (state = { user: {} }, action) => {
         user: null,
       };
     case LOGOUT_FAIL:
-    case LOGIN_USING_OTP_FAIL:
       return {
         ...state,
         error: action.payload,

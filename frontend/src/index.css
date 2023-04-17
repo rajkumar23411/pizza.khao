@@ -193,3 +193,33 @@ input[type="number"] {
   0%{ left: -100%}
   100%{ left: 150%}
 }
+
+.slick-arrow.slick-prev,
+.slick-arrow.slick-next {
+    width: 47px;
+    height: 80px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,.2);
+    background: transparent;
+    backdrop-filter: blur(10px);
+    color: #8888;
+    z-index: 1;
+}
+.slick-prev {
+    left: 0 !important;
+    border-radius: 0 5px 5px 0;
+}
+.slick-next {
+    right: 0 !important;
+    border-radius: 5px 0 0 5px;
+}
+.slick-prev::before,
+.slick-next::before {
+    display: none;
+}
+.slick-arrow.slick-prev:hover,
+.slick-arrow.slick-next:hover{
+  color: #000 !important;
+}

@@ -5,20 +5,22 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PizzaInformation from "../components/PizzaInformation";
-import RelatedProducts from "../components/RelatedProducts";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import ItemSkeleton from "../components/ItemSkeleton";
 import {
   getProductDetails,
   getRelatedProducts,
 } from "../redux/actions/productAction";
 import { pizzaSize } from "../utils";
 import { Rating } from "@mui/material";
-import PlaceHolderCard from "../components/PlaceHolderCard";
 import SinglePizzaLoader from "../components/SinglePizzaLoader";
 import { addToCart, getCartItems } from "../redux/actions/cartActions";
 import { useSnackbar } from "notistack";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
+import SingleRelatedPizza from "./../components/SingleRelatedPizza";
+import Slider from "react-slick";
+import { settings } from "../utils/Arrows";
 
 const SinglePizza = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ const SinglePizza = () => {
   const { loading: relatedProductLoading, relatedProducts } = useSelector(
     (state) => state.relatedProducts
   );
+
   const [price, setPrice] = useState();
   const [size, setSize] = useState(product ? "regular" : "");
   const [quantity, setQuantity] = useState(1);
@@ -226,11 +229,18 @@ const SinglePizza = () => {
         )}
 
         {relatedProductLoading ? (
-          <div className=" w-full grid grid-cols-5 gap-4 place-items-center place-content-start h-full">
-            {Array(5).fill(<PlaceHolderCard />)}
-          </div>
+          <ItemSkeleton />
         ) : (
-          relatedProducts && <RelatedProducts product={relatedProducts} />
+          <section className="flex flex-col gap-10">
+            <h1 className="font-bold text-golden text-2xl font-roboto tracking-wide uppercase">
+              Related products
+            </h1>
+            <Slider {...settings} className="overflow-hidden">
+              {relatedProducts.map((prod) => (
+                <SingleRelatedPizza product={prod} key={prod._id} />
+              ))}
+            </Slider>
+          </section>
         )}
       </section>
       <HomeFooter />
