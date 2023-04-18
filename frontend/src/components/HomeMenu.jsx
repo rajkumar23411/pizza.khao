@@ -29,10 +29,10 @@ const HomeMenu = () => {
         <h3 className="text-base uppercase tracking-wider text-[#D1411E] font-bold">
           Choose your flavor
         </h3>
-        <h1 className="text-4xl uppercase font-bold text-gray-700 font-sans">
+        <h1 className="text-3xl uppercase font-bold text-gray-700 font-sans">
           The best pizza menu in town
         </h1>
-        <p className="w-2/5 text-gray-500 text-lg text-center">
+        <p className="w-2/5 text-gray-500 text-base text-center">
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo
           quidem dolore iure sequi cupiditate atque? Veritatis non labore
           obcaecati consequatur?

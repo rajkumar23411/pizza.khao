@@ -79,16 +79,23 @@ const productController = {
 
   async getAllproducts(req, res, next) {
     try {
-      const resultPerPage = 9;
+      const resultPerPage = 8;
       const totalProducts = await Product.countDocuments();
       const features = new Features(Product.find(), req.query)
         .search()
-        .filter()
-        .pagination(resultPerPage);
+        .filter();
 
-      const products = await features.query;
+      let products = await features.query;
 
-      res.status(200).json({ products, totalProducts, resultPerPage });
+      let filteredProductCount = products.length;
+
+      features.pagination(resultPerPage);
+
+      products = await features.query.clone();
+
+      res
+        .status(200)
+        .json({ products, totalProducts, resultPerPage, filteredProductCount });
     } catch (error) {
       console.log(error);
     }

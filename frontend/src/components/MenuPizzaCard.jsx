@@ -75,24 +75,24 @@ const MenuPizzaCard = ({ pizza }) => {
                   />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <p className="font-roboto text-yellow-700 uppercase font-medium tracking-wider text-base">
+                  <p className="text-yellow-700 uppercase font-medium tracking-wider text-base">
                     {item.name}
                   </p>
-                  <p className="text-2xl font-bold text-[#D2401E]">
+                  <p className="text-xl font-medium text-[#D2401E]">
                     ₹{item.prices.regular} - ₹{item.prices.extralarge}
                   </p>
                 </div>
               </Link>
               <div className="flex items-center justify-center gap-2">
                 <span
-                  className="bg-red-600 text-center py-2 px-6 cursor-pointer hover:bg-red-700 text-sm font-semibold text-white uppercase font-roboto tracking-wider"
+                  className="bg-red-600 text-center py-2 px-6 rounded cursor-pointer hover:bg-red-700 text-sm font-normal text-white uppercase tracking-widest"
                   onClick={() => handleAddtoCart(item._id, 1, "regular")}
                 >
                   Add to cart
                 </span>
                 <span
                   onClick={() => handleClickOpen(item)}
-                  className="bg-slate-200 text-center py-2 px-6 cursor-pointer hover:bg-slate-300 text-sm font-semibold font-roboto tracking-wider text-gray-800 uppercase"
+                  className="bg-slate-200 text-center py-2 px-6 cursor-pointer rounded hover:bg-slate-300 text-sm font-normal tracking-widest text-gray-800 uppercase"
                 >
                   Quick View
                 </span>

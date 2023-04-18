@@ -111,7 +111,7 @@ const BannerNav = () => {
             >
               <NavLink to="/menu">
                 <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:font-semibold hover:text-red-600 text-gray-700">
-                  All pizzas
+                  Our popular pizzas
                 </li>
               </NavLink>
               <NavLink to="/resturent-menu" className="text-gray-700 ">

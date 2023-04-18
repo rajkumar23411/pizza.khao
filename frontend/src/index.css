@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +7,7 @@
   padding: 0;
   box-sizing: border-box;
   outline: none;
-  font-family: "Lato", sans-serif;
+  font-family: 'Oswald', sans-serif;
   transition: all 0.3s;
 }
 
@@ -222,4 +222,34 @@ input[type="number"] {
 .slick-arrow.slick-prev:hover,
 .slick-arrow.slick-next:hover{
   color: #000 !important;
+}
+
+.menu-ligt-header{
+  background: url('../public/images/title-img-new.jpg') center center/cover;
+  background-color: red;
+  background-repeat: no-repeat;
+}
+.menu-light-category-box:hover p{
+  color: #B7903C;
+}
+.menu-light-category-box:hover img{
+  animation: shake 0.5s linear ;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }

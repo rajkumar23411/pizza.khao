@@ -34,7 +34,7 @@ const OrderDetails = ({ order }) => {
             Deliverd to:
           </span>
           <span className="text-sm font-semibold text-blue-600">
-            {order.addressId.name}
+            {order.addressId?.name}
           </span>
         </div>
         <div className="flex  items-center gap-1">
@@ -42,9 +42,9 @@ const OrderDetails = ({ order }) => {
             Address:
           </span>
           <span className="text-gray-700 text-sm ">
-            {order.addressId.locality}, {order.addressId.address},{" "}
-            {order.addressId.landMark}, {order.addressId.alternateContact},{" "}
-            {order.addressId.state} - {order.addressId.pinCode}
+            {order.addressId?.locality}, {order.addressId?.address},{" "}
+            {order.addressId?.landMark}, {order.addressId?.alternateContact},{" "}
+            {order.addressId?.state} - {order.addressId?.pinCode}
           </span>
         </div>
         <div className="flex items-center gap-1">

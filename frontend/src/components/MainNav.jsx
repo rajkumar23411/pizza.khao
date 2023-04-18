@@ -91,7 +91,10 @@ const MainNav = () => {
                 } h-12`}
               >
                 <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  <NavLink to="/menu">All Pizzas</NavLink>
+                  <NavLink to="/menu">Our popular pizzas</NavLink>
+                </li>
+                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
+                  <NavLink to="/menu-light">Menu filter light</NavLink>
                 </li>
                 <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
                   <NavLink to="/resturent-menu">Resturent Menu</NavLink>

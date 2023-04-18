@@ -59,16 +59,13 @@ const Cart = () => {
                       placeholder="Coupon Code"
                       className="h-full border-2 border-gray-400 pl-2"
                     />
-                    <span className="bg-red-600 text-white uppercase h-12 text-base tracking-wider font-medium flex items-center justify-center w-max px-4 cursor-pointer hover:bg-red-700">
+                    <span className="bg-red-600 text-white rounded uppercase h-12 text-sm tracking-wider font-semibold flex items-center justify-center w-max px-4 cursor-pointer hover:bg-red-700">
                       Apply Coupon
                     </span>
                   </div>
-                  <Link
-                    to="/menu"
-                    className="bg-red-600 text-white uppercase h-12 text-base tracking-wider font-medium w-max flex items-center justify-center px-4 cursor-pointer hover:bg-red-700"
-                  >
-                    Update Cart
-                  </Link>
+                  <span className="bg-red-600 text-white rounded uppercase h-12 text-sm tracking-wider font-semibold w-max flex items-center justify-center px-4 cursor-pointer hover:bg-red-700">
+                    Clear cart
+                  </span>
                 </div>
               </section>
               <section className="flex gap-4 p-10">
@@ -80,21 +77,21 @@ const Cart = () => {
                 </div>
                 <div className="flex-[0.6] flex items-center flex-col h-max">
                   <div>
-                    <h1 className="text-2xl font-roboto uppercase font-bold text-gray-800">
+                    <div className="text-2xl font-roboto uppercase font-bold text-golden border-b-2 border-b-golden border-dashed">
                       Cart Total
-                    </h1>
+                    </div>
                     <div className="flex gap-20 py-10">
                       <div className="flex flex-col gap-4">
-                        <div className="text-lg capitalize text-gray-900">
+                        <div className="text-lg capitalize text-gray-500">
                           Subtotal
                         </div>
-                        <div className="text-lg capitalize text-gray-900">
+                        <div className="text-lg capitalize text-gray-500">
                           Shipping
                         </div>
-                        <div className="text-lg capitalize text-gray-900">
+                        <div className="text-lg capitalize text-gray-500">
                           Tax
                         </div>
-                        <div className="text-lg capitalize font-bold text-red-600">
+                        <div className="text-lg uppercase font-bold text-red-600">
                           Total
                         </div>
                       </div>
@@ -130,13 +127,13 @@ const Cart = () => {
                     <div className="flex flex-col gap-3">
                       <Link
                         to="/checkout"
-                        className="bg-green-600 text-center text-white rounded py-3 uppercase font-semibold text-sm tracking-wider hover:bg-green-700 cursor-pointer"
+                        className="bg-red-600 text-center text-white rounded py-3 uppercase font-semibold text-sm tracking-wider hover:bg-red-700 cursor-pointer"
                       >
                         Proceed to checkout
                       </Link>
                       <Link
                         to="/menu"
-                        className="text-center text-blue-600 rounded py-3 uppercase font-semibold text-sm tracking-wider  border-2 border-blue-600 hover:text-blue-700 hover:border-blue-700 cursor-pointer"
+                        className="text-center text-gray-600 rounded py-3 uppercase font-semibold text-sm tracking-wider  border-2 border-gray-300 hover:text-gray-700 hover:border-gray-700 cursor-pointer"
                       >
                         Continue Shopping
                       </Link>

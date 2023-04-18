@@ -23,6 +23,8 @@ import ProtectedRoute from "./protectedRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyOTP from "./pages/VerifyOTP";
+import SearchMenu from "./pages/SearchMenu";
+import MenuLight from "./pages/MenuLight";
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
@@ -81,7 +83,7 @@ const App = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/menu/:keyword" element={<Menu />} />
+      <Route path="/menu/:keyword" element={<SearchMenu />} />
       <Route path="/pizza/:keyword" element={<Menu />} />
       <Route
         path="/order/success"
@@ -107,6 +109,7 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="/menu-light" element={<MenuLight />} />
     </Routes>
   );
 };
