@@ -9,17 +9,22 @@ import { settings } from "../utils/Arrows";
 import ItemSkeleton from "./ItemSkeleton";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 import { useSnackbar } from "notistack";
+import { clearError } from "../redux/actions/cartActions";
 const HomeMenu = () => {
   const dispatch = useDispatch();
   const { loading, products } = useSelector((state) => state.products);
-  const { success } = useSelector((state) => state.myCart);
+  const { success, error } = useSelector((state) => state.myCart);
   const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     if (success) {
       enqueueSnackbar("Pizza added to cart", { variant: "success" });
       dispatch({ type: ADD_TO_CART_RESET });
     }
-  }, [success, enqueueSnackbar]);
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+      dispatch(clearError());
+    }
+  }, [success, error, enqueueSnackbar]);
   useEffect(() => {
     dispatch(getAllProducts());
   }, [dispatch]);

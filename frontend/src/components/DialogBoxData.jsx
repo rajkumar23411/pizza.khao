@@ -54,7 +54,7 @@ const DialogBoxData = ({ pizza, onClose }) => {
         <img src={pizza.image} alt={pizza.name} draggable="false" />
       </div>
       <div className="flex-1 flex flex-col m-10">
-        <h1 className="font-sans uppercase text-2xl font-bold text-gray-700">
+        <h1 className="uppercase text-2xl font-medium text-gray-700 tracking-wider">
           {pizza.name}
         </h1>
         <div className="flex items-center gap-4 py-4">
@@ -76,34 +76,26 @@ const DialogBoxData = ({ pizza, onClose }) => {
           aliquid.
         </p>
         <div className="flex flex-col pt-10">
-          <h1 className="uppercase font-bold text-golden">
+          <h1 className="uppercase font-medium tracking-wider text-golden">
             NUTRITIONAL VALUE PER 100G:
           </h1>
           <div className="flex pt-2">
             <span className="flex-[0.8] text-base text-gray-500">Calories</span>
-            <span className="flex-1 text-red-700 font-semibold font-sans">
-              800 kcal
-            </span>
+            <span className="flex-1 text-red-700 font-normal">800 kcal</span>
           </div>
           <div className="flex">
             <span className="flex-[0.8] text-base text-gray-500">
               Carbohydrates
             </span>
-            <span className="flex-1 text-red-700 font-semibold font-sans">
-              20 g
-            </span>
+            <span className="flex-1 text-red-700 font-normal">20 g</span>
           </div>
           <div className="flex ">
             <span className="flex-[0.8] text-base text-gray-500">Fats</span>
-            <span className="flex-1 text-red-700 font-semibold font-sans">
-              50.9 g
-            </span>
+            <span className="flex-1 text-red-700 font-normal">50.9 g</span>
           </div>
           <div className="flex">
             <span className="flex-[0.8] text-base text-gray-500">Protien</span>
-            <span className="flex-1 text-red-700 font-semibold font-sans">
-              120 g
-            </span>
+            <span className="flex-1 text-red-700 font-normal">120 g</span>
           </div>
         </div>
         <div className="flex gap-3 items-center py-6">

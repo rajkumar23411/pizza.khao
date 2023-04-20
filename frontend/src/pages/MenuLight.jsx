@@ -8,6 +8,7 @@ import { menuLightCategories, randomLoaderPhrase } from "../utils";
 import { useSnackbar } from "notistack";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 import { Pagination, Stack } from "@mui/material";
+import { clearError } from "../redux/actions/cartActions";
 const MenuLight = () => {
   const {
     loading,
@@ -17,7 +18,7 @@ const MenuLight = () => {
     filteredProductCount,
   } = useSelector((state) => state.products);
 
-  const { success } = useSelector((state) => state.myCart);
+  const { success, error } = useSelector((state) => state.myCart);
   const [category, setCategory] = useState("");
   const [activeCategory, setActiveCategory] = useState(null);
   const dispatch = useDispatch();
@@ -40,7 +41,11 @@ const MenuLight = () => {
       enqueueSnackbar("Item added to cart", { variant: "success" });
       dispatch({ type: ADD_TO_CART_RESET });
     }
-  }, [success, enqueueSnackbar]);
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+      dispatch(clearError());
+    }
+  }, [success, error, enqueueSnackbar]);
   useEffect(() => {
     dispatch(getAllProducts("", category, [0, 1000], currentPage));
   }, [category, dispatch, currentPage]);

@@ -15,7 +15,11 @@ import {
 import { pizzaSize } from "../utils";
 import { Rating } from "@mui/material";
 import SinglePizzaLoader from "../components/SinglePizzaLoader";
-import { addToCart, getCartItems } from "../redux/actions/cartActions";
+import {
+  addToCart,
+  clearError,
+  getCartItems,
+} from "../redux/actions/cartActions";
 import { useSnackbar } from "notistack";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 import SingleRelatedPizza from "./../components/SingleRelatedPizza";
@@ -25,11 +29,10 @@ import { settings } from "../utils/Arrows";
 const SinglePizza = () => {
   const dispatch = useDispatch();
   const { loading, product } = useSelector((state) => state.productDetails);
-  const { success, cart } = useSelector((state) => state.myCart);
+  const { success, error, cart } = useSelector((state) => state.myCart);
   const { loading: relatedProductLoading, relatedProducts } = useSelector(
     (state) => state.relatedProducts
   );
-
   const [price, setPrice] = useState();
   const [size, setSize] = useState(product ? "regular" : "");
   const [quantity, setQuantity] = useState(1);
@@ -58,7 +61,7 @@ const SinglePizza = () => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (id, quantity, size) => {
     dispatch(addToCart(id, quantity, size));
   };
 
@@ -68,7 +71,11 @@ const SinglePizza = () => {
       dispatch({ type: ADD_TO_CART_RESET });
       dispatch(getCartItems());
     }
-  }, [success, enqueueSnackbar]);
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+      dispatch(clearError());
+    }
+  }, [dispatch, success, error, enqueueSnackbar]);
 
   useEffect(() => {
     dispatch(getProductDetails(id));
@@ -211,7 +218,9 @@ const SinglePizza = () => {
                           : "bg-yellow-600 hover:bg-yellow-700"
                       } text-white uppercase tracking-wide font-medium rounded h-full flex items-center justify-center px-6  cursor-pointer`}
                       onClick={
-                        isItemPresetInCart === -1 ? handleAddToCart : goTocart
+                        isItemPresetInCart === -1
+                          ? () => handleAddToCart(product._id, quantity, size)
+                          : goTocart
                       }
                     >
                       {isItemPresetInCart === -1 ? "Add to cart" : "Go to cart"}
@@ -233,7 +242,11 @@ const SinglePizza = () => {
             </h1>
             <Slider {...settings} className="overflow-hidden">
               {relatedProducts.map((prod) => (
-                <SingleRelatedPizza product={prod} key={prod._id} />
+                <SingleRelatedPizza
+                  product={prod}
+                  key={prod._id}
+                  addToCart={handleAddToCart}
+                />
               ))}
             </Slider>
           </section>

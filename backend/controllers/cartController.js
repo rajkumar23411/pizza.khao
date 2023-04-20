@@ -26,12 +26,11 @@ const cartController = {
       );
 
       if (isItemExists) {
-        cart.items.forEach((item) => {
-          if (item.product.toString() === productId.toString()) {
-            item.quantity = quantity;
-            item.size = size;
-          }
-        });
+        return next(
+          CustomErrorHandler.AlreadyExists(
+            "Product already exists in your cart"
+          )
+        );
       } else {
         cart.items.push({ product: productId, quantity, size });
       }

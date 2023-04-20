@@ -11,12 +11,16 @@ import {
 } from "../redux/actions/wishListAction";
 import { RESET_ADD_TO_FAVOURITE } from "../redux/constants/wishListConstant";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
-import { addToCart, getCartItems } from "../redux/actions/cartActions";
+import {
+  addToCart,
+  clearError,
+  getCartItems,
+} from "../redux/actions/cartActions";
 
 const MenuPizzaCard = ({ pizza }) => {
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { success } = useSelector((state) => state.myCart);
+  const { success, error } = useSelector((state) => state.myCart);
   const { wishlist, message } = useSelector((state) => state.wishlist);
   const [modelItem, setModelItem] = useState({});
   const dispatch = useDispatch();
@@ -43,12 +47,18 @@ const MenuPizzaCard = ({ pizza }) => {
       setOpen(false);
       dispatch(getCartItems());
     }
+
     if (message) {
       enqueueSnackbar(message, { variant: "success" });
       dispatch({ type: RESET_ADD_TO_FAVOURITE });
     }
+
+    if (error) {
+      enqueueSnackbar(error, { variant: "error" });
+      dispatch(clearError());
+    }
     dispatch(getWishlist());
-  }, [success, dispatch, message, enqueueSnackbar]);
+  }, [success, dispatch, error, message, enqueueSnackbar]);
   return (
     <div className="grid grid-cols-3 place-items-center place-content-start h-full">
       {pizza &&
