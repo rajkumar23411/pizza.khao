@@ -102,14 +102,14 @@ const SinglePizza = () => {
         ) : (
           <>
             <section className="h-screen flex gap-10">
-              <div className="flex-1 flex bg-gray-100 items-center justify-center relative">
+              <div className="flex-1 flex bg-gray-50 h-max py-20 rounded-md items-center justify-center relative">
                 <span className="h-20 w-20 bg-yellow-400 absolute top-4 left-4 text-lg text-white font-bold rounded-full flex items-center justify-center">
                   -14%
                 </span>
                 <img
                   src={product && product.image}
                   alt="pizza"
-                  className="w-full h-[70%] object-contain"
+                  className={`w-full h-96 object-contain drop-shadow-xl`}
                   draggable="false"
                 />
               </div>

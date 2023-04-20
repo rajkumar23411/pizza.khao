@@ -3,9 +3,13 @@ import { pizzaSize } from "../utils";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { useDispatch } from "react-redux";
-import { updateCart } from "../redux/actions/cartActions";
+import { removeCartItem, updateCart } from "../redux/actions/cartActions";
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
+  const handleRemoveProduct = (id) => {
+    console.log(item);
+    dispatch(removeCartItem(id));
+  };
   const handleSizeChange = (id, quantity, size) => {
     dispatch(updateCart(id, quantity, size));
   };
@@ -83,7 +87,10 @@ const CartItem = ({ item }) => {
                 <FavoriteBorderRoundedIcon fontSize="small" />
                 Favourite
               </span>
-              <span className="text-base flex items-center justify-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-normal p-2 rounded cursor-pointer">
+              <span
+                className="text-base flex items-center justify-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-normal p-2 rounded cursor-pointer"
+                onClick={() => handleRemoveProduct(item.product._id)}
+              >
                 <DeleteOutlineOutlinedIcon fontSize="small" />
                 Remove
               </span>

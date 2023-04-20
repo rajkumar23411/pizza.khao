@@ -6,10 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearError, getCartItems } from "../redux/actions/cartActions";
 import HomeFooter from "../components/HomeFooter";
 import { useSnackbar } from "notistack";
-import { UPDATE_CART_RESET } from "../redux/constants/cartConstant";
+import {
+  REMOVE_CART_ITEM_RESET,
+  UPDATE_CART_RESET,
+} from "../redux/constants/cartConstant";
 
 const Cart = () => {
-  const { loading, cart, error, success } = useSelector(
+  const { loading, cart, error, success, message } = useSelector(
     (state) => state.myCart
   );
   const dispatch = useDispatch();
@@ -24,8 +27,12 @@ const Cart = () => {
       enqueueSnackbar("Cart updated", { variant: "success" });
       dispatch({ type: UPDATE_CART_RESET });
     }
+    if (message) {
+      enqueueSnackbar(message, { variant: "success" });
+      dispatch({ type: REMOVE_CART_ITEM_RESET });
+    }
     dispatch(getCartItems());
-  }, [dispatch, error, success, enqueueSnackbar]);
+  }, [dispatch, error, message, success, enqueueSnackbar]);
 
   const totalPrice = cart && cart.totalPrice;
   const tax = cart && Number((cart.totalPrice / 100) * 5);
