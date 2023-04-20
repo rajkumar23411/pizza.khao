@@ -77,12 +77,14 @@ const MenuPizzaCard = ({ pizza }) => {
               </div>
               <Link to={`/pizza/${item._id}`}>
                 <div className="pizza-image w-full flex items-center justify-center">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-60"
-                    draggable="false"
-                  />
+                  <div className="w-60 h-60">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="h-full w-full object-cover"
+                      draggable="false"
+                    />
+                  </div>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-2">
                   <p className="text-yellow-700 uppercase font-medium tracking-wider text-base">

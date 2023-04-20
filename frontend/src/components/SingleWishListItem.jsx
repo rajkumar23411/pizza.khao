@@ -1,55 +1,52 @@
-import { Delete } from "@mui/icons-material";
 import { Rating } from "@mui/material";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Link } from "react-router-dom";
-import {
-  addRemoveFromWishlist,
-  getWishlist,
-} from "../redux/actions/wishListAction";
-import { useSnackbar } from "notistack";
-import { RESET_ADD_TO_FAVOURITE } from "../redux/constants/wishListConstant";
-
-const SingleWishListItem = ({ wishlist }) => {
-  const dispatch = useDispatch();
-  const { message } = useSelector((state) => state.wishlist);
-  const { enqueueSnackbar } = useSnackbar();
-  const handleRemoveFromWishlist = (id) => {
-    console.log("calling....");
-    dispatch(addRemoveFromWishlist(id));
-  };
-  useEffect(() => {
-    if (message) {
-      enqueueSnackbar(message, { variant: "success" });
-      dispatch({ type: RESET_ADD_TO_FAVOURITE });
-      dispatch(getWishlist());
-    }
-  }, [dispatch, message]);
+const SingleWishListItem = ({
+  item,
+  handleRemoveFromWishlist,
+  handleAddtoCart,
+}) => {
   return (
-    <>
-      {wishlist?.items?.map((item) => (
-        <div className="bg-slate-50 w-[70%] flex justify-between p-4">
-          <Link to={`/pizza/${item.product._id}`}>
-            <div className="flex items-start gap-4 rounded">
-              <img src={item.product.image} alt="pizza" className="h-24" />
-              <div>
-                <h1 className="uppercase font-semibold text-gray-800 tracking-wider text-sm">
-                  {item.product.name}
-                </h1>
-                <div>
-                  <Rating value={item.product.ratings} size="small" />
-                </div>
-                <p className="text-red-600 font-semibold">{`₹${item.product.prices.regular} - ₹${item.product.prices.extralarge}`}</p>
-              </div>
-            </div>
-          </Link>
-          <Delete
-            className="text-gray-300 cursor-pointer hover:text-gray-500"
-            onClick={() => handleRemoveFromWishlist(item.product._id)}
+    <div className="p-3 flex flex-col justify-center items-center shadow-sm border-[1px] border-gray-100 rounded w-60">
+      <Link
+        to={`/pizza/${item.product._id}`}
+        className="cursor-pointer text-center"
+      >
+        <div className="h-28 w-28">
+          <img
+            src={item.product.image}
+            alt={item.product.name}
+            className="h-full w-full object-cover"
           />
         </div>
-      ))}
-    </>
+        <p className="uppercase tracking-wider text-base font-medium text-golden">
+          {item.product.name}
+        </p>
+        <Rating
+          precision={0.5}
+          readOnly={true}
+          value={item.product.ratings}
+          size="small"
+        />
+        <p className="text-red-600 font-medium">
+          ₹{item.product.prices.regular} - ₹{item.product.prices.extralarge}
+        </p>
+      </Link>
+      <div className="flex items-center justify-between gap-3 mt-4 w-full">
+        <p
+          className="border-2 border-red-600 bg-red-600 text-white rounded-sm text-center uppercase tracking-wide  text-sm py-1 cursor-pointer flex-1 hover:bg-red-700"
+          onClick={() => handleRemoveFromWishlist(item.product._id)}
+        >
+          Remove
+        </p>
+        <p
+          className="bg-white border-2 border-blue-600 text-blue-600 rounded-sm text-center uppercase tracking-wide text-sm  py-1 cursor-pointer flex-1 hover:border-blue-700 hover:text-blue-700"
+          onClick={() => handleAddtoCart(item.product._id, 1, "regular")}
+        >
+          Add to cart
+        </p>
+      </div>
+    </div>
   );
 };
 

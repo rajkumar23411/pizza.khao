@@ -22,12 +22,14 @@ const SinglePizzaCard = ({ pizza }) => {
       <div className="flex flex-col w-80 py-6 gap-2 pizza-box overflow-hidden relative h-[24rem]">
         <Link to={`/pizza/${pizza._id}`} className="cursor-pointer">
           <div className="pizza-image w-full flex items-center justify-center flex-col gap-2">
-            <img
-              src={pizza.image}
-              alt={pizza.name}
-              className="h-56"
-              draggable="false"
-            />
+            <div className="w-56 h-56">
+              <img
+                src={pizza.image}
+                alt={pizza.name}
+                className="w-full h-full object-cover"
+                draggable="false"
+              />
+            </div>
             <p className=" text-yellow-700 uppercase font-medium tracking-wider text-base">
               {pizza.name}
             </p>

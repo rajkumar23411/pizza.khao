@@ -78,7 +78,6 @@ const Address = ({ address, confirmDeliveryAddress, selectAddress }) => {
 const CheckOut = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.myCart);
-  const { order } = useSelector((state) => state.newOrder);
   const dispatch = useDispatch();
   const Razorpay = useRazorpay();
   const [newAddress, setNewAddress] = useState(false);
@@ -192,10 +191,10 @@ const CheckOut = () => {
             contact: user.contact,
           },
           notes: {
-            address: selectedAddress.address,
+            address: "Pizza-Khao Pvt. Ltd.",
           },
         };
-        const razorpay = new window.Razorpay(options);
+        const razorpay = new Razorpay(options);
         razorpay.open();
       } catch (error) {
         console.log(error);

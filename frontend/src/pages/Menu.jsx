@@ -108,7 +108,7 @@ const Menu = () => {
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="h-16"
+                      className="h-16 w-16 object-cover rounded"
                     />
                     <div className="flex justify-center flex-col">
                       <p className="uppercase text-gray-600 font-medium tracking-wider text-sm">

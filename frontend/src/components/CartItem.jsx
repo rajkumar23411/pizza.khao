@@ -4,11 +4,18 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { useDispatch } from "react-redux";
 import { removeCartItem, updateCart } from "../redux/actions/cartActions";
-const CartItem = ({ item }) => {
+import { addRemoveFromWishlist } from "../redux/actions/wishListAction";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+const CartItem = ({ item, wishlist }) => {
   const dispatch = useDispatch();
   const handleRemoveProduct = (id) => {
-    console.log(item);
     dispatch(removeCartItem(id));
+  };
+  const moveToWishlist = (id) => {
+    dispatch(addRemoveFromWishlist(id));
+  };
+  const isItemInWishlist = (id) => {
+    return wishlist?.items?.find((item) => item.product._id === id);
   };
   const handleSizeChange = (id, quantity, size) => {
     dispatch(updateCart(id, quantity, size));
@@ -20,7 +27,11 @@ const CartItem = ({ item }) => {
     >
       <div className="flex items-start gap-6 h-full">
         <div className="flex items-center justify-center flex-col gap-4 h-full">
-          <img src={item?.product?.image} alt="pizza" className="h-28" />
+          <img
+            src={item?.product?.image}
+            alt="pizza"
+            className="h-28 w-28 object-cover rounded-md drop-shadow-md"
+          />
           <div className="flex items-center justify-between gap-4">
             <select
               className="capitalize border-[1px] border-gray-500 p-1 text-gray-600 rounded-sm font-light cursor-pointer"
@@ -83,9 +94,20 @@ const CartItem = ({ item }) => {
               </div>
             )}
             <div className="flex items-center gap-4">
-              <span className="text-base flex items-center justify-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-normal p-2 rounded cursor-pointer">
-                <FavoriteBorderRoundedIcon fontSize="small" />
-                Favourite
+              <span onClick={() => moveToWishlist(item.product._id)}>
+                {isItemInWishlist(item.product._id) ? (
+                  <span className="bg-gray-100 rounded-sm p-2 cursor-pointer hover:bg-gray-200">
+                    <FavoriteRoundedIcon
+                      fontSize="small"
+                      className="text-red-600"
+                    />
+                  </span>
+                ) : (
+                  <span className="text-base flex items-center justify-center gap-1 bg-gray-50 hover:bg-gray-200 text-gray-600 font-normal p-2 rounded cursor-pointer">
+                    <FavoriteBorderRoundedIcon fontSize="small" />
+                    Add to favourite
+                  </span>
+                )}
               </span>
               <span
                 className="text-base flex items-center justify-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-600 font-normal p-2 rounded cursor-pointer"

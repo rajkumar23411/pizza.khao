@@ -24,7 +24,7 @@ const MenuLightPizza = ({ product }) => {
           <img
             src={product.image}
             alt={product.name}
-            className="h-56"
+            className="h-56 w-56 object-cover"
             draggable="false"
           />
           <p className=" text-yellow-700 uppercase font-medium tracking-wider text-sm">

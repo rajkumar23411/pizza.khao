@@ -10,14 +10,26 @@ import {
   REMOVE_CART_ITEM_RESET,
   UPDATE_CART_RESET,
 } from "../redux/constants/cartConstant";
+import { RESET_ADD_TO_FAVOURITE } from "../redux/constants/wishListConstant";
+import { getWishlist } from "../redux/actions/wishListAction";
 
 const Cart = () => {
   const { loading, cart, error, success, message } = useSelector(
     (state) => state.myCart
   );
+  const { wishlist, message: wishListMessage } = useSelector(
+    (state) => state.wishlist
+  );
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    if (wishListMessage) {
+      enqueueSnackbar(wishListMessage, { variant: "success" });
+      dispatch({ type: RESET_ADD_TO_FAVOURITE });
+    }
+    dispatch(getWishlist());
+  }, [wishListMessage, enqueueSnackbar, dispatch]);
   useEffect(() => {
     if (error) {
       enqueueSnackbar(error, { variant: "error" });
@@ -32,7 +44,7 @@ const Cart = () => {
       dispatch({ type: REMOVE_CART_ITEM_RESET });
     }
     dispatch(getCartItems());
-  }, [dispatch, error, message, success, enqueueSnackbar]);
+  }, [dispatch, error, message, wishListMessage, success, enqueueSnackbar]);
 
   const totalPrice = cart && cart.totalPrice;
   const tax = cart && Number((cart.totalPrice / 100) * 5);
@@ -97,7 +109,7 @@ const Cart = () => {
                   </h1>
                   <div className="flex flex-col gap-6">
                     {cart?.items?.map((item, i) => (
-                      <CartItem key={i} item={item} />
+                      <CartItem key={i} item={item} wishlist={wishlist} />
                     ))}
                   </div>
                 </div>
