@@ -8,6 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartItems } from "../redux/actions/cartActions";
 import { useSnackbar } from "notistack";
 import { logout } from "../redux/actions/userAction";
+import { PagesSubMenu } from "../utils";
+
+export const MenuSubTags = [
+  { name: "Our popular pizzas", link: "/menu" },
+  { name: "Menu filter light", link: "/menu-light" },
+  { name: "Resturent Menu", link: "/resturent-menu" },
+];
 
 const BannerNav = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -47,18 +54,18 @@ const BannerNav = () => {
             <PhoneEnabledOutlinedIcon fontSize="large" sx={{ color: "red" }} />
           </div>
           <p className="flex flex-col">
-            <span className="uppercase font-bold text-white text-sm tracking-wider">
+            <span className="uppercase font-normal text-white text-sm tracking-widest">
               ORDER IT NOW
             </span>
-            <span className="text-white font-bold text-2xl">91333 46789</span>
+            <span className="text-white font-medium text-xl">91333 46789</span>
           </p>
         </div>
         <div className="flex items-center justify-center gap-8 relative">
-          <Link className="uppercase tracking-wider text-white font-bold text-sm">
+          <Link className="uppercase tracking-widest text-white font-medium text-sm">
             Home
           </Link>
           <Link
-            className="uppercase tracking-wider text-white font-bold text-sm relative"
+            className="uppercase tracking-widest text-white font-medium text-sm relative"
             onMouseEnter={() => toggleMenu(1)}
             onMouseLeave={() => toggleMenu(0)}
           >
@@ -68,27 +75,14 @@ const BannerNav = () => {
                 isModelOpen === 1 ? "nav-links active" : "nav-links"
               } bg-white`}
             >
-              <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                About Us
-              </li>
-              <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                Our Serices
-              </li>
-              <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                Our team
-              </li>
-              <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                Book a table
-              </li>
-              <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                Contact Us
-              </li>
-              <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                Get in touch
-              </li>
-              <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
-                Coming Soon
-              </li>
+              {PagesSubMenu.map((item, index) => (
+                <li
+                  className="tracking-wide font-medium text-gray-600 text-sm hover:bg-red-50 hover:text-red-600"
+                  key={index}
+                >
+                  {item}
+                </li>
+              ))}
               {isAuthenticated && user && user.role === "admin" && (
                 <NavLink to="/add/pizza">
                   <li className="tracking-wide font-medium text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 hover:font-semibold">
@@ -99,7 +93,7 @@ const BannerNav = () => {
             </ul>
           </Link>
           <Link
-            className="uppercase tracking-wider text-white font-bold text-sm relative"
+            className="uppercase tracking-widest text-white font-medium text-sm relative"
             onMouseEnter={() => toggleMenu(2)}
             onMouseLeave={() => toggleMenu(0)}
           >
@@ -109,30 +103,27 @@ const BannerNav = () => {
                 isModelOpen === 2 ? "nav-links active" : "nav-links"
               } h-12`}
             >
-              <NavLink to="/menu">
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:font-semibold hover:text-red-600 text-gray-700">
-                  Our popular pizzas
-                </li>
-              </NavLink>
-              <NavLink to="/resturent-menu" className="text-gray-700 ">
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:font-semibold hover:text-red-600">
-                  Resturent Menu
-                </li>
-              </NavLink>
+              {MenuSubTags.map((item, index) => (
+                <NavLink to={item.link} key={index}>
+                  <li className="tracking-wide font-medium text-sm hover:bg-red-50  hover:text-red-600 text-gray-700">
+                    {item.name}
+                  </li>
+                </NavLink>
+              ))}
             </ul>
           </Link>
           <Link>
             <img src="/images/logo-light.png" alt="logo" className="h-16" />
           </Link>
-          <Link className="uppercase tracking-wider text-white font-bold text-sm">
+          <Link className="uppercase tracking-widest text-white font-medium text-sm">
             Event
           </Link>
-          <Link className="uppercase tracking-wider text-white font-bold text-sm">
+          <Link className="uppercase tracking-widest text-white font-medium text-sm">
             Blog
           </Link>
           {isAuthenticated ? (
             <Link
-              className="uppercase tracking-wider text-white font-bold text-sm"
+              className="uppercase tracking-widest text-white font-medium text-sm"
               onClick={handleLogout}
             >
               Logout
@@ -140,7 +131,7 @@ const BannerNav = () => {
           ) : (
             <Link
               to="/login"
-              className="uppercase tracking-wider text-white font-bold text-sm"
+              className="uppercase tracking-widest text-white font-medium text-sm"
             >
               Login
             </Link>
@@ -154,7 +145,7 @@ const BannerNav = () => {
               </span>
             )}
             <Link
-              className="text-white uppercase tracking-wider font-bold text-sm"
+              className="text-white uppercase tracking-widest font-medium text-sm"
               to="/cart"
             >
               <MopedOutlinedIcon sx={{ color: "white" }} fontSize="large" />
@@ -166,7 +157,7 @@ const BannerNav = () => {
             onClick={handleShowSearchBar}
           >
             <SearchOutlinedIcon sx={{ color: "white" }} fontSize="large" />
-            <span className="text-white uppercase tracking-wider font-bold text-sm">
+            <span className="text-white uppercase tracking-widest font-medium text-sm">
               Search
             </span>
           </div>

@@ -183,6 +183,7 @@ const productController = {
           if (rev.user.toString() === req.user._id.toString()) {
             rev.rating = rating;
             rev.comment = comment;
+            rev.addedAt = Date.now();
           }
         });
       } else {

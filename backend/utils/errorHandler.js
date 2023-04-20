@@ -13,6 +13,46 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
+  // wrong mongodb id error
+  if (err.name === "CastError") {
+    statusCode = 400;
+    data = {
+      message: "Resource not found. Invalid: " + err.path,
+    };
+  }
+
+  // validation error
+  if (err.name === "ValidationError") {
+    statusCode = 400;
+    data = {
+      message: err.message,
+    };
+  }
+
+  // duplicate key
+  if (err.code === 11000) {
+    statusCode = 400;
+    data = {
+      message: "Duplicate " + Object.keys(err.keyValue) + " entered",
+    };
+  }
+
+  // jwt error
+  if (err.name === "JsonWebTokenError") {
+    statusCode = 400;
+    data = {
+      message: "Invalid Token",
+    };
+  }
+
+  // jwt expired error
+  if (err.name === "TokenExpiredError") {
+    statusCode = 400;
+    data = {
+      message: "Token Expired",
+    };
+  }
+
   return res.status(statusCode).json(data);
 };
 

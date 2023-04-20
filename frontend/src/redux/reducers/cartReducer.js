@@ -10,27 +10,35 @@ import {
   REMOVE_CART_ITEM_FAIL,
   REMOVE_CART_ITEM_RESET,
   REMOVE_CART_ITEM_SUCCESS,
+  UPDATE_CART_FAIL,
+  UPDATE_CART_REQUEST,
+  UPDATE_CART_RESET,
+  UPDATE_CART_SUCCESS,
 } from "../constants/cartConstant";
 
 export const cartReducer = (state = { cart: [] }, action) => {
   switch (action.type) {
     case ADD_TO_CART_REQUEST:
+    case UPDATE_CART_REQUEST:
       return {
         ...state,
         success: false,
       };
     case ADD_TO_CART_SUCCESS:
+    case UPDATE_CART_SUCCESS:
       return {
         ...state,
         cart: action.payload.cart,
         success: action.payload.success,
       };
     case ADD_TO_CART_FAIL:
+    case UPDATE_CART_FAIL:
       return {
         ...state,
         error: action.payload,
       };
     case ADD_TO_CART_RESET:
+    case UPDATE_CART_RESET:
       return {
         ...state,
         success: false,

@@ -31,7 +31,7 @@ const PizzaInformation = ({ id, pizza }) => {
             onClick={() => toggleTag(1)}
             className={`${
               toggleState === 1 ? "tab-active" : ""
-            } uppercase font-roboto tracking-wide text-golden text-base font-medium hover:text-red-800 cursor-pointer`}
+            } uppercase  tracking-wide text-golden text-base font-medium hover:text-red-800 cursor-pointer`}
           >
             Description
           </p>
@@ -39,7 +39,7 @@ const PizzaInformation = ({ id, pizza }) => {
             onClick={() => toggleTag(2)}
             className={`${
               toggleState === 2 ? "tab-active" : ""
-            } uppercase font-roboto tracking-wide text-golden text-base font-medium hover:text-red-800 cursor-pointer`}
+            } uppercase  tracking-wide text-golden text-base font-medium hover:text-red-800 cursor-pointer`}
           >
             Additional Information
           </p>
@@ -47,7 +47,7 @@ const PizzaInformation = ({ id, pizza }) => {
             onClick={() => toggleTag(3)}
             className={`${
               toggleState === 3 ? "tab-active" : ""
-            } uppercase font-roboto tracking-wide text-golden text-base font-medium hover:text-red-800 cursor-pointer`}
+            } uppercase  tracking-wide text-golden text-base font-medium hover:text-red-800 cursor-pointer`}
           >
             Reviews{" "}
             {reviews && pizza.numOfReviews > 0 && `(${pizza.numOfReviews})`}
@@ -57,7 +57,7 @@ const PizzaInformation = ({ id, pizza }) => {
           <div
             className={`${
               toggleState === 1 ? "content active-content" : "content"
-            } text-gray-600`}
+            } text-gray-600 font-light`}
           >
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi,
             maiores sit. Non aliquam sapiente debitis molestiae ea quae ducimus,
@@ -93,13 +93,13 @@ const PizzaInformation = ({ id, pizza }) => {
             } `}
           >
             {pizza && pizza.numOfReviews > 0 && (
-              <h1 className="uppercase text-golden font-roboto pb-6 font-semibold tracking-wide">
+              <h1 className="uppercase text-golden pb-6 font-normal tracking-wide">
                 {pizza.numOfReviews} Reviews for {pizza.name}
               </h1>
             )}
             <div className="flex flex-col gap-3">
               {reviews && reviews.length === 0 ? (
-                <h1 className="text-gray-500">No reviews yet</h1>
+                <h1 className="text-gray-500 font-normal">No reviews yet</h1>
               ) : (
                 reviews.map((review) => (
                   <UserComment key={review._id} review={review} />
@@ -107,7 +107,7 @@ const PizzaInformation = ({ id, pizza }) => {
               )}
               <div
                 onClick={handleCommentBox}
-                className="bg-red-600 w-max uppercase text-white tracking-wide  font-roboto px-4 py-2 mt-6 hover:bg-red-700 cursor-pointer"
+                className="border-2 border-red-600 text-sm rounded  w-max uppercase text-red-600 tracking-wide px-4 py-2 mt-6 hover:text-white hover:bg-red-600 cursor-pointer"
               >
                 Post a review
               </div>

@@ -5,7 +5,8 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import SearchBar from "./SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartItems } from "../redux/actions/cartActions";
-import { cardActionAreaClasses } from "@mui/material";
+import { PagesSubMenu } from "../utils";
+
 const MainNav = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [isModelOpen, setIsModelOpen] = useState(0);
@@ -31,7 +32,7 @@ const MainNav = () => {
     <>
       <nav className="w-full flex items-center justify-between px-10 h-20">
         <div className="h-full">
-          <ul className="flex items-center gap-12 h-full justify-center">
+          <ul className="flex items-center h-full justify-center">
             <NavLink to="/">
               <img
                 src="/images/logo.png"
@@ -41,12 +42,12 @@ const MainNav = () => {
             </NavLink>
             <NavLink
               to="/"
-              className="uppercase text-gray-700 font-bold tracking-widest h-full grid place-items-center text-xs cursor-pointer"
+              className="uppercase text-gray-600 font-medium tracking-widest h-full grid place-items-center text-xs cursor-pointer pr-5 pl-10"
             >
               Home
             </NavLink>
             <li
-              className="uppercase text-gray-700 font-bold tracking-widest relative cursor-pointer h-full grid place-items-center text-xs"
+              className="uppercase text-gray-600 font-medium tracking-widest relative cursor-pointer h-full grid place-items-center text-xs px-5"
               onMouseEnter={() => toggleMenu(1)}
               onMouseLeave={() => toggleMenu(0)}
             >
@@ -56,31 +57,18 @@ const MainNav = () => {
                   isModelOpen === 1 ? "nav-links active" : "nav-links"
                 }`}
               >
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  About Us
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  Our Serices
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  Our team
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  Book a table
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  Contact Us
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  Get in touch
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  Coming Soon
-                </li>
+                {PagesSubMenu.map((item, index) => (
+                  <li
+                    className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600"
+                    key={index}
+                  >
+                    {item}
+                  </li>
+                ))}
               </ul>
             </li>
             <li
-              className="uppercase text-gray-700 font-bold tracking-widest relative cursor-pointer h-full grid place-items-center text-xs"
+              className="uppercase text-gray-600 font-medium tracking-widest relative cursor-pointer h-full grid place-items-center text-xs px-5"
               onMouseEnter={() => toggleMenu(2)}
               onMouseLeave={() => toggleMenu(0)}
             >
@@ -104,7 +92,7 @@ const MainNav = () => {
             <li
               onMouseEnter={() => toggleMenu(3)}
               onMouseLeave={() => toggleMenu(0)}
-              className="uppercase text-gray-700 font-bold tracking-widest h-full grid place-items-center text-xs cursor-pointer relative"
+              className="uppercase text-gray-600 font-medium tracking-widest h-full grid place-items-center text-xs cursor-pointer relative px-5"
             >
               Shop
               <ul
@@ -126,17 +114,17 @@ const MainNav = () => {
                 </li>
               </ul>
             </li>
-            <li className="uppercase text-gray-700 font-bold tracking-widest h-full grid place-items-center text-xs cursor-pointer">
+            <li className="uppercase text-gray-600 font-medium tracking-widest h-full grid place-items-center text-xs cursor-pointer px-5">
               Event
             </li>
-            <li className="uppercase text-gray-700 font-bold tracking-widest h-full grid place-items-center text-xs cursor-pointer">
+            <li className="uppercase text-gray-600 font-medium tracking-widest h-full grid place-items-center text-xs cursor-pointer px-5">
               Blog
             </li>
           </ul>
         </div>
         <div className="flex items-center justify-center gap-12">
           <Link to="/cart">
-            <div className="cursor-pointer uppercase text-xs text-gray-700 font-bold tracking-wide flex items-center justify-center gap-1 relative">
+            <div className="cursor-pointer uppercase text-xs text-gray-600 font-medium tracking-wide flex items-center justify-center gap-1 relative">
               {cart && cart.items && (
                 <span className="absolute -left-3 -top-1 bg-gray-700 text-white h-4 w-4 rounded-full flex items-center justify-center text-xs">
                   {cart.items.length === 0 ? 0 : cart.items.length}
@@ -147,7 +135,7 @@ const MainNav = () => {
             </div>
           </Link>
           <div
-            className="cursor-pointer uppercase text-xs text-gray-700 font-bold tracking-wide flex items-center justify-center gap-1"
+            className="cursor-pointer uppercase text-xs text-gray-600 font-medium tracking-wide flex items-center justify-center gap-1"
             onClick={handleShowSearchBar}
           >
             <SearchOutlinedIcon fontSize="medium" className="text-gray-600" />

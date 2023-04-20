@@ -43,7 +43,34 @@ const cartController = {
       console.log(error);
     }
   },
+  async updateCart(req, res, next) {
+    const { id, quantity, size } = req.body;
+    try {
+      const cart = await Cart.findOne({ userId: req.user._id });
 
+      if (!cart) {
+        return next(CustomErrorHandler.notFound("Cart not found"));
+      }
+
+      const cartItemIndex = cart.items.findIndex(
+        (item) => item.product.toString() === id.toString()
+      );
+
+      if (cartItemIndex === -1) {
+        console.log("Hello");
+        return next(
+          CustomErrorHandler.notFound("Product not found in the cart")
+        );
+      } else {
+        cart.items[cartItemIndex].quantity = quantity;
+        cart.items[cartItemIndex].size = size;
+        await cart.save();
+        res.status(200).json({ cart, success: true });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
   async deleteFromCart(req, res, next) {
     try {
       const product = req.params.id;

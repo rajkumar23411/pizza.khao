@@ -9,6 +9,9 @@ import {
   GET_CART_ITEMS_SUCCESS,
   REMOVE_CART_ITEM_FAIL,
   REMOVE_CART_ITEM_SUCCESS,
+  UPDATE_CART_FAIL,
+  UPDATE_CART_REQUEST,
+  UPDATE_CART_SUCCESS,
 } from "../constants/cartConstant";
 
 export const addToCart = (productId, quantity, size) => async (dispatch) => {
@@ -36,6 +39,20 @@ export const getCartItems = () => async (dispatch) => {
       type: GET_CART_ITEMS_FAIL,
       payload: error.response.data.message,
     });
+  }
+};
+
+export const updateCart = (id, quantity, size) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_CART_REQUEST });
+    const { data } = await axios.put("/api/cart/update", {
+      id,
+      quantity,
+      size,
+    });
+    dispatch({ type: UPDATE_CART_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: UPDATE_CART_FAIL, payload: error.response.data.message });
   }
 };
 

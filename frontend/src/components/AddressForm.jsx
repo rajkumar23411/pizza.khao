@@ -110,11 +110,13 @@ const AddressForm = ({ button, onCancel, bg }) => {
           value={altContact}
         />
       </div>
-      <input
-        type="submit"
-        value={button}
-        className="uppercase bg-purple-600 text-white p-3 font-semibold tracking-wider hover:bg-red-700 cursor-pointer rounded"
-      />
+      <div className="w-full text-center">
+        <input
+          type="submit"
+          value={button}
+          className="uppercase bg-red-600 text-white w-max px-6 py-2 font-normal tracking-wider hover:bg-red-700 cursor-pointer rounded"
+        />
+      </div>
       {onCancel && (
         <div
           onClick={onCancel}

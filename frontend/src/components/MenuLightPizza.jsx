@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { addRemoveFromWishlist } from "../redux/actions/wishListAction";
 import { addToCart } from "../redux/actions/cartActions";
 import DialogBoxData from "./DialogBoxData";
 import { Dialog } from "@mui/material";

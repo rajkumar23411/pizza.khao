@@ -44,7 +44,7 @@ const SmallSearchBar = ({ products }) => {
               >
                 <img src={product.image} alt={product.name} className="h-12" />
                 <div>
-                  <p className="uppercase text-gray-700 font-semibold font-roboto tracking-wider text-xs">
+                  <p className="uppercase text-gray-700 font-normal tracking-wider text-xs">
                     {product.name}
                   </p>
                   <p className="flex gap-2">

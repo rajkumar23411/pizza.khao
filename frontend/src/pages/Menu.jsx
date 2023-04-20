@@ -197,14 +197,14 @@ const Menu = () => {
                     <em>None</em>
                   </MenuItem>
                   {sortingOptions.map((option, i) => (
-                    <MenuItem key={i} value={option}>
+                    <MenuItem key={i} value={option} className="text-gray-400">
                       {option}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
               <div className="text-gray-500">
-                Showing 1-{resultPerPage} out of {productsCount} result
+                Showing 1-{products?.length} out of {productsCount} result
               </div>
             </div>
 

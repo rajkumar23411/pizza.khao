@@ -30,25 +30,25 @@ const HomeFooter = () => {
               Working Hours
             </p>
             <p className="flex flex-col">
-              <span className="font-bold text-golden uppercase text-sm tracking-wider font-sans">
+              <span className="font-bold text-golden uppercase text-sm tracking-wider ">
                 Monday
               </span>
               <span className="text-lg text-red-700">Kitchen Closed</span>
             </p>
             <p className="flex flex-col">
-              <span className="font-bold text-golden uppercase text-sm tracking-wider font-sans">
+              <span className="font-bold text-golden uppercase text-sm tracking-wider ">
                 Tuesday-friday
               </span>
               <span className="text-lg text-gray-400">09:00-22.00</span>
             </p>
             <p className="flex flex-col">
-              <span className="font-bold text-golden uppercase text-sm tracking-wider font-sans">
+              <span className="font-bold text-golden uppercase text-sm tracking-wider ">
                 Saturday
               </span>
               <span className="text-lg text-gray-400">11am-Midnight</span>
             </p>
             <p className="flex flex-col">
-              <span className="font-bold text-golden uppercase text-sm tracking-wider font-sans">
+              <span className="font-bold text-golden uppercase text-sm tracking-wider ">
                 Sunday
               </span>
               <span className="text-lg text-gray-400">9:00-22:00</span>
@@ -65,7 +65,7 @@ const HomeFooter = () => {
               </span>
             </p>
           </div>
-          <div className="flex-1 font-bold text-white uppercase text-2xl p-6 leading-10 tracking-tight font-sans">
+          <div className="flex-1 font-medium text-white uppercase text-2xl p-6 leading-10 ">
             THE DON PEPPE CREW FIRST AND FOREMOST VALUES AN AUTHENTIC, WELL
             BAKED SLICE OF PIZZA.
           </div>

@@ -66,3 +66,13 @@ export const phrases = [
 export const randomLoaderPhrase = () => {
   return phrases[Math.floor(Math.random() * phrases.length)];
 };
+
+export const PagesSubMenu = [
+  "About Us",
+  "Our Serices",
+  "Our team",
+  "Book a table",
+  "Contact Us",
+  "Get in touch",
+  "Coming Soon",
+];

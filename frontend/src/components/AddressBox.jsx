@@ -19,8 +19,8 @@ const AddressBox = ({ address }) => {
     <div className="w-full flex flex-col border-b-2">
       <div className="flex items-center justify-between p-4">
         <p className="flex items-center gap-4">
-          <span className="font-semibold text-gray-800">{address.name}</span>
-          <span className="font-semibold text-gray-800">{address.contact}</span>
+          <span className="font-normal text-gray-800">{address.name}</span>
+          <span className="font-normal text-gray-800">{address.contact}</span>
         </p>
         <div className="cursor-pointer" onMouseEnter={() => toggleMenu(1)}>
           <div className="relative">
@@ -48,8 +48,9 @@ const AddressBox = ({ address }) => {
           </div>
         </div>
       </div>
-      <p className="text-gray-700 w-[65%] p-4">
-        {address.locality}, {address.address}, {address.city}, <br />
+      <p className="text-gray-700 w-[65%] p-4 font-light">
+        {address.locality} {address.address} {address.city} {address.landMark}{" "}
+        {address.alternatContact} <br />
         {address.state} - {address.pinCode}
       </p>
       {isModelOpen && (

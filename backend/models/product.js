@@ -20,6 +20,7 @@ const productSchema = new Schema({
       name: { type: String, required: true },
       rating: { type: Number, required: true },
       comment: { type: String, required: true },
+      addedAt: { type: Date, default: Date.now() },
     },
   ],
   user: { type: mongoose.Schema.ObjectId, ref: "User", required: true },

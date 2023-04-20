@@ -29,7 +29,7 @@ const CheckoutStep = (props) => {
             {props.stepNumber}
           </p>
           <p
-            className={`uppercase tracking-wider text-gray-800 font-semibold ${
+            className={`uppercase tracking-wider text-gray-800 font-normal ${
               props.active && "text-white"
             }`}
           >
@@ -50,12 +50,17 @@ const Address = ({ address, confirmDeliveryAddress, selectAddress }) => {
         <Radio onClick={() => selectAddress(address)} />
         <div className="flex flex-col gap-4">
           <div className="flex gap-5">
-            <p className="text-gray-800 font-semibold">{address.name}</p>
-            <p className="text-gray-800 font-semibold">{address.contact}</p>
+            <p className="text-gray-800 font-medium">{address.name}</p>
+            <p className="text-gray-800 font-medium">{address.contact}</p>
           </div>
-          <div className="text-gray-800">
-            {address.locality}, {address.address}, {address.landMark},{" "}
-            {address.alternateContact}, {address.state} - {address.pinCode}
+          <div className="text-gray-600 font-normal flex items-center gap-1">
+            <span>{address.locality}</span>
+            <span>{address.address}</span>
+            <span>{address.landMark}</span>
+            <span>{address.alternateContact}</span>
+            <span>
+              {address.state} - {address.pinCode}
+            </span>
           </div>
           {address.selected && (
             <button
@@ -241,7 +246,7 @@ const CheckOut = () => {
             active={!isAuthenticated}
             body={
               isAuthenticated ? (
-                <div className="flex items-center gap-4 font-semibold">
+                <div className="flex items-center gap-4 font-normal pl-12 text-gray-600">
                   <span className="capitalize">
                     {user.firstname} {user.lastname}
                   </span>
@@ -310,7 +315,7 @@ const CheckOut = () => {
                     <OrderedItems items={cart.items} />
                     <div className="mt-4 flex items-center justify-end">
                       <button
-                        className="text-white bg-green-600 font-medium capitalize hover:bg-green-700 cursor-pointer w-max px-4 py-2 rounded-sm"
+                        className="text-white bg-green-600 font-normal tracking-wider capitalize hover:bg-green-700 cursor-pointer w-max px-4 py-2 rounded-sm"
                         onClick={proceedNext}
                       >
                         Continue
@@ -333,7 +338,7 @@ const CheckOut = () => {
                           />
                         </div>
                         <div className="leading-5">
-                          <p className="text-gray-800 font-semibold uppercase tracking-wide">
+                          <p className="text-gray-800 font-normal uppercase tracking-wide">
                             {item.product.name}
                           </p>
                           <p className="capitalize text-gray-600">
@@ -363,34 +368,46 @@ const CheckOut = () => {
                       type="radio"
                       name="payment"
                       value="cod"
-                      className="h-4 w-4"
+                      className="h-4 w-4 cursor-pointer bg-red-700"
                       onChange={(e) => setSelectPaymentOption(e.target.value)}
                     />
                     <label htmlFor="cod">Cash on Delivery</label>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 w-full">
                     <input
                       type="radio"
                       name="payment"
                       value="online"
-                      className="h-4 w-4"
+                      className="h-4 w-4 cursor-pointer"
                       onChange={(e) => setSelectPaymentOption(e.target.value)}
                     />
-                    <label htmlFor="online">Online Payment</label>
+                    <label
+                      htmlFor="online"
+                      className="flex w-full items-center  gap-2"
+                    >
+                      <p>Online payment</p>
+                      (
+                      <img
+                        src="/images/razorpay-icon.svg"
+                        alt="razorpay icon"
+                        className="h-4"
+                      />
+                      )
+                    </label>
                   </div>
                   <div className="flex items-center gap-4">
                     <input
                       type="radio"
                       name="payment"
                       value="wallet"
-                      className="h-4 w-4"
+                      className="h-4 w-4 cursor-pointer"
                       onChange={(e) => setSelectPaymentOption(e.target.value)}
                     />
                     <label htmlFor="wallet">Wallet</label>
                   </div>
                   {selectPaymentOption !== "" && (
                     <button
-                      className="bg-red-600 font-medium text-white  py-2 rounded-sm w-max px-4 mt-4 tracking-wide hover:bg-red-700"
+                      className="bg-red-600 font-light text-white  py-2 rounded-sm w-max px-4 mt-4 tracking-wider hover:bg-red-700"
                       onClick={confirmOrder}
                     >
                       {selectPaymentOption === "cod"
