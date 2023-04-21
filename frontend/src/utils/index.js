@@ -76,3 +76,11 @@ export const PagesSubMenu = [
   "Get in touch",
   "Coming Soon",
 ];
+
+export const shopSubMenu = [
+  { name: "Favourites", link: "/account/favourites" },
+  { name: "My orders", link: "/my-order" },
+  { name: "Cart", link: "/cart" },
+  { name: "Checkout", link: "/checkout" },
+  { name: "My Account", link: "/account/settings" },
+];

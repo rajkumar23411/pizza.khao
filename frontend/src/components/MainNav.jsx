@@ -5,12 +5,13 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import SearchBar from "./SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartItems } from "../redux/actions/cartActions";
-import { PagesSubMenu } from "../utils";
+import { PagesSubMenu, shopSubMenu } from "../utils";
 
 const MainNav = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [isModelOpen, setIsModelOpen] = useState(0);
   const { cart } = useSelector((state) => state.myCart);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const toggleMenu = (index) => {
     setIsModelOpen(index);
@@ -21,7 +22,7 @@ const MainNav = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 900) {
+      if (window.scrollY > 500) {
         setShowSearchBar(false);
       }
     };
@@ -65,6 +66,11 @@ const MainNav = () => {
                     {item}
                   </li>
                 ))}
+                {isAuthenticated && user?.role === "admin" && (
+                  <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
+                    <NavLink to="/add/pizza">Add a pizza</NavLink>
+                  </li>
+                )}
               </ul>
             </li>
             <li
@@ -100,18 +106,14 @@ const MainNav = () => {
                   isModelOpen === 3 ? "nav-links active" : "nav-links"
                 } h-12`}
               >
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  <Link to="/account/settings">My Account</Link>
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  <Link to="/resturent-menu">Cart</Link>
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  <Link to="/checkout">Checkout</Link>
-                </li>
-                <li className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600">
-                  <Link to="/my-order">My Orders</Link>
-                </li>
+                {shopSubMenu.map((item, index) => (
+                  <li
+                    key={index}
+                    className="tracking-wide font-medium text-sm hover:bg-red-50 hover:text-red-600"
+                  >
+                    <Link to={item.link}>{item.name}</Link>
+                  </li>
+                ))}
               </ul>
             </li>
             <li className="uppercase text-gray-600 font-medium tracking-widest h-full grid place-items-center text-xs cursor-pointer px-5">

@@ -17,6 +17,20 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 dotenv.config({ path: "./.env" });
 
+//handling uncaught error
+process.on("uncaughtException", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log(`Server has been closed`);
+  process.exit(1);
+});
+
+//Handling unhandled promise rejection
+process.on("unhandledRejection", (err) => {
+  console.log(`Error: ${err.message}`);
+  console.log(`Server has been closed`);
+  server.close(process.exit(1));
+});
+
 dbConnection();
 
 app.use(express.json());

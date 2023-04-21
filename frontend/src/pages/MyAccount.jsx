@@ -5,6 +5,7 @@ import PromptModel from "../components/PromptModel";
 import { useDispatch, useSelector } from "react-redux";
 import { updateName } from "../redux/actions/userAction";
 import { useSnackbar } from "notistack";
+import PageHead from "../components/PageHead";
 const MyAccount = () => {
   const { user, loading } = useSelector((state) => state.user);
   const { error, isUpdated } = useSelector((state) => state.profile);
@@ -46,15 +47,11 @@ const MyAccount = () => {
         <div>
           <MainNav />
         </div>
-        <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-          <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-            My Account
-          </h1>
-        </div>
+        <PageHead pageName={"My Account"} />
       </section>
       <section className="flex items-start gap-4 p-20 bg-slate-50 h-screen">
         <AccountNav />
-        <div className="flex-1 bg-white shadow-md p-10 flex flex-col min-h-full gap-6">
+        <div className="flex-1 bg-white shadow-md p-10 flex flex-col min-h-full gap-6 rounded-md">
           <h1 className="uppercase text-golden font-semibold tracking-wider text-xl">
             Personal Information
           </h1>

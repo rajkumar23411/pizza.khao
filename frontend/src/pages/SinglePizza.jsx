@@ -25,6 +25,7 @@ import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 import SingleRelatedPizza from "./../components/SingleRelatedPizza";
 import Slider from "react-slick";
 import { settings } from "../utils/Arrows";
+import PageHead from "../components/PageHead";
 
 const SinglePizza = () => {
   const dispatch = useDispatch();
@@ -91,27 +92,25 @@ const SinglePizza = () => {
   return (
     <>
       <MainNav />
-      <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-        <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-          Shop / {product && product.name}
-        </h1>
-      </div>
+      <PageHead pageName={`Shop / ${product?.name}`} />
       <section className="flex flex-col p-20">
         {loading ? (
           <SinglePizzaLoader />
         ) : (
           <>
-            <section className="h-screen flex gap-10">
+            <section className="h-max flex gap-10">
               <div className="flex-1 flex bg-gray-50 h-max py-20 rounded-md items-center justify-center relative">
                 <span className="h-20 w-20 bg-yellow-400 absolute top-4 left-4 text-lg text-white font-bold rounded-full flex items-center justify-center">
                   -14%
                 </span>
-                <img
-                  src={product && product.image}
-                  alt="pizza"
-                  className={`w-full h-96 object-contain drop-shadow-xl`}
-                  draggable="false"
-                />
+                <div className="h-96 w-96 rounded overflow-hidden drop-shadow-xl">
+                  <img
+                    src={product && product.image}
+                    alt="pizza"
+                    className={`h-96 w-96 object-cover`}
+                    draggable="false"
+                  />
+                </div>
               </div>
               <div className="flex-1 flex flex-col gap-4">
                 <p className="font-semibold text-gray-700 uppercase text-2xl tracking-wider">
@@ -184,6 +183,20 @@ const SinglePizza = () => {
                       </select>
                       <ExpandMoreIcon fontSize="small" sx={{ color: "gray" }} />
                     </div>
+                  </div>
+                  <div className="flex items-center mt-6 gap-1">
+                    <span className="text-golden font-medium uppercase">
+                      Categories:
+                    </span>
+                    {product?.category?.map((cat, index) => (
+                      <span
+                        className="text-gray-500 font-normal tracking-wide"
+                        key={index}
+                      >
+                        {cat}
+                        {index !== product.category.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
                   </div>
                   {price && (
                     <div className="pt-6 flex items-center gap-2">

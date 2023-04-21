@@ -8,6 +8,8 @@ import MainNav from "../components/MainNav";
 import { myAddresses } from "../redux/actions/addressAction";
 import { useSnackbar } from "notistack";
 import { ADD_NEW_ADDRESS_RESET } from "../redux/constants/addressConstant";
+import Loader from "../components/Loader";
+import PageHead from "../components/PageHead";
 
 const AccountAddress = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
@@ -33,24 +35,16 @@ const AccountAddress = () => {
         <div>
           <MainNav />
         </div>
-        <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-          <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-            My Account
-          </h1>
-        </div>
+        <PageHead pageName={"My Account"} />
       </section>
       <section className="flex items-start gap-4 p-20 bg-slate-50 h-screen max-h-full">
         <AccountNav />
-        <div className="flex-1 bg-white shadow-md p-10 flex flex-col min-h-full gap-6">
+        <div className="flex-1 bg-white shadow-md p-10 flex flex-col min-h-full gap-6 rounded-md">
           <h1 className="uppercase text-golden font-normal tracking-wider text-xl">
             Manage Address
           </h1>
           {loading ? (
-            <div className="flex items-center justify-center h-96">
-              <p className="font-light text-gray-600 animate-pulse">
-                Hang on! Fetching your data...
-              </p>
-            </div>
+            <Loader />
           ) : (
             <>
               <div className="flex flex-col">

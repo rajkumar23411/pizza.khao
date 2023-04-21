@@ -9,16 +9,12 @@ import { getAllProducts } from "../redux/actions/productAction";
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Pagination,
-  Select,
-} from "@mui/material";
+import { Pagination } from "@mui/material";
 import PlaceHolderCard from "../components/PlaceHolderCard";
 import NoResultFound from "../components/NoResultFound";
 import SmallSearchBar from "../components/SmallSearchBar";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import PageHead from "../components/PageHead";
 
 const Menu = () => {
   const {
@@ -34,7 +30,7 @@ const Menu = () => {
   const [price, setPrice] = useState([0, 1000]);
   const [sort, setSort] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [isClicked, setIsClicked] = useState(false);
   const handlePriceChange = (event, newValue) => {
     setPrice(newValue);
   };
@@ -85,11 +81,7 @@ const Menu = () => {
       <div>
         <MainNav />
       </div>
-      <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-        <h1 className="font-bold text-white text-6xl tracking-wide uppercase">
-          Menu
-        </h1>
-      </div>
+      <PageHead pageName={"Menu"} />
       <section className="flex m-20">
         <div className="flex-[0.2]">
           <div className="flex flex-col border-b-2 border-golden border-dashed pb-10">
@@ -184,25 +176,23 @@ const Menu = () => {
         ) : (
           <div className="flex-1 flex flex-col">
             <div className="flex w-full justify-between px-10">
-              <FormControl sx={{ minWidth: 250 }}>
-                <InputLabel id="demo-simple-select-label">
-                  Sort items
-                </InputLabel>
-                <Select
-                  value={sort}
-                  label="Sort items"
+              <div className="bg-gray-100 w-56 flex items-center justify-between h-12 rounded-sm overflow-hidden">
+                <select
+                  className="bg-transparent appearance-none w-full text-gray-600 h-full cursor-pointer px-2 capitalize"
                   onChange={handleSortChange}
+                  onClick={() => setIsClicked(!isClicked)}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {sortingOptions.map((option, i) => (
-                    <MenuItem key={i} value={option} className="text-gray-400">
+                  <option value="">Sort Items</option>
+                  {sortingOptions.map((option, index) => (
+                    <option key={index} value={option} className="capitalize">
                       {option}
-                    </MenuItem>
+                    </option>
                   ))}
-                </Select>
-              </FormControl>
+                </select>
+                <div className={isClicked ? "-rotate-180" : ""}>
+                  <ExpandMoreIcon fontSize="small" sx={{ color: "gray" }} />
+                </div>
+              </div>
               <div className="text-gray-500">
                 Showing 1-{products?.length} out of {productsCount} result
               </div>

@@ -29,7 +29,7 @@ const AccountNav = () => {
     enqueueSnackbar("Logged out successfully", { variant: "success" });
   };
   return (
-    <div className="flex-[0.3] flex flex-col min-h-full bg-white shadow-md">
+    <div className="flex-[0.3] flex flex-col min-h-full bg-white shadow-md rounded-md overflow-hidden">
       <div className="flex items-center gap-4 p-4 border-b-[1px]">
         <img src="/images/profile-pic.svg" alt="profile pic" />
         <div className="flex flex-col gap-1">

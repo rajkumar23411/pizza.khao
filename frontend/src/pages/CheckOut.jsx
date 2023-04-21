@@ -6,13 +6,14 @@ import CheckoutLoginForm from "../components/CheckoutLoginForm";
 import { clearError, myAddresses } from "../redux/actions/addressAction";
 import { Radio } from "@mui/material";
 import { clearErrors, createOrder } from "../redux/actions/orderAction";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import axios from "axios";
 import useRazorpay from "react-razorpay";
 import { NEW_ORDER_RESET } from "../redux/constants/orderConstant";
 import AddressForm from "./../components/AddressForm";
 import { ADD_NEW_ADDRESS_RESET } from "../redux/constants/addressConstant";
+import PageHead from "../components/PageHead";
 const CheckoutStep = (props) => {
   return (
     <div className="bg-white shadow-sm w-full">
@@ -232,230 +233,244 @@ const CheckOut = () => {
   return (
     <>
       <MainNav />
-      <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-        <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-          CheckOut
-        </h1>
-      </div>
-      <div className="min-h-screen w-full bg-slate-50 py-20 px-40 flex gap-4">
-        <div className="flex-1 flex flex-col gap-4">
-          <CheckoutStep
-            stepNumber={1}
-            title="Login"
-            active={!isAuthenticated}
-            body={
-              isAuthenticated ? (
-                <div className="flex items-center gap-4 font-normal pl-12 text-gray-600">
-                  <span className="capitalize">
-                    {user.firstname} {user.lastname}
-                  </span>
-                  <span>{user.contact}</span>
-                </div>
-              ) : (
-                <CheckoutLoginForm />
-              )
-            }
-          />
-          <CheckoutStep
-            stepNumber={2}
-            title="Delivery Address"
-            active={!confirmAddress && isAuthenticated}
-            body={
-              address.length === 0 ? (
-                <AddressForm
-                  onCancel={() => setNewAddress(false)}
-                  button={"Save and Deliver here"}
-                />
-              ) : confirmAddress ? (
-                selectedAddress && (
-                  <div className="flex flex-col gap-2 pl-12">
-                    <p className="text-gray-700 font-semibold">
-                      {selectedAddress.name} - {selectedAddress.contact}
-                    </p>
-                    <p className="text-gray-600">
-                      {selectedAddress.locality}, {selectedAddress.address},{" "}
-                      {selectedAddress.landMark},{" "}
-                      {selectedAddress.alternateContact} <br />{" "}
-                      {selectedAddress.state} - {selectedAddress.pinCode}
-                    </p>
-                  </div>
-                )
-              ) : (
-                address.map((address) => (
-                  <Address
-                    address={address}
-                    confirmDeliveryAddress={confirmDeliveryAddress}
-                    selectAddress={selectAddress}
-                  />
-                ))
-              )
-            }
-          />
-          {address.length !== 0 &&
-            (confirmAddress ? null : newAddress ? (
-              <AddressForm button={"Save and Deliver here"} />
-            ) : isAuthenticated ? (
-              <CheckoutStep
-                stepNumber={"+"}
-                title={"ADD NEW ADDRESS"}
-                active={false}
-                onClick={() => setNewAddress(true)}
-                bg="bg-white"
-              />
-            ) : null)}
-          <CheckoutStep
-            stepNumber={3}
-            title="ORDER SUMMARY"
-            active={orderSummary}
-            body={
-              <>
-                {orderSummary ? (
-                  <>
-                    <OrderedItems items={cart.items} />
-                    <div className="mt-4 flex items-center justify-end">
-                      <button
-                        className="text-white bg-green-600 font-normal tracking-wider capitalize hover:bg-green-700 cursor-pointer w-max px-4 py-2 rounded-sm"
-                        onClick={proceedNext}
-                      >
-                        Continue
-                      </button>
-                    </div>
-                  </>
-                ) : null}
-                {showOrderSummary && (
-                  <div className="flex-col gap-6 flex">
-                    {cart.items.map((item) => (
-                      <div
-                        key={item._id}
-                        className="flex items-center gap-6 px-10"
-                      >
-                        <div className="h-24 w-24">
-                          <img
-                            src={item.product.image}
-                            alt={item.product.image}
-                            className="h-full w-full"
-                          />
-                        </div>
-                        <div className="leading-5">
-                          <p className="text-gray-800 font-normal uppercase tracking-wide">
-                            {item.product.name}
-                          </p>
-                          <p className="capitalize text-gray-600">
-                            {item.size}
-                          </p>
-                          <p className="text-gray-600">{item.quantity}</p>
-                          <p className="font-semibold text-red-600 text-lg">
-                            ₹{item.quantity * item.product.prices[item.size]}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            }
-          />
-          <CheckoutStep
-            stepNumber={4}
-            title="Payment Options"
-            active={paymentOption}
-            body={
-              paymentOption ? (
-                <div className="flex flex-col gap-4 pl-12">
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="cod"
-                      className="h-4 w-4 cursor-pointer bg-red-700"
-                      onChange={(e) => setSelectPaymentOption(e.target.value)}
-                    />
-                    <label htmlFor="cod">Cash on Delivery</label>
-                  </div>
-                  <div className="flex items-center gap-4 w-full">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="online"
-                      className="h-4 w-4 cursor-pointer"
-                      onChange={(e) => setSelectPaymentOption(e.target.value)}
-                    />
-                    <label
-                      htmlFor="online"
-                      className="flex w-full items-center  gap-2"
-                    >
-                      <p>Online payment</p>
-                      (
-                      <img
-                        src="/images/razorpay-icon.svg"
-                        alt="razorpay icon"
-                        className="h-4"
-                      />
-                      )
-                    </label>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="wallet"
-                      className="h-4 w-4 cursor-pointer"
-                      onChange={(e) => setSelectPaymentOption(e.target.value)}
-                    />
-                    <label htmlFor="wallet">Wallet</label>
-                  </div>
-                  {selectPaymentOption !== "" && (
-                    <button
-                      className="bg-red-600 font-light text-white  py-2 rounded-sm w-max px-4 mt-4 tracking-wider hover:bg-red-700"
-                      onClick={confirmOrder}
-                    >
-                      {selectPaymentOption === "cod"
-                        ? "Place order"
-                        : "Proceed to payment"}
-                    </button>
-                  )}
-                </div>
-              ) : null
-            }
-          />
-        </div>
-        <div className="flex-[0.5] bg-white h-max shadow-md">
-          <h1 className="uppercase font-semibold tracking-wide text-golden w-full border-b-2 border-golden border-dashed px-4 py-2">
-            Price Details
+      <PageHead pageName={"Checkout"} />
+      {cart?.items?.length === 0 ? (
+        <div className="flex justify-center items-center h-full py-10 flex-col">
+          <img src="/images/empty_cart.svg" alt="empty cart" className="h-60" />
+          <h1 className="text-2xl font-medium mt-6 text-gray-700">
+            Oops! Nothing here to checkout
           </h1>
-          <div className="flex flex-col gap-2 border-b-[1px] p-4">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">
-                Price ({cart?.items?.length})
-              </span>
-              <span className="text-gray-800 font-semibold">
-                ₹{totalPrice?.toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Delivery Charge</span>
-              <span className="text-gray-800 font-semibold">
-                ₹{shipping?.toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Tax</span>
-              <span className="text-gray-800 font-semibold">
-                ₹{tax?.toFixed(2)}
-              </span>
-            </div>
+          <p className="text-lg font-light">No item found in your cart</p>
+          <Link
+            to="/menu"
+            className="bg-red-600 text-white px-4 py-2 rounded-sm text-lg mt-4 hover:bg-red-700"
+          >
+            Go to menu
+          </Link>
+        </div>
+      ) : (
+        <div className="min-h-screen w-full bg-slate-50 py-20 px-40 flex gap-4">
+          <div className="flex-1 flex flex-col gap-4">
+            <CheckoutStep
+              stepNumber={1}
+              title="Login"
+              active={!isAuthenticated}
+              body={
+                isAuthenticated ? (
+                  <div className="flex items-center gap-4 font-normal pl-12 text-gray-600">
+                    <span className="capitalize">
+                      {user.firstname} {user.lastname}
+                    </span>
+                    <span>{user.contact}</span>
+                  </div>
+                ) : (
+                  <CheckoutLoginForm />
+                )
+              }
+            />
+            <CheckoutStep
+              stepNumber={2}
+              title="Delivery Address"
+              active={!confirmAddress && isAuthenticated}
+              body={
+                address.length === 0 ? (
+                  <AddressForm
+                    onCancel={() => setNewAddress(false)}
+                    button={"Save and Deliver here"}
+                  />
+                ) : confirmAddress ? (
+                  selectedAddress && (
+                    <div className="flex flex-col gap-2 pl-12">
+                      <p className="text-gray-700 font-semibold">
+                        {selectedAddress.name} - {selectedAddress.contact}
+                      </p>
+                      <p className="text-gray-600">
+                        {selectedAddress.locality}, {selectedAddress.address},{" "}
+                        {selectedAddress.landMark},{" "}
+                        {selectedAddress.alternateContact} <br />{" "}
+                        {selectedAddress.state} - {selectedAddress.pinCode}
+                      </p>
+                    </div>
+                  )
+                ) : (
+                  address.map((address) => (
+                    <Address
+                      address={address}
+                      confirmDeliveryAddress={confirmDeliveryAddress}
+                      selectAddress={selectAddress}
+                    />
+                  ))
+                )
+              }
+            />
+            {address.length !== 0 &&
+              (confirmAddress ? null : newAddress ? (
+                <AddressForm button={"Save and Deliver here"} />
+              ) : isAuthenticated ? (
+                <CheckoutStep
+                  stepNumber={"+"}
+                  title={"ADD NEW ADDRESS"}
+                  active={false}
+                  onClick={() => setNewAddress(true)}
+                  bg="bg-white"
+                />
+              ) : null)}
+            <CheckoutStep
+              stepNumber={3}
+              title="ORDER SUMMARY"
+              active={orderSummary}
+              body={
+                <>
+                  {orderSummary ? (
+                    <>
+                      <OrderedItems items={cart.items} />
+                      <div className="mt-4 flex items-center justify-end">
+                        <button
+                          className="text-white bg-green-600 font-normal tracking-wider capitalize hover:bg-green-700 cursor-pointer w-max px-4 py-2 rounded-sm"
+                          onClick={proceedNext}
+                        >
+                          Continue
+                        </button>
+                      </div>
+                    </>
+                  ) : null}
+                  {showOrderSummary && (
+                    <div className="flex-col gap-6 flex">
+                      {cart.items.map((item) => (
+                        <div
+                          key={item._id}
+                          className="flex items-center gap-6 px-10"
+                        >
+                          <div className="h-24 w-24">
+                            <img
+                              src={item.product.image}
+                              alt={item.product.image}
+                              className="h-full w-full"
+                            />
+                          </div>
+                          <div className="leading-5">
+                            <p className="text-gray-800 font-normal uppercase tracking-wide">
+                              {item.product.name}
+                            </p>
+                            <p className="capitalize text-gray-600">
+                              {item.size}
+                            </p>
+                            <p className="text-gray-600">{item.quantity}</p>
+                            <p className="font-semibold text-red-600 text-lg">
+                              ₹{item.quantity * item.product.prices[item.size]}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              }
+            />
+            <CheckoutStep
+              stepNumber={4}
+              title="Payment Options"
+              active={paymentOption}
+              body={
+                paymentOption ? (
+                  <div className="flex flex-col gap-4 pl-12">
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="cod"
+                        className="h-4 w-4 cursor-pointer bg-red-700"
+                        onChange={(e) => setSelectPaymentOption(e.target.value)}
+                      />
+                      <label htmlFor="cod">Cash on Delivery</label>
+                    </div>
+                    <div className="flex items-center gap-4 w-full">
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="online"
+                        className="h-4 w-4 cursor-pointer"
+                        onChange={(e) => setSelectPaymentOption(e.target.value)}
+                      />
+                      <label
+                        htmlFor="online"
+                        className="flex w-full items-center  gap-2"
+                      >
+                        <p>Online payment</p>
+                        (
+                        <img
+                          src="/images/razorpay-icon.svg"
+                          alt="razorpay icon"
+                          className="h-4"
+                        />
+                        )
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="wallet"
+                        className="h-4 w-4 cursor-pointer"
+                        onChange={(e) => setSelectPaymentOption(e.target.value)}
+                      />
+                      <label htmlFor="wallet">Wallet</label>
+                    </div>
+                    {selectPaymentOption !== "" && (
+                      <button
+                        className="bg-red-600 font-light text-white  py-2 rounded-sm w-max px-4 mt-4 tracking-wider hover:bg-red-700"
+                        onClick={confirmOrder}
+                      >
+                        {selectPaymentOption === "cod"
+                          ? "Place order"
+                          : "Proceed to payment"}
+                      </button>
+                    )}
+                  </div>
+                ) : null
+              }
+            />
           </div>
-          <div className="flex justify-between items-center p-4 border-b-[1px]">
-            <span className="text-lg font-semibold text-gray-800">
-              Total Payable:
-            </span>
-            <span className="text-red-600 font-semibold text-lg">₹{total}</span>
-          </div>
-          <div className="flex justify-between items-center p-4 text-golden font-semibold">
-            *Your total savings in this order is $45.98
+          <div className="flex-[0.5] bg-white h-max shadow-md">
+            <h1 className="uppercase font-semibold tracking-wide text-golden w-full border-b-2 border-golden border-dashed px-4 py-2">
+              Price Details
+            </h1>
+            <div className="flex flex-col gap-2 border-b-[1px] p-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">
+                  Price ({cart?.items?.length})
+                </span>
+                <span className="text-gray-800 font-semibold">
+                  ₹{totalPrice?.toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Delivery Charge</span>
+                <span className="text-gray-800 font-semibold">
+                  ₹{shipping?.toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Tax</span>
+                <span className="text-gray-800 font-semibold">
+                  ₹{tax?.toFixed(2)}
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-between items-center p-4 border-b-[1px]">
+              <span className="text-lg font-semibold text-gray-800">
+                Total Payable:
+              </span>
+              <span className="text-red-600 font-semibold text-lg">
+                ₹{total}
+              </span>
+            </div>
+            <div className="flex justify-between items-center p-4 text-golden font-semibold">
+              *Your total savings in this order is $45.98
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

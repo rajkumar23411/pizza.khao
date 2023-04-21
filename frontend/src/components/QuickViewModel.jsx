@@ -1,16 +1,12 @@
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Rating,
-  Select,
-} from "@mui/material";
+import { Rating } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { addRemoveFromWishlist } from "../redux/actions/wishListAction";
 import { addToCart } from "../redux/actions/cartActions";
 import { pizzaSize } from "../utils";
 import { Link } from "react-router-dom";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const QuickViewModel = ({ pizza, onClose, wishListItems }) => {
   const [size, setSize] = React.useState("");
@@ -35,12 +31,21 @@ const QuickViewModel = ({ pizza, onClose, wishListItems }) => {
       }}
     >
       <div className="flex bg-white w-4/5 h-[92vh] rounded-md relative overflow-hidden">
-        <div className="qucikViewClose" onClick={onClose}></div>
-        <div className="flex-1 flex items-center justify-center bg-gray-100 m-10">
-          <img src={pizza.image} alt={pizza.name} draggable="false" />
+        <CloseRoundedIcon
+          fontSize="large"
+          onClick={onClose}
+          className="absolute top-1 right-1 transition ease-in-out duration-150 cursor-pointer hover:text-golden text-gray-600"
+        />
+        <div className="flex-1 flex items-center justify-center m-10">
+          <img
+            src={pizza.image}
+            alt={pizza.name}
+            draggable="false"
+            className="h-96 w-96 object-cover rounded-md drop-shadow-md"
+          />
         </div>
         <div className="flex-1 flex flex-col m-10">
-          <h1 className="font-sans uppercase text-2xl font-bold text-gray-700">
+          <h1 className="uppercase text-2xl font-semibold tracking-wider text-gray-700">
             {pizza.name}
           </h1>
           <div className="flex items-center gap-4 py-4">
@@ -98,34 +103,37 @@ const QuickViewModel = ({ pizza, onClose, wishListItems }) => {
               </span>
             </div>
           </div>
+          <div className="flex items-center mt-6 gap-1">
+            <span className="text-golden font-medium uppercase">
+              Categories:
+            </span>
+            {pizza?.category?.map((cat, index) => (
+              <span
+                className="text-gray-500 font-normal tracking-wide"
+                key={index}
+              >
+                {cat}
+                {index !== pizza.category.length - 1 ? ", " : ""}
+              </span>
+            ))}
+          </div>
           <div className="flex gap-3 items-center py-6">
             <div className="text-base font-bold uppercase text-golden">
               Pick Size:
             </div>
-            <div>
-              <FormControl
-                variant="outlined"
-                sx={{ minWidth: 200 }}
-                size="medium"
+            <div className="bg-gray-100 w-40 flex items-center justify-between h-12 rounded-sm">
+              <select
+                className="bg-transparent appearance-none w-full text-gray-600 h-full cursor-pointer px-2 capitalize"
+                onChange={handleSizeChange}
               >
-                <InputLabel id="demo-simple-select-label">
-                  Select size
-                </InputLabel>
-                <Select
-                  value={size}
-                  label="Select size"
-                  onChange={handleSizeChange}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {pizzaSize.map((size, i) => (
-                    <MenuItem key={i} value={size}>
-                      {size}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                <option value="">Select Size</option>
+                {pizzaSize.map((size, index) => (
+                  <option key={index} value={size} className="capitalize">
+                    {size}
+                  </option>
+                ))}
+              </select>
+              <ExpandMoreIcon fontSize="small" sx={{ color: "gray" }} />
             </div>
           </div>
           {size === "" ? (

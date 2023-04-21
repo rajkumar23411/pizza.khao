@@ -12,6 +12,7 @@ import { useSnackbar } from "notistack";
 import { RESET_ADD_TO_FAVOURITE } from "../redux/constants/wishListConstant";
 import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 import { addToCart, clearError } from "../redux/actions/cartActions";
+import PageHead from "../components/PageHead";
 
 const WishList = () => {
   const { loading, wishlist, message } = useSelector((state) => state.wishlist);
@@ -46,15 +47,11 @@ const WishList = () => {
         <div>
           <MainNav />
         </div>
-        <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-          <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-            My Account / Favourites
-          </h1>
-        </div>
+        <PageHead pageName={"My Account / Favourites"} />
       </section>
       <section className="flex items-start gap-4 p-20 bg-slate-50 h-screen">
         <AccountNav />
-        <div className="flex-1 bg-white shadow-md p-10 flex flex-col min-h-full gap-6">
+        <div className="flex-1 bg-white shadow-md p-10 flex flex-col min-h-full gap-6 rounded-md">
           <h1 className="uppercase text-golden font-semibold tracking-wider text-xl">
             Favourites ({wishlist?.items?.length})
           </h1>

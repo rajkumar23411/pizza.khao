@@ -19,6 +19,7 @@ import {
 import PlaceHolderCard from "../components/PlaceHolderCard";
 import NoResultFound from "../components/NoResultFound";
 import SmallSearchBar from "../components/SmallSearchBar";
+import PageHead from "../components/PageHead";
 
 const SearchMenu = () => {
   const { loading, products, productsCount, resultPerPage } = useSelector(
@@ -81,11 +82,7 @@ const SearchMenu = () => {
       <div>
         <MainNav />
       </div>
-      <div className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-        <h1 className="font-extrabold text-white text-6xl font-roboto tracking-wide uppercase">
-          Menu
-        </h1>
-      </div>
+      <PageHead pageName={"Menu"} />
       {products && products.length === 0 ? (
         <NoResultFound />
       ) : (

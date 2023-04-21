@@ -60,9 +60,14 @@ const CartItem = ({ item, wishlist }) => {
                 onChange={(e) =>
                   handleSizeChange(item.product._id, e.target.value, item.size)
                 }
+                className="cursor-pointer"
               >
                 {Array.from(Array(10).keys()).map((x, i) => (
-                  <option key={i} value={i + 1}>
+                  <option
+                    key={i}
+                    value={i + 1}
+                    className="cursor-pointer hover:bg-red-600"
+                  >
                     {i + 1}
                   </option>
                 ))}

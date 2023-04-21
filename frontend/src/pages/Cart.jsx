@@ -12,6 +12,7 @@ import {
 } from "../redux/constants/cartConstant";
 import { RESET_ADD_TO_FAVOURITE } from "../redux/constants/wishListConstant";
 import { getWishlist } from "../redux/actions/wishListAction";
+import PageHead from "../components/PageHead";
 
 const Cart = () => {
   const { loading, cart, error, success, message } = useSelector(
@@ -55,30 +56,30 @@ const Cart = () => {
       <section>
         <MainNav />
       </section>
-      <section className="h-72 bg-page-head bg-center bg-cover w-full flex items-center px-10">
-        <h1 className="font-extrabold text-white text-6xl  tracking-wide">
-          MY CART
-        </h1>
-      </section>
+      <PageHead pageName={"My Cart"} />
       {loading ? (
-        <div>
+        <div className="flex items-center justify-center h-[32rem] flex-col gap-2">
           <img src="/images/pizza_loader.gif" alt="loader" />
+          <p className="font-light text-gray-600 animate-pulse">
+            Hang on! Fetching your data...
+          </p>
         </div>
       ) : (
         <>
           {cart?.items?.length === 0 ? (
-            <div className="w-full flex items-center justify-center flex-col py-20 gap-4">
+            <div className="w-full flex items-center justify-center flex-col py-20">
               <img
-                src="/images/empty_cart.jpg"
+                src="/images/pizza_maker.svg"
                 alt="empty_cart"
-                className="h-96"
+                className="h-80"
               />
-              <p className="uppercase text-gray-700 font-semibold text-3xl">
+              <p className="uppercase text-golden font-medium text-3xl mt-6 tracking-wider">
                 Your cart is empty
               </p>
+              <p className="text-gray-600 text-lg">No items found in cart</p>
               <Link
                 to="/menu"
-                className="bg-red-600 font-normal text-white rounded-sm px-4 py-2 uppercase tracking-wider text-sm cursor-pointer hover:bg-red-700"
+                className="bg-red-600 font-normal text-white rounded-sm px-4 mt-6 py-2 uppercase tracking-wider text-sm cursor-pointer hover:bg-red-700"
               >
                 Update Cart
               </Link>
@@ -181,9 +182,9 @@ const Cart = () => {
               </section>
             </>
           )}
+          <HomeFooter />
         </>
       )}
-      <HomeFooter />
     </>
   );
 };
