@@ -2,7 +2,9 @@
 
 ## 📜 Screenshots
 
-**Frontend:** 
+**Frontend:**
+
+
 ![reactjs](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)&nbsp; ![react-router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)&nbsp;
 ![redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)&nbsp;
 ![mui](https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)&nbsp;
@@ -11,7 +13,9 @@
 ![slick-carousel](https://img.shields.io/badge/slick-carousel-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)&nbsp;
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v2.2.7-blue)
 
-**Backend:** 
+**Backend:**
+
+
 ![nodejs](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)&nbsp; ![expressjs](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)&nbsp;
 ![jsonwebtoken](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)&nbsp; ![cookie-parser](https://img.shields.io/badge/cookie--parser-v1.4.5-blue?logo=npm)
 ![dotenv](https://img.shields.io/badge/dotenv-v8.2.0-green?logo=dotenv&logoColor=white) ![Nexmo](https://img.shields.io/badge/Nexmo-v2.10.0-7B16FF?logo=nexmo&logoColor=white)
@@ -19,18 +23,28 @@
 ![OTP Generator](https://img.shields.io/badge/OTP%20Generator-v1.0.2-green?logo=Shield.io&logoColor=white) ![bcryptjs](https://img.shields.io/badge/bcryptjs-v2.4.3-green?logo=JavaScript&logoColor=white)
 
 **Database:** 
+
+
 ![mongodb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)&nbsp;
 
 **Payment Gateway:** 
+
+
 ![Razorpay](https://img.shields.io/badge/Razorpay-02042B?style=for-the-badge&logo=razorpay&logoColor=3395FF)
 
 **Image Management:** 
+
+
 ![Cloudinary Version](https://img.shields.io/npm/v/cloudinary?label=Cloudinary)
 
 **Mail Service:** 
+
+
 ![Nodemailer Version](https://img.shields.io/npm/v/nodemailer?label=Nodemailer)
 
 **Message Service:** 
+
+
 ![Nexmo](https://img.shields.io/badge/Nexmo-v2.10.0-7B16FF?logo=nexmo&logoColor=white)
 
 
@@ -74,4 +88,7 @@
 
 ## 🖥️ Developed By
 
-**Rajkumar Kalita © 2023** [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+**Rajkumar Kalita © 2023** 
+
+
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://www.instagram.com/__thisisrajkumar/?next=%2F)
