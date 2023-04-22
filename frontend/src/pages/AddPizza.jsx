@@ -16,7 +16,8 @@ const AddPizza = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const dispatch = useDispatch();
-  const { loading, success, error } = useSelector((state) => state.newProduct);
+  const { success, error } = useSelector((state) => state.newProduct);
+  const loading = true;
   const { enqueueSnackbar } = useSnackbar();
   const nevigate = useNavigate();
   const handleCategoryChange = (e) => {
@@ -184,8 +185,8 @@ const AddPizza = () => {
         </div>
         <div className="w-[26rem]">
           <label
-            for="formFileMultiple"
-            class="mb-2 inline-block text-neutral-700"
+            htmlFor="formFileMultiple"
+            className="mb-2 inline-block text-neutral-700"
           >
             Choose an image
           </label>
@@ -201,7 +202,7 @@ const AddPizza = () => {
         {loading ? (
           <button type="button" class="bg-indigo-500 ..." disabled>
             <svg
-              class="animate-spin h-5 w-5 mr-3 ..."
+              className="animate-spin h-5 w-5 mr-3 ..."
               viewBox="0 0 24 24"
             ></svg>
             Processing...

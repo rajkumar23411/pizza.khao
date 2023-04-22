@@ -201,18 +201,12 @@ input[type="number"] {
   color: #000 !important;
 }
 
-.menu-ligt-header {
-  background: url("../public/images/title-img-new.jpg") center center/cover;
-  background-color: red;
-  background-repeat: no-repeat;
-}
 .menu-light-category-box:hover p {
   color: #b7903c;
 }
 .menu-light-category-box:hover img {
   animation: shake 0.5s linear;
 }
-
 .loader {
   font-size: 10px;
   width: 1em;

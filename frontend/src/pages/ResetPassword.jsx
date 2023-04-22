@@ -11,6 +11,7 @@ const ResetPassword = () => {
   const loacation = useLocation();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { contact } = loacation.state;
   const navigate = useNavigate();
@@ -80,9 +81,17 @@ const ResetPassword = () => {
             <Link
               to="/login"
               className="flex items-center justify-center text-purple-500 gap-2 hover:text-purple-700 cursor-pointer font-sans"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
             >
-              <ArrowBackOutlinedIcon fontSize="small" />
-              <p className="font-semibold">Back to log in</p>
+              <ArrowBackOutlinedIcon
+                fontSize="small"
+                className={
+                  !isHovered &&
+                  "transition ease-linear duration-150 translate-x-1"
+                }
+              />
+              <p className="uppercase">Back to log in</p>
             </Link>
           </div>
         </form>

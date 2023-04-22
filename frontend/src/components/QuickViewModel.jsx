@@ -9,7 +9,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const QuickViewModel = ({ pizza, onClose, wishListItems }) => {
-  const [size, setSize] = React.useState("");
+  const [size, setSize] = React.useState("regular");
   const dispatch = useDispatch();
   const handleSizeChange = (event) => {
     setSize(event.target.value);

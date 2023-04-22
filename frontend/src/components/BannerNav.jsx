@@ -38,7 +38,7 @@ const BannerNav = () => {
   };
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 900) {
+      if (window.scrollY > 200) {
         setShowSearchBar(false);
       }
     };

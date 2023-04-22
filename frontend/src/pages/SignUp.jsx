@@ -36,7 +36,7 @@ const SignUp = () => {
       <div className="backdrop-blur-md w-max form flex items-center justify-center flex-col gap-10 rounded-lg p-10">
         <div className="flex items-end gap-1">
           <h1 className="text-3xl font-extrabold text-white">
-            Welcome to Don Peppe
+            Welcome to Pizza Khao
           </h1>
           <div className="h-3 w-3 bg-red-600 rounded-full"></div>
         </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center h-96 flex-col gap-2">
+    <div className="flex items-center justify-center h-96 w-full flex-col gap-2">
       <img
         src="/images/loader.png"
         alt="loader"

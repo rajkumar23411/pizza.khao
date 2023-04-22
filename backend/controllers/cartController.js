@@ -6,12 +6,12 @@ const cartController = {
   async addToCart(req, res, next) {
     const { productId, quantity, size } = req.body;
     try {
+      if (!productId || !quantity || !size) {
+        return next(CustomErrorHandler.required("Please provide all fields"));
+      }
+
       let cart = await Cart.findOne({ userId: req.user._id });
-      await Product.findById(productId).then((product) => {
-        if (!product) {
-          return next(CustomErrorHandler.notFound("Product not found"));
-        }
-      });
+
       if (!cart) {
         cart = new Cart({
           userId: req.user._id,

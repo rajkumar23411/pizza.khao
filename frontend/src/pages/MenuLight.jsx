@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/actions/productAction";
 import { menuLightCategories, randomLoaderPhrase } from "../utils";
 import { useSnackbar } from "notistack";
-import { ADD_TO_CART_RESET } from "../redux/constants/cartConstant";
 import { Pagination, Stack } from "@mui/material";
 import { clearError } from "../redux/actions/cartActions";
 const MenuLight = () => {
@@ -18,7 +17,7 @@ const MenuLight = () => {
     filteredProductCount,
   } = useSelector((state) => state.products);
 
-  const { success, error } = useSelector((state) => state.myCart);
+  const { error } = useSelector((state) => state.myCart);
   const [category, setCategory] = useState("");
   const [activeCategory, setActiveCategory] = useState(null);
   const dispatch = useDispatch();
@@ -37,28 +36,26 @@ const MenuLight = () => {
   };
 
   useEffect(() => {
-    if (success) {
-      enqueueSnackbar("Item added to cart", { variant: "success" });
-      dispatch({ type: ADD_TO_CART_RESET });
-    }
     if (error) {
       enqueueSnackbar(error, { variant: "error" });
       dispatch(clearError());
     }
-  }, [success, error, enqueueSnackbar]);
+  }, [error, enqueueSnackbar]);
   useEffect(() => {
     dispatch(getAllProducts("", category, [0, 1000], currentPage));
   }, [category, dispatch, currentPage]);
   return (
     <>
       <MainNav />
-      <div className="h-80 w-full menu-ligt-header flex flex-col items-center justify-center gap-1">
-        <h1 className="uppercase font-normal text-white tracking-wider">
-          choose your flavor
-        </h1>
-        <h1 className="uppercase text-5xl font-bold tracking-normal text-white">
-          Menu filter light
-        </h1>
+      <div className="h-80 w-full bg-restro-menu bg-center bg-cover bg-no-repeat">
+        <div className="flex items-center justify-center flex-col gap-2 h-full w-full">
+          <h1 className=" uppercase text-base text-white tracking-widest">
+            choose your favourite
+          </h1>
+          <p className="text-4xl uppercase text-white  font-semibold tracking-wide">
+            Menu filter light
+          </p>
+        </div>
       </div>
       <div className="w-full flex items-center justify-center py-16 gap-10">
         {menuLightCategories.map((cat, i) => (
@@ -81,9 +78,9 @@ const MenuLight = () => {
       {loading ? (
         <div className="flex items-center justify-center h-[28rem] flex-col gap-2">
           <img
-            src="/images/pizza_loader.gif"
+            src="/images/loader.png"
             alt="loader"
-            className="h-20"
+            className="h-10 invert-[0.5]"
             draggable="false"
           />
           <p className="text-base text-gray-500 font-light">

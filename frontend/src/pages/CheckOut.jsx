@@ -14,6 +14,7 @@ import { NEW_ORDER_RESET } from "../redux/constants/orderConstant";
 import AddressForm from "./../components/AddressForm";
 import { ADD_NEW_ADDRESS_RESET } from "../redux/constants/addressConstant";
 import PageHead from "../components/PageHead";
+import Loader from "./../components/Loader";
 const CheckoutStep = (props) => {
   return (
     <div className="bg-white shadow-sm w-full">
@@ -77,12 +78,18 @@ const Address = ({ address, confirmDeliveryAddress, selectAddress }) => {
   );
 };
 const CheckOut = () => {
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const {
+    isAuthenticated,
+    user,
+    loading: userLoading,
+  } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.myCart);
   const dispatch = useDispatch();
   const Razorpay = useRazorpay();
   const [newAddress, setNewAddress] = useState(false);
-  const { addresses } = useSelector((state) => state.myAddresses);
+  const { addresses, loading: addressLoading } = useSelector(
+    (state) => state.myAddresses
+  );
   const { success: addAddressSuccess, error: addAddressError } = useSelector(
     (state) => state.newAddress
   );
@@ -177,7 +184,6 @@ const CheckOut = () => {
                     paidAt: Date.now(),
                   };
                   dispatch(createOrder(orderData));
-
                   setPaymentOption(false);
                 }
               })
@@ -227,7 +233,7 @@ const CheckOut = () => {
   }, [dispatch, addAddressSuccess, addAddressError, enqueueSnackbar]);
 
   useEffect(() => {
-    const address = addresses.map((adr) => ({ ...adr, selected: false }));
+    const address = addresses?.map((adr) => ({ ...adr, selected: false }));
     setAddress(address);
   }, [addresses]);
   return (
@@ -256,8 +262,10 @@ const CheckOut = () => {
               title="Login"
               active={!isAuthenticated}
               body={
-                isAuthenticated ? (
-                  <div className="flex items-center gap-4 font-normal pl-12 text-gray-600">
+                userLoading ? (
+                  <Loader />
+                ) : isAuthenticated ? (
+                  <div className="flex items-center gap-4 font-medium pl-12 text-gray-700">
                     <span className="capitalize">
                       {user.firstname} {user.lastname}
                     </span>
@@ -273,7 +281,9 @@ const CheckOut = () => {
               title="Delivery Address"
               active={!confirmAddress && isAuthenticated}
               body={
-                address.length === 0 ? (
+                addressLoading ? (
+                  <Loader />
+                ) : address?.length === 0 ? (
                   <AddressForm
                     onCancel={() => setNewAddress(false)}
                     button={"Save and Deliver here"}
@@ -284,16 +294,18 @@ const CheckOut = () => {
                       <p className="text-gray-700 font-semibold">
                         {selectedAddress.name} - {selectedAddress.contact}
                       </p>
-                      <p className="text-gray-600">
-                        {selectedAddress.locality}, {selectedAddress.address},{" "}
-                        {selectedAddress.landMark},{" "}
-                        {selectedAddress.alternateContact} <br />{" "}
-                        {selectedAddress.state} - {selectedAddress.pinCode}
-                      </p>
+                      {selectedAddress && (
+                        <p className="text-gray-600">
+                          {selectedAddress.locality}, {selectedAddress.address},{" "}
+                          {selectedAddress.landMark},{" "}
+                          {selectedAddress.alternateContact} <br />{" "}
+                          {selectedAddress.state} - {selectedAddress.pinCode}
+                        </p>
+                      )}
                     </div>
                   )
                 ) : (
-                  address.map((address) => (
+                  address?.map((address) => (
                     <Address
                       address={address}
                       confirmDeliveryAddress={confirmDeliveryAddress}
@@ -303,7 +315,7 @@ const CheckOut = () => {
                 )
               }
             />
-            {address.length !== 0 &&
+            {address?.length !== 0 &&
               (confirmAddress ? null : newAddress ? (
                 <AddressForm button={"Save and Deliver here"} />
               ) : isAuthenticated ? (
@@ -413,8 +425,14 @@ const CheckOut = () => {
                         value="wallet"
                         className="h-4 w-4 cursor-pointer"
                         onChange={(e) => setSelectPaymentOption(e.target.value)}
+                        disabled
                       />
-                      <label htmlFor="wallet">Wallet</label>
+                      <label htmlFor="wallet" className="text-gray-500">
+                        Wallet{" "}
+                        <span className="font-light text-gray-500">
+                          (Coming Soon)
+                        </span>
+                      </label>
                     </div>
                     {selectPaymentOption !== "" && (
                       <button
@@ -431,7 +449,11 @@ const CheckOut = () => {
               }
             />
           </div>
-          <div className="flex-[0.5] bg-white h-max shadow-md">
+          <div
+            className={`${
+              !isAuthenticated ? "hidden" : "flex-[0.5]"
+            } bg-white h-max shadow-m`}
+          >
             <h1 className="uppercase font-semibold tracking-wide text-golden w-full border-b-2 border-golden border-dashed px-4 py-2">
               Price Details
             </h1>

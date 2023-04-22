@@ -11,7 +11,7 @@ import CheckOut from "./pages/CheckOut";
 import MyAccount from "./pages/MyAccount";
 import AccountAddress from "./pages/AccountAddress";
 import store from "./redux/store";
-import { loadUser } from "./redux/actions/userAction";
+import { clearError, loadUser } from "./redux/actions/userAction";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import AddPizza from "./pages/AddPizza";
@@ -25,14 +25,26 @@ import ResetPassword from "./pages/ResetPassword";
 import VerifyOTP from "./pages/VerifyOTP";
 import SearchMenu from "./pages/SearchMenu";
 import MenuLight from "./pages/MenuLight";
+import { useSelector } from "react-redux";
 const App = () => {
+  const { error } = useSelector((state) => state.user);
   useEffect(() => {
+    if (error) {
+      store.dispatch(clearError());
+    }
     store.dispatch(loadUser());
   }, []);
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/cart" element={<Cart />} />
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/menu" element={<Menu />} />
       <Route path="/pizza/:id" element={<SinglePizza />} />
       <Route path="/blog" element={<Blog />} />
