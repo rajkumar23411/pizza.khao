@@ -2,6 +2,20 @@
 
 ## 📜 Screenshots
 
+| Desktop primary | Desktop secondary |
+| --------------- | ----------------- |
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/eb43ebb5-7c05-4521-b724-1a4056db2849) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/b2863ae5-2bf9-427e-af31-9ab995e02538) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/31e3e191-b953-4ff6-8aa0-d5146d68ce38) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/99460c7e-d75f-4682-8d6f-2684f27aa911) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/4828e15e-7883-4e4a-b1ef-25b783d6817d) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/38938699-bb1a-4403-9fc4-14376e0952bc) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/c96e92af-efea-4b37-abbe-a9cbb3768c7e) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/4140e837-d382-4a79-b098-f2db5634fd67) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/f858287e-1f72-4c00-a6d6-3b77b4e7f2e2) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/89ac6bd2-b83b-4b72-9d80-7eac155c6796) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/bc1e9a60-f146-40cd-b0fa-1b9f8bc342b6) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/074815bc-3e2a-4cba-a636-473fcf7fae3c) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/bf03d842-b1d0-4397-9516-320ac5c896cb) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/1bec78bc-11f9-4ddf-b089-18b8bcb399f5) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/b07c5126-391e-46cd-bf98-0ce228f837cd) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/4fd6a9cd-5ddc-4579-900a-91d0a5090263) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/b691c38f-c561-4752-b9a9-bd9a65892b9a) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/c7020ca0-675c-46e4-b8b3-87064b62575a) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/34182e62-d1b5-4bb5-8521-e70f9178471f) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/62d7670a-285c-48c2-a41c-53836f3dcb38) | 
+| ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/2571d1c1-77d6-4b3d-a452-6997dbc996cc) |
+
 **Frontend:**
 
 
