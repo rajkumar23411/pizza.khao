@@ -1,8 +1,8 @@
 # Pizza-Khao - a full stacked online food (pizza) ordering web app
 
-## 📜 Screenshots
+## 😶‍🌫️ Screenshots
 
-| Desktop primary | Desktop secondary |
+| 🖥️Desktop primary | 🖥️Desktop secondary |
 | --------------- | ----------------- |
 | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/eb43ebb5-7c05-4521-b724-1a4056db2849) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/b2863ae5-2bf9-427e-af31-9ab995e02538) | 
 | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/31e3e191-b953-4ff6-8aa0-d5146d68ce38) | ![](https://github.com/rajkumar23411/pizza.khao/assets/90103892/99460c7e-d75f-4682-8d6f-2684f27aa911) | 
